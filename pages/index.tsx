@@ -1,6 +1,13 @@
 const Page = () => {
   return (
-    <div>Hello</div>
+    <div
+      style={{
+        height: '100000px'
+      }}
+    >
+      Hello
+    
+    </div>
   )
 }
 

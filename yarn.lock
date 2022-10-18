@@ -677,7 +677,7 @@
     "@chakra-ui/icon" "3.0.11"
     "@chakra-ui/react-context" "2.0.4"
 
-"@chakra-ui/styled-system@2.3.4":
+"@chakra-ui/styled-system@^2.3.4", "@chakra-ui/styled-system@2.3.4":
   "integrity" "sha512-Lozbedu+GBj4EbHB/eGv475SFDLApsIEN9gNKiZJBJAE1HIhHn3Seh1iZQSrHC/Beq+D5cQq3Z+yPn3bXtFU7w=="
   "resolved" "https://registry.npmjs.org/@chakra-ui/styled-system/-/styled-system-2.3.4.tgz"
   "version" "2.3.4"
