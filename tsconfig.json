@@ -13,8 +13,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "components/*": ["src/components/*"],
+      "icons/*": ["src/icons/*"],
+      "libs/*": ["libs/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.js", "src/components/section.jsx"],
   "exclude": ["node_modules"]
 }

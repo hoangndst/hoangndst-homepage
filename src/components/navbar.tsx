@@ -15,10 +15,10 @@ import {
   MenuList,
   MenuItem
 } from "@chakra-ui/react";
-import Logo from "./logo";
+import Logo from "components/logo";
 import NextLink from "next/link"
-import { GithubIcon } from "../icons/github";
-import ThemeChangeButton from "./theme-change-button";
+import { GithubIcon } from "icons/github";
+import ThemeChangeButton from "components/theme-change-button";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
 type ListItemType = {
@@ -59,14 +59,12 @@ const LinkItem = ({ href, path, target, children, ...props }: ListItemType) => {
 const NavBar = ({ path }: { path: string}) => {
   return (
     <Box
+      bg={useColorModeValue('#F3F6F940', '#001E3C80')}
+      boxShadow={useColorModeValue('inset 0px -1px 1px #e7ebf0', 'rgb(19 47 76) 0px -1px 1px inset')}
       position="fixed"
       as="nav"
       w="100%"
-      bg={useColorModeValue('#F3F6F9', '#001E3C')}
-      css={{ 
-        backdropFilter: 'blur(20px)' 
-      }}
-      boxShadow={useColorModeValue('inset 0px -1px 1px #e7ebf0', 'rgb(19 47 76) 0px -1px 1px inset')}
+      css={{ backdropFilter: 'blur(50px)' }}
       zIndex={2}
     >
       <Container

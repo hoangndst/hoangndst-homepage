@@ -1,8 +1,8 @@
 import * as React from "react"
 import Head from "next/head"
-import { Box, Container } from '@chakra-ui/react'
+import { Box, Container, useColorModeValue } from '@chakra-ui/react'
 import type { NextRouter } from "next/router"
-import NavBar from "../navbar"
+import NavBar from "components/navbar"
 
 export type MainProps = {
   children: React.ReactNode,
@@ -11,7 +11,12 @@ export type MainProps = {
 
 const Main = ({ children, router }: MainProps) => {
   return (
-    <Box as="main" pb={8}>
+    <Box as="main" pb={8}
+      style={{
+        backgroundColor: useColorModeValue('white', '#001e3c'),
+        height: '100vh'
+      }}
+    >
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content="@hoangndst's homepage" />

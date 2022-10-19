@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
-import Chakra from "../src/components/chakra";
-import Layout from '../src/components/layouts/main'
+import Chakra from "components/chakra";
+import Layout from 'components/layouts/main'
 import { AnimatePresence } from "framer-motion";
 interface CustomPageProps {
   cookies: any

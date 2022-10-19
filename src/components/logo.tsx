@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styled from "@emotion/styled";
-import RaspberryIcon from "../icons/raspberry"
+import RaspberryIcon from "icons/raspberry"
 import { Text, useColorModeValue } from "@chakra-ui/react";
 
 const LogoBox = styled.span`
