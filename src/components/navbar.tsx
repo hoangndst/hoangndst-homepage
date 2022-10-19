@@ -6,11 +6,20 @@ import {
   Heading,
   HTMLChakraProps,
   Link,
-  Stack
+  Stack,
+  Button,
+  Tooltip,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
 } from "@chakra-ui/react";
 import Logo from "./logo";
 import NextLink from "next/link"
-import styled from "@emotion/styled";
+import { GithubIcon } from "../icons/github";
+import ThemeChangeButton from "./theme-change-button";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 type ListItemType = {
   href: string,
@@ -28,18 +37,19 @@ const LinkItem = ({ href, path, target, children, ...props }: ListItemType) => {
   return (
     <NextLink href={href} passHref scroll={false}
     >
-      <Link
+      <Button
+        as={Link}
+        // bg={active? activeColor : inActiveColor}
+        variant={active? 'solid' : 'ghost'}
         p={2}
-        bg={active? activeColor : inActiveColor}
         target={target}
-        borderRadius="5px"
         style={{
           textDecoration: 'none'
         }}
         {...props}
       >
         {children}
-      </Link>
+      </Button>
     </NextLink>
   )
 }
@@ -63,8 +73,10 @@ const NavBar = ({ path }: { path: string}) => {
         display="flex"
         p={2}
         maxW="container.md"
+        minH="56px"
         alignItems="center"
-        justifyItems="space-between"
+        ml="auto"
+        mr="auto"
       >
         <Flex align="center" mr={5}> 
           <Heading as="h1" size="lg">
@@ -80,6 +92,11 @@ const NavBar = ({ path }: { path: string}) => {
           mt={{ base: 4, md: 0 }}
         >
           <LinkItem
+            href="/" path={path}
+          >
+            Home
+          </LinkItem>
+          <LinkItem
             href="/resume" path={path}
           >
             Resume
@@ -90,6 +107,46 @@ const NavBar = ({ path }: { path: string}) => {
             Blog
           </LinkItem>
         </Stack>
+        <Box ml="auto"></Box>
+        <Box display="flex" flexGrow={0} ml="auto">
+          <Tooltip label='Github' aria-label='Github' openDelay={800}>
+            <IconButton 
+              style={{
+                marginRight: '10px'
+              }}
+              aria-label="github-icon"
+              icon={<GithubIcon width={20} />}
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                window.open('https://github.com/hoangndst');
+              }}
+            />
+          </Tooltip>
+          <ThemeChangeButton />
+          <Box ml={2} display={{ base: 'inline-block', md: 'none' }}>
+            <Menu isLazy id='nav-menu'>
+              <MenuButton
+                as={IconButton}
+                icon={<HamburgerIcon />}
+                variant="outline"
+                aria-label="Options"
+                size="sm"
+              />
+              <MenuList>
+                <NextLink href="/" passHref>
+                  <MenuItem as={Link}>Home</MenuItem>
+                </NextLink>
+                <NextLink href="/resume" passHref>
+                  <MenuItem as={Link}>Resume</MenuItem>
+                </NextLink>
+                <NextLink href="/blog" passHref>
+                  <MenuItem as={Link}>Blog</MenuItem>
+                </NextLink>
+              </MenuList>
+            </Menu>
+          </Box>
+        </Box>
       </Container>
     </Box>
   )

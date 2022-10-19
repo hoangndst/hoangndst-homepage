@@ -2,10 +2,13 @@ const Page = () => {
   return (
     <div
       style={{
-        height: '100000px'
+        height: '100000px',
+        background: 'white'
       }}
     >
-      Hello
+      Hello asjdhajskdh
+
+      asdasdsadaslkjjk
     
     </div>
   )
