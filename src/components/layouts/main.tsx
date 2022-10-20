@@ -3,6 +3,7 @@ import Head from "next/head"
 import { Box, Container, useColorModeValue } from '@chakra-ui/react'
 import type { NextRouter } from "next/router"
 import NavBar from "components/navbar"
+import Footer from "components/footer"
 
 export type MainProps = {
   children: React.ReactNode,
@@ -14,7 +15,7 @@ const Main = ({ children, router }: MainProps) => {
     <Box as="main" pb={8}
       style={{
         backgroundColor: useColorModeValue('white', '#001e3c'),
-        height: '100vh'
+        minHeight: '100vh'
       }}
     >
       <Head>
@@ -38,6 +39,9 @@ const Main = ({ children, router }: MainProps) => {
       <Container maxW="container.md" pt={14}>
         {children}
       </Container>
+
+      <Footer />
+
     </Box>
   )
 }

@@ -131,7 +131,10 @@ const NavBar = ({ path }: { path: string}) => {
                 aria-label="Options"
                 size="sm"
               />
-              <MenuList>
+              <MenuList
+                bg={useColorModeValue('#F3F6F9', '#001E3C')}
+                // css={{ backdropFilter: 'blur(1px)' }}
+              >
                 <NextLink href="/" passHref>
                   <MenuItem as={Link}>Home</MenuItem>
                 </NextLink>

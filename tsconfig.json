@@ -21,6 +21,6 @@
       "libs/*": ["libs/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.js", "src/components/section.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.js", "src/components/section.jsx", "src/components/footer.js"],
   "exclude": ["node_modules"]
 }
