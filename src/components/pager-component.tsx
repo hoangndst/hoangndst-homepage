@@ -5,7 +5,7 @@ import {
   Box,
   Tag 
 } from "@chakra-ui/react"
-import { mdProps } from 'libs/md-type'
+import { mdProps } from 'src/type/frontmatter'
 
 export const PagerComponent = ( children: React.ReactNode ) => {
   const { colorMode } = useColorMode()

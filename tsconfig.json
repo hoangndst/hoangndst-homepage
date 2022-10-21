@@ -18,9 +18,13 @@
     "paths": {
       "components/*": ["src/components/*"],
       "icons/*": ["src/icons/*"],
-      "libs/*": ["libs/*"]
+      "libs/*": ["libs/*"],
+      "utils/*": ["src/utils/*"],
+      "types/*": ["src/types/*"],
+      "contentlayer/generated": ["./.contentlayer/generated"],
+      "config/*": ["config/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.js", "src/components/section.jsx", "src/components/footer.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.jsx", "src/components/section.jsx", "src/components/footer.jsx", ".contentlayer/generated"],
   "exclude": ["node_modules"]
 }
