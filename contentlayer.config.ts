@@ -3,11 +3,11 @@ import {
   defineDocumentType,
   makeSource,
 } from 'contentlayer/source-files'
-import siteConfig from 'config/site-config.json'
+import siteConfig from './config/site-config.json'
 import remarkSlug from 'remark-slug'
 import remarkGfm from 'remark-gfm'
 import remarkEmoji from 'remark-emoji'
-import { rehypeMdxCodeMeta } from 'utils/rehype-code-meta'
+import { rehypeMdxCodeMeta } from './src/utils/rehype-code-meta'
 
 const computedFields: ComputedFields = {
   slug: {

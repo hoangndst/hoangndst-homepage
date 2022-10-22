@@ -1,10 +1,10 @@
 import Layout from 'components/layouts/page'
 import {
   useColorModeValue,
-  useColorMode, 
+  useColorMode,
   Container,
   Link,
-  Box ,
+  Box,
   Heading,
   chakra,
   List,
@@ -30,7 +30,9 @@ const Page = () => {
 
   return (
     <Layout title='Home'>
-      <Container>
+      <Container
+        minW={{ md: '40rem' }}
+      >
         <Box
           borderRadius='lg'
           mb={6}
@@ -51,7 +53,7 @@ const Page = () => {
           </Box>
           <Box
             flexShrink={0}
-            mt={{ base: 4, md: 0}}
+            mt={{ base: 4, md: 0 }}
             ml={{ md: 6 }}
             textAlign='center'
           >
@@ -87,9 +89,9 @@ const Page = () => {
             About
           </Heading>
           <Paragraph>
-          An IT student with competent background and growth mindset, motivated by his interest in Information Technology
-          and science. Realizing the academic research track may not be for him, he is taking steps into the industry with a
-          strong will to learn, develop and be useful.
+            An IT student with competent background and growth mindset, motivated by his interest in Information Technology
+            and science. Realizing the academic research track may not be for him, he is taking steps into the industry with a
+            strong will to learn, develop and be useful.
           </Paragraph>
           <Box
             sx={{
@@ -97,6 +99,7 @@ const Page = () => {
               alignItems: 'center',
               justifyContent: 'center'
             }}
+            mt={10}
           >
             <NextLink href='/resume' passHref scroll={false}>
               <Button

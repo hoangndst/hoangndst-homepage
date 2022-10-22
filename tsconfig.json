@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "importHelpers": true,
+    "removeComments": true,
+    "target": "esnext",
+    "strict": false,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -23,6 +25,11 @@
       "types/*": ["src/types/*"],
       "contentlayer/generated": ["./.contentlayer/generated"],
       "config/*": ["config/*"],
+    }
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/chakra.jsx", "src/components/section.jsx", "src/components/footer.jsx", ".contentlayer/generated"],

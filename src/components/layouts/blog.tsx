@@ -4,7 +4,7 @@ import MDXLayout from "components/layouts/mdx"
 
 interface BlogLayoutProps {
   frontmatter: any
-  children: React.ReactNode   
+  children: React.ReactNode
 }
 
 const BlogLayout = (props: BlogLayoutProps) => {
@@ -29,11 +29,11 @@ const BlogLayout = (props: BlogLayoutProps) => {
         fontSize='sm'
         display='block'
         mb='16'
-      > 
+      >
         {publishedDate.text}
       </Box>
       {children}
     </MDXLayout>
   )
-
 }
+export default BlogLayout
