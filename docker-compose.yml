@@ -1,7 +1,3 @@
-version: '3'
-networks:
-  traefik_default:
-    external: true
 services:
   app:
     container_name: homepage
@@ -18,3 +14,6 @@ services:
       - "traefik.http.routers.homepage.tls.certresolver=production"
     networks:
       - traefik_default
+networks:
+  traefik_default:
+    external: true
