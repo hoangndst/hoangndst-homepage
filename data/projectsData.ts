@@ -13,6 +13,12 @@ const projectsData: Project[] = [
     href: 'https://github.com/KusionStack/kusion',
   },
   {
+    title: 'Homepage',
+    description: `My personal website. CI/CD Automation. Hosted on Raspberry Pi.`,
+    imgSrc: '/static/images/homepage.png',
+    href: 'https://github.com/hoangndst/hoangndst-homepage',
+  },
+  {
     title: 'DevOps Sphere',
     description: `A comprehensive solution designed to optimize the software development process for businesses. By integrating advanced DevOps tools and services, automates CI/CD processes, efficiently manages source code, and ensures security throughout.`,
     imgSrc: '/static/images/devops-sphere.png',
