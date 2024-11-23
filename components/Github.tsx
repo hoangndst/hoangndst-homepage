@@ -20,11 +20,11 @@ const Github = () => {
     }
 
     calculateStatuses()
-  }, [allTalks])
+  }, [])
 
   return (
     <div className="dark:text-grey text-gray flex flex-col items-center justify-center pb-12 pt-12">
-      <p className="text-s text-gray dark:text-gray leading-7 md:mt-5 pb-12">
+      <p className="text-s text-gray dark:text-gray pb-12 leading-7 md:mt-5">
         <Link href="/about">Checkout my latest conference talks 🎤</Link>
       </p>
       <ul className="">
