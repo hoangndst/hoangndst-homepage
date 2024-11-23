@@ -20,4 +20,5 @@ jobs:
       - name: Deploy
         uses: distributhor/workflow-webhook@v3
         with:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}?SERVICE_TAG=${{ steps.get_version.outputs.VERSION }}
+          webhook_url: ${{ secrets.WEBHOOK_URL }}?tag=${{ steps.get_version.outputs.VERSION }}
+          verify_ssl: false
