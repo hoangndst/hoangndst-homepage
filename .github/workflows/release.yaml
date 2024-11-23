@@ -66,4 +66,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.REGISTRY_PREFIX }}/homepage:${{ steps.get_version.outputs.VERSION }}
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.REGISTRY_PREFIX }}:${{ steps.get_version.outputs.VERSION }}
