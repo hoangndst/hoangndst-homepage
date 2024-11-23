@@ -7,8 +7,8 @@ const siteMetadata = {
   openToWork: true,
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://hoangndst.freeddns.org',
-  siteRepo: 'https://github.com/hoangndst/hoangndst-blog',
+  siteUrl: 'https://hoangnd.freeddns.org',
+  siteRepo: 'https://github.com/hoangndst/hoangndst-homepage',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   email: 'hoangndst@gmail.com',
