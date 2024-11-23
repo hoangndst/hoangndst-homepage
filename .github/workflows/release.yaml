@@ -66,4 +66,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          platforms: linux/arm64 # for Raspberry Pi
           tags: ${{ secrets.REGISTRY }}/${{ secrets.REGISTRY_PREFIX }}:${{ steps.get_version.outputs.VERSION }}
