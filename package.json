@@ -1,6 +1,6 @@
 {
-  "name": "tailwind-nextjs-starter-blog",
-  "version": "2.3.0",
+  "name": "hoangndst-homepage",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "next dev",
