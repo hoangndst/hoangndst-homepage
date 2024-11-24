@@ -7,20 +7,16 @@ const siteMetadata = {
   openToWork: true,
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://hoangnd.freeddns.org',
+  siteUrl: 'https://hoangndst.com',
   siteRepo: 'https://github.com/hoangndst/hoangndst-homepage',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/homepage.png`,
   email: 'hoangndst@gmail.com',
   github: 'https://github.com/hoangndst',
   x: 'https://x.com/hoangndst',
-  // facebook: 'https://facebook.com',
   youtube: 'https://youtube.com/@hoangndst',
   linkedin: 'https://www.linkedin.com/in/hoangndst',
-  // threads: 'https://www.threads.net',
   instagram: 'https://www.instagram.com/hoangndst',
-  // medium: 'https://medium.com',
-  // bluesky: 'https://bsky.app/',
   locale: 'en-US',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
@@ -49,8 +45,6 @@ const siteMetadata = {
     },
   },
   newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
-    // Please add your .env file and modify it according to your selection
     provider: 'buttondown',
   },
   comments: {
@@ -88,14 +82,6 @@ const siteMetadata = {
     kbarConfig: {
       searchDocumentsPath: `${process.env.BASE_PATH || ''}/search.json`, // path to load documents to search
     },
-    // provider: 'algolia',
-    // algoliaConfig: {
-    //   // The application ID provided by Algolia
-    //   appId: 'R2IYF7ETH7',
-    //   // Public API key: it is safe to commit it
-    //   apiKey: '599cec31baffa4868cae4e79f180729b',
-    //   indexName: 'docsearch',
-    // },
   },
 }
 
