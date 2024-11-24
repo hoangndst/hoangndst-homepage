@@ -1,65 +1,69 @@
 'use client'
-
-import React, { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from '@/components/Link'
-import type { Talks } from 'contentlayer/generated'
-import { allTalks } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
-import { formatDate } from 'pliny/utils/formatDate'
 
 const Github = () => {
-  const [talkStatuses, setTalkStatuses] = useState<{ [key: string]: boolean }>({})
+  const [svgContent, setSvgContent] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const calculateStatuses = () => {
-      const statuses: { [key: string]: boolean } = {}
-      allTalks.forEach((talk) => {
-        statuses[talk.event] = new Date(talk.date) > new Date()
-      })
-      setTalkStatuses(statuses)
+    const fetchSVGContent = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/ghchart`)
+        const svgText = await response.text()
+        const parser = new DOMParser()
+        const xmlDoc = parser.parseFromString(svgText, 'image/svg+xml')
+
+        const rectElements = xmlDoc.querySelectorAll('rect[style*="fill:#EEEEEE;"]')
+
+        rectElements.forEach((rectElement) => {
+          rectElement.setAttribute('style', 'fill:#161b22;shape-rendering:crispedges;')
+        })
+
+        const modifiedSvgText = new XMLSerializer().serializeToString(xmlDoc)
+
+        setSvgContent(`data:image/svg+xml;base64,${btoa(modifiedSvgText)}`)
+      } catch (error) {
+        console.error('Error fetching SVG:', error)
+      }
+      setLoading(false)
     }
 
-    calculateStatuses()
+    fetchSVGContent()
   }, [])
 
+  if (loading || svgContent === '') {
+    return (
+      <div className="dark:text-grey text-gray flex flex-col items-center justify-center">
+        <p className="text-gray dark:text-gray text-xs leading-7 md:mt-5">
+          <Link
+            href="/about"
+            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+          >
+            My Github Contributions
+          </Link>
+        </p>
+
+        {/* Skeleton Loader */}
+        <div className="h-[180px] w-full animate-pulse rounded-md bg-gray-200 dark:bg-gray-700"></div>
+      </div>
+    )
+  }
+
   return (
-    <div className="dark:text-grey text-gray flex flex-col items-center justify-center pb-12 pt-12">
-      <p className="text-s text-gray dark:text-gray pb-12 leading-7 md:mt-5">
-        <Link href="/about">Checkout my latest conference talks 🎤</Link>
+    <div className="dark:text-grey text-gray flex flex-col items-center justify-center">
+      <p className="text-gray dark:text-gray text-xs leading-7 md:mt-5">
+        <Link
+          href={siteMetadata.github}
+          className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+        >
+          My Github Contributions
+        </Link>
       </p>
-      <ul className="">
-        {allTalks
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sort by date (descending)
-          .map((talk: Talks) => {
-            return (
-              <li key={talk.event} className="mb-4">
-                <div className="flex flex-col sm:flex-row sm:items-center">
-                  <Link
-                    href={talk.url || '#'}
-                    className="text-xl font-bold text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                  >
-                    {talk.event}
-                  </Link>
-                  <div className="mt-1 text-sm text-gray-500 dark:text-gray-400 sm:ml-2 sm:mt-0">
-                    <span>
-                      🗓️{' '}
-                      <time suppressHydrationWarning dateTime={talk.date}>
-                        {formatDate(talk.date, siteMetadata.locale)}
-                      </time>
-                    </span>
-                    <span className="ml-2">
-                      {talkStatuses[talk.event] ? (
-                        <span className="text-blue-500">🔥 Upcoming</span>
-                      ) : (
-                        <span className="text-green-500">Finished</span>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </li>
-            )
-          })}
-      </ul>
+      <Image width={900} height={200} src={svgContent} alt="My Github Contributions" />
     </div>
   )
 }

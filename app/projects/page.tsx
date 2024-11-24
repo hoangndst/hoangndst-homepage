@@ -1,6 +1,7 @@
 import projectsData from '@/data/projectsData'
 import Card from '@/components/Card'
 import { genPageMetadata } from 'app/seo'
+import Github from '@/components/Github'
 
 export const metadata = genPageMetadata({ title: 'Projects' })
 
@@ -15,6 +16,7 @@ export default function Projects() {
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
             Here are some projects I've worked on recently.
           </p>
+          <Github />
         </div>
         <div className="container py-12">
           <div className="-m-4 flex flex-wrap">
