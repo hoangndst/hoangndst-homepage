@@ -9,8 +9,8 @@ const siteMetadata = {
   theme: 'system', // system, dark or light
   siteUrl: 'https://hoangndst.com',
   siteRepo: 'https://github.com/hoangndst/hoangndst-homepage',
-  siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/homepage.png`,
+  siteLogo: `https://hoangndst.com/static/images/logo.png`,
+  socialBanner: `https://hoangndst.com/static/images/homepage.png`,
   email: 'hoangndst@gmail.com',
   github: 'https://github.com/hoangndst',
   x: 'https://x.com/hoangndst',
@@ -56,10 +56,10 @@ const siteMetadata = {
     giscusConfig: {
       // Visit the link below, and follow the steps in the 'configuration' section
       // https://giscus.app/
-      repo: process.env.NEXT_PUBLIC_GISCUS_REPO,
-      repositoryId: process.env.NEXT_PUBLIC_GISCUS_REPOSITORY_ID,
-      category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY,
-      categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID,
+      repo: 'hoangndst/hoangndst-homepage',
+      repositoryId: 'R_kgDOIPvQkg',
+      category: '@hoangndst',
+      categoryId: 'DIC_kwDOIPvQks4Ckjsy',
       mapping: 'pathname', // supported options: pathname, url, title
       reactions: '1', // Emoji reactions: 1 = enable / 0 = disable
       // Send discussion metadata periodically to the parent window: 1 = enable / 0 = disable
