@@ -5,7 +5,7 @@ import Typed from 'typed.js'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import Image from '@/components/Image'
-import Github from '@/components/Github'
+import Talk from '@/components/Talk'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 
@@ -51,7 +51,7 @@ export default function Home({ posts }) {
             <span ref={el} />
           </div>
 
-          <Github />
+          <Talk />
 
           <p className="text-gray dark:text-gray text-lg leading-7">{siteMetadata.description}</p>
         </div>
