@@ -1,1 +1,65 @@
-[{"title":"Platform Engineering","date":"2024-12-16T00:00:00.000Z","tags":["tech","platform-engineering","idp"],"lastmod":"2024-12-16T00:00:00.000Z","summary":"Platform Engineering","images":["/static/blog/platform-engineering/platform-toolings.png"],"type":"Blog","readingTime":{"text":"4 min read","minutes":3.515,"time":210900,"words":703},"slug":"platform-engineering","path":"blog/platform-engineering","filePath":"blog/platform-engineering.mdx","toc":[],"structuredData":{"@context":"https://schema.org","@type":"BlogPosting","headline":"Platform Engineering","datePublished":"2024-12-16T00:00:00.000Z","dateModified":"2024-12-16T00:00:00.000Z","description":"Platform Engineering","image":"/static/blog/platform-engineering/platform-toolings.png","url":"https://hoangndst.com/blog/platform-engineering"}},{"title":"Back with blog","date":"2024-11-23T00:00:00.000Z","tags":["tech","life","chocoboba"],"lastmod":"2024-11-23T00:00:00.000Z","summary":"I am back with my blog","images":["/static/images/dallas-texas-us.jpg"],"type":"Blog","readingTime":{"text":"1 min read","minutes":0.345,"time":20700,"words":69},"slug":"back-with-blog","path":"blog/back-with-blog","filePath":"blog/back-with-blog.mdx","toc":[],"structuredData":{"@context":"https://schema.org","@type":"BlogPosting","headline":"Back with blog","datePublished":"2024-11-23T00:00:00.000Z","dateModified":"2024-11-23T00:00:00.000Z","description":"I am back with my blog","image":"/static/images/dallas-texas-us.jpg","url":"https://hoangndst.com/blog/back-with-blog"}}]
+[
+  {
+    "type": "Blog",
+    "title": "Platform Engineering",
+    "date": "2024-12-16",
+    "tags": [
+      "tech",
+      "platform-engineering",
+      "idp"
+    ],
+    "lastmod": "2024-12-16",
+    "summary": "Platform Engineering",
+    "images": [
+      "/static/blog/platform-engineering/platform-toolings.png"
+    ],
+    "readingTime": "{\"text\":\"4 min read\",\"minutes\":3.605,\"time\":216300,\"words\":721}",
+    "slug": "platform-engineering",
+    "filePath": "blog/platform-engineering.mdx",
+    "path": "blog/platform-engineering",
+    "toc": "{}",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Platform Engineering",
+      "datePublished": "2024-12-16",
+      "dateModified": "2024-12-16",
+      "description": "Platform Engineering",
+      "image": "/static/blog/platform-engineering/platform-toolings.png",
+      "url": "https://hoangndst.com/blog/platform-engineering"
+    }
+  },
+  {
+    "type": "Blog",
+    "title": "Back with blog",
+    "date": "2024-11-23",
+    "tags": [
+      "tech",
+      "life",
+      "chocoboba"
+    ],
+    "lastmod": "2024-11-23",
+    "summary": "I am back with my blog",
+    "images": [
+      "/static/images/dallas-texas-us.jpg"
+    ],
+    "authors": [
+      "hoangndst"
+    ],
+    "readingTime": "{\"text\":\"1 min read\",\"minutes\":0.74,\"time\":44400,\"words\":148}",
+    "slug": "back-with-blog",
+    "filePath": "blog/back-with-blog.mdx",
+    "path": "blog/back-with-blog",
+    "toc": "{}",
+    "structuredData": {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Back with blog",
+      "datePublished": "2024-11-23",
+      "dateModified": "2024-11-23",
+      "description": "I am back with my blog",
+      "image": "/static/images/dallas-texas-us.jpg",
+      "url": "https://hoangndst.com/blog/back-with-blog"
+    }
+  }
+]
