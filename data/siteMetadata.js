@@ -80,7 +80,7 @@ const siteMetadata = {
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {
-      searchDocumentsPath: `${process.env.BASE_PATH || ''}/search.json`, // path to load documents to search
+      searchDocumentsPath: `https://raw.githubusercontent.com/hoangndst/hoangndst-homepage/blog/search.json`, // path to load documents to search
     },
   },
 }
