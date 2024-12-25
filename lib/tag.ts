@@ -2,6 +2,7 @@ import getConfig from 'next/config'
 
 const { serverRuntimeConfig } = getConfig()
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getTagData(): Promise<any> {
   const response = await fetch(
     `https://raw.githubusercontent.com/hoangndst/hoangndst-homepage/blog/tag-data.json`,

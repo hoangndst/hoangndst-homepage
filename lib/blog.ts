@@ -80,6 +80,7 @@ export async function getBlogByName(name: string): Promise<Blog | undefined> {
     lastmod?: string
     draft?: boolean
     summary?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     images?: any
     authors?: string[]
     layout?: string
