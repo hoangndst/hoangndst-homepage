@@ -2,7 +2,7 @@ import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import { slug } from 'github-slugger'
 import { genPageMetadata } from 'app/seo'
-import { getTagData } from '@/lib/tag'
+import { getTags } from '@/lib/tag'
 import { Suspense } from 'react'
 
 export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
@@ -23,7 +23,7 @@ const LoadingSkeleton = () => {
 }
 
 export default async function Page() {
-  const tagData = await getTagData()
+  const tagData = await getTags()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])

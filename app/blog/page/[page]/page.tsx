@@ -1,6 +1,7 @@
 import ListLayout from '@/layouts/ListLayoutWithTags'
+import { notFound } from 'next/navigation'
 import { getBlogs } from '@/lib/blog'
-import { getTagData } from '@/lib/tag'
+import { getTags } from '@/lib/tag'
 
 const POSTS_PER_PAGE = 5
 
@@ -15,7 +16,11 @@ export const generateStaticParams = async () => {
 export default async function Page(props: { params: Promise<{ page: string }> }) {
   const params = await props.params
   const posts = await getBlogs()
-  const tagData = await getTagData()
+  const tagData = await getTags()
+  if (posts.length === 0 || !tagData) {
+    return notFound()
+  }
+
   const pageNumber = parseInt(params.page as string)
   const initialDisplayPosts = posts.slice(
     POSTS_PER_PAGE * (pageNumber - 1),

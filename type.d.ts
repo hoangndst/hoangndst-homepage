@@ -12,7 +12,8 @@ type Blog = {
   layout?: string | undefined
   bibliography?: string | undefined
   canonicalUrl?: string | undefined
-  body: ReactNode
+  body?: ReactNode
+  rawData: string
   readingTime: json
   slug: string
   path: string

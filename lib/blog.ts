@@ -27,9 +27,7 @@ import BlogNewsletterForm from 'pliny/ui/BlogNewsletterForm'
 import Image from '@/components/Image'
 import CustomLink from '@/components/Link'
 import TableWrapper from '@/components/TableWrapper'
-import getConfig from 'next/config'
-
-const { serverRuntimeConfig } = getConfig()
+import { ReactNode } from 'react'
 
 // heroicon mini link
 const icon = fromHtmlIsomorphic(
@@ -44,49 +42,29 @@ const icon = fromHtmlIsomorphic(
   { fragment: true }
 )
 
-type BlogTree = {
-  tree: [
+type BlogsTree = {
+  data: [
     {
+      id: string
       path: string
+      raw_data: string
     },
   ]
 }
 
-export async function getBlogByName(name: string): Promise<Blog | undefined> {
-  const response = await fetch(
-    `https://raw.githubusercontent.com/hoangndst/hoangndst-homepage/blog/${name}`,
-    {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${serverRuntimeConfig.githubToken}`,
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-      cache: 'no-store',
-    }
-  )
-  if (!response.ok) {
-    return undefined
+type BlogTree = {
+  data: {
+    id: string
+    path: string
+    raw_data: string
   }
+}
 
-  const rawData = await response.text()
+export async function getBlogContent(rawData: string): Promise<ReactNode> {
   if (rawData === '404: Not Found') {
     return undefined
   }
-  const { frontmatter, content } = await compileMDX<{
-    type: 'Blog'
-    title: string
-    date: string
-    tags: string[]
-    lastmod?: string
-    draft?: boolean
-    summary?: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    images?: any
-    authors?: string[]
-    layout?: string
-    bibliography?: string
-    canonicalUrl?: string
-  }>({
+  const { content } = await compileMDX({
     source: rawData,
     components: {
       Image,
@@ -127,6 +105,30 @@ export async function getBlogByName(name: string): Promise<Blog | undefined> {
       },
     },
   })
+  return content
+}
+
+export async function convertBlog(name: string, rawData: string): Promise<Blog | undefined> {
+  const { frontmatter } = await compileMDX<{
+    type: 'Blog'
+    title: string
+    date: string
+    tags: string[]
+    lastmod?: string
+    draft?: boolean
+    summary?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    images?: any
+    authors?: string[]
+    layout?: string
+    bibliography?: string
+    canonicalUrl?: string
+  }>({
+    source: rawData,
+    options: {
+      parseFrontmatter: true,
+    },
+  })
   const blog: Blog = {
     _id: name,
     type: 'Blog',
@@ -139,7 +141,7 @@ export async function getBlogByName(name: string): Promise<Blog | undefined> {
     images: frontmatter.images,
     authors: frontmatter.authors,
     layout: frontmatter.layout,
-    body: content,
+    rawData: rawData,
     readingTime: JSON.stringify(readingTime(rawData)),
     slug: name.replace(/\.mdx?$/, '').replace(/^.+?(\/)/, ''),
     filePath: name,
@@ -156,41 +158,47 @@ export async function getBlogByName(name: string): Promise<Blog | undefined> {
       url: `${siteMetadata.siteUrl}/blog/${name.replace(/\.mdx?$/, '').replace(/^.+?(\/)/, '')}`,
     },
   }
-
   return blog
 }
 
 export async function getBlogs(): Promise<Blog[]> {
-  const response = await fetch(
-    `https://api.github.com/repos/hoangndst/hoangndst-homepage/git/trees/blog?recursive=1`,
-    {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${serverRuntimeConfig.githubToken}`,
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-      cache: 'no-store',
-    }
-  )
-
-  const fileTree: BlogTree = await response.json()
-
-  const mdxFiles = fileTree.tree.filter((file) => file.path.endsWith('.mdx'))
-
+  const response = await fetch(`${siteMetadata.siteUrl}/api/blogs`)
+  if (!response.ok) {
+    return [] as Blog[]
+  }
+  const tree = (await response.json()) as BlogsTree
   const blogs = await Promise.all(
-    mdxFiles.map(async (file) => {
+    tree.data.map(async (file) => {
       try {
-        const blog = await getBlogByName(file.path)
-        return blog || null
+        const blog = await convertBlog(file.path, file.raw_data)
+        return blog as Blog
       } catch (error) {
         return null
       }
     })
   )
 
-  return blogs
-    .filter((blog) => blog !== null)
-    .sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime()
-    })
+  const validBlogs: Blog[] = []
+  for (const blog of blogs) {
+    if (blog !== null) {
+      validBlogs.push(blog)
+    }
+  }
+  return sortBlogs(validBlogs) || []
+}
+
+export function sortBlogs(blogs: Blog[]) {
+  return blogs.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime()
+  })
+}
+
+export async function getBlogBySlug(slug: string): Promise<Blog | undefined> {
+  const response = await fetch(`${siteMetadata.siteUrl}/api/blogs/${slug}`)
+  if (!response.ok) {
+    return undefined
+  }
+  const tree = (await response.json()) as BlogTree
+  const blog = await convertBlog(tree.data.path, tree.data.raw_data)
+  return blog
 }

@@ -1,25 +1,20 @@
-const handler = async () => {
+async function handler(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const visionToken = process.env.VISION_TOKEN
   if (!visionToken) {
     return Response.json('VISION_TOKEN is not set', {
       status: 500,
     })
   }
-  const response = await fetch(`https://vision.hoangndst.com/api/v1/blogs`, {
+  const response = await fetch(`https://vision.hoangndst.com/api/v1/blogs/path/${slug}`, {
     headers: {
       Accept: 'application/json',
       Authorization: `Basic ${visionToken}`,
     },
     cache: 'no-store',
   })
-
-  const posts = await response.json()
-  if (!posts) {
-    return new Response('Not found', {
-      status: 404,
-    })
-  }
-  return Response.json(posts, {
+  const post = await response.json()
+  return Response.json(post, {
     status: 200,
   })
 }
