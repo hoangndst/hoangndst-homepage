@@ -5,7 +5,7 @@ import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getBlogs } from '@/lib/blog'
-import { getTagData } from '@/lib/tag'
+import { getTags } from '@/lib/tag'
 
 export async function generateMetadata(props: {
   params: Promise<{ tag: string }>
@@ -18,14 +18,14 @@ export async function generateMetadata(props: {
     alternates: {
       canonical: './',
       types: {
-        'application/rss+xml': `${siteMetadata.siteUrl}/tags/${tag}/feed.xml`,
+        'application/rss+xml': `https://os.hoangndst.com/hoangndst/tags/${tag}/feed.xml`,
       },
     },
   })
 }
 
 export const generateStaticParams = async () => {
-  const tagData = await getTagData()
+  const tagData = await getTags()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   const paths = tagKeys.map((tag) => ({
@@ -36,12 +36,15 @@ export const generateStaticParams = async () => {
 
 export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
   const allBlogs = await getBlogs()
-  const tagData = await getTagData()
+  const tagData = await getTags()
   const params = await props.params
   const tag = decodeURI(params.tag)
 
   // Capitalize first letter and convert space to dash
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
+  if (allBlogs.length === 0) {
+    return notFound()
+  }
   const filteredPosts = allBlogs.filter(
     (post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)
   )

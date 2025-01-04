@@ -5,21 +5,20 @@ const handler = async () => {
       status: 500,
     })
   }
-  const response = await fetch(`https://vision.hoangndst.com/api/v1/blogs`, {
+  const response = await fetch(`https://vision.hoangndst.com/api/v1/blogs/tags`, {
     headers: {
       Accept: 'application/json',
       Authorization: `Basic ${visionToken}`,
     },
     cache: 'no-store',
   })
-
-  const posts = await response.json()
-  if (!posts) {
+  const tagData = await response.json()
+  if (!tagData) {
     return new Response('Not found', {
       status: 404,
     })
   }
-  return Response.json(posts, {
+  return Response.json(tagData, {
     status: 200,
   })
 }

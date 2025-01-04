@@ -1,26 +1,14 @@
-import getConfig from 'next/config'
+import siteMetadata from '@/data/siteMetadata'
 
-const { serverRuntimeConfig } = getConfig()
+type TagResponse = {
+  data: Record<string, number>
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getTagData(): Promise<any> {
-  const response = await fetch(
-    `https://raw.githubusercontent.com/hoangndst/hoangndst-homepage/blog/tag-data.json`,
-    {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${serverRuntimeConfig.githubToken}`,
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-      cache: 'no-store',
-    }
-  )
+export async function getTags(): Promise<Record<string, number>> {
+  const response = await fetch(`${siteMetadata.siteUrl}/api/tags`)
   if (!response.ok) {
-    return undefined
-  }
-  const tagData = await response.json()
-  if (tagData === null) {
     return {}
   }
-  return tagData
+  const tagData = (await response.json()) as TagResponse
+  return tagData.data
 }
