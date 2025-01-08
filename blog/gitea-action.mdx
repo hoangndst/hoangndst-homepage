@@ -1,0 +1,229 @@
+---
+title: 'Gitea Action'
+date: '2024-11-23'
+lastmod: '2024-11-23'
+tags: ['tech', 'life', 'chocoboba']
+authors: ['hoangndst']
+summary: 'I am back with my blog'
+images:
+  ['/static/images/dallas-texas-us.jpg']
+---
+## So sánh với Github Action
+### Nhưng tính năng thêm vào:
+#### 1. Sử dụng các action với URL git repository:
+  ```yaml
+  # normal uses
+  uses: actions/checkout@v4
+  # with git url
+  uses: https://github.com/actions/checkout@v4
+  ```
+#### 2. Có thêm lựa chọn code các action bằng ngôn ngữ Golang thay vì chỉ sử dụng ngôn ngữ Javascript. [Tham khảo thêm](https://blog.gitea.com/creating-go-actions/)
+#### 3. Hỗ trợ non-standard syntax @yearly, @monthly, @weekly, @daily, @hourly ở schedule. Github Actions chỉ hỗ trợ cron syntax. [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule)
+  ```yaml
+  # normal uses
+  schedule:
+    - cron: '0 0 * * 0'
+  # with non-standard syntax
+  schedule:
+    - @weekly
+  ```
+
+### Những syntax mà Gitea Action không hỗ trợ:
+#### 1. `concurrency`: 
+- Được sử dụng để quản lý việc chạy các workflows đồng thời, nhằm tránh tình trạng xung đột hoặc lãng phí tài nguyên. [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs)
+- VD bên dưới là cấu hình `job-1` chạy trong môi trường `staging_environment`. Điều này có nghĩa nếu `job-1` mới được trigger, tất cả các job khác đang chạy trong môi trường `staging_environment` sẽ bị hủy.
+  ```yaml
+  jobs:
+    job-1:
+      runs-on: ubuntu-latest
+      concurrency:
+        group: staging_environment
+        cancel-in-progress: true
+  ```
+#### 2. `run-name`: 
+- Sử dụng để tùy chỉnh tên của một workflow cụ thể khi nó chạy.
+  ```yaml
+  name: Deploy to Production
+  run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
+  ```
+#### 3. `permissions` và `jobs.<job_id>.permissions`: 
+- Sử dụng để quản lý quyền truy cập của workflows hoặc jobs vào GitHub API (ví dụ: để tạo, đọc, ghi, hoặc xóa tài nguyên như repository, issues, hay pull requests). [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#permissions)
+- Quyền sẽ được ghi đè ở cấp độ job nếu cấu hình ở cấp độ job.
+  ```yaml
+  name: Example Workflow
+
+  permissions:
+    contents: read
+
+  on:
+    pull_request:
+
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      permissions:
+        pull-requests: write
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+  ```
+#### 4. `jobs.<job_id>.timeout-minutes`: 
+- Sử dụng để đặt giới hạn thời gian tối đa (timeout) cho một job. Nếu job vượt quá thời gian này mà chưa hoàn thành, nó sẽ tự động bị hủy. [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes)
+  ```yaml
+  name: Example Workflow
+  on:
+    push:
+      branches:
+        - main
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      timeout-minutes: 30
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+        - name: Build project
+          run: echo "Building..."
+  ```
+#### 5. `jobs.<job_id>.continue-on-error`:  
+- Sử dụng để chỉ định rằng một job sẽ tiếp tục chạy dù có xảy ra lỗi. Thay vì dừng workflow khi job bị lỗi, workflow sẽ tiếp tục thực thi các jobs hoặc steps tiếp theo (nếu có). [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idcontinue-on-error)
+  ```yaml
+  name: Continue on Error Example
+  on:
+    push:
+      branches:
+        - main
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Fail intentionally
+          run: exit 1
+      continue-on-error: true
+
+    test:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Run tests
+          run: echo "Testing..."
+  ```
+#### 6. `jobs.<job_id>.environment`: 
+- Sử dụng để chỉ định môi trường (environment) mà job sẽ chạy. Môi trường là một cách để quản lý và bảo vệ các secrets và thiết lập của dự án. [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment)
+  ```yaml
+  name: Staging Workflow
+  on:
+    push:
+      branches:
+        - staging
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      environment:
+        name: staging
+        url: https://staging.example.com
+      steps:
+        - name: Deploy application
+          run: echo "Deploying to staging environment..."
+  ```
+#### 7. `run-on` với cấu hình nâng cao: [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on)
+- Hiện tại Gitea Action chỉ hỗ trợ cấu hình `run-on` với các giá trị như:
+  ```yaml
+  runs-on: ubuntu-latest
+  runs-on: [self-hosted, linux]
+  ```
+- Github Action hỗ trợ cấu hình `run-on` với các giá trị như:
+  ```yaml
+  strategy:
+    matrix:
+      os: [ubuntu-latest, windows-latest]
+  jobs:
+    test:
+      runs-on: ${{ matrix.os }}
+      steps:
+        - name: Run tests
+          run: echo "Testing on ${{ matrix.os }}"
+  ```
+#### 8. `hashFiles`: 
+- Sử dụng để tính giá trị hash (SHA-256) của một hoặc nhiều tệp. Biểu thức này hữu ích khi muốn tạo giá trị duy nhất dựa trên nội dung tệp để kiểm tra sự thay đổi hoặc kích hoạt lại bước (step) trong workflow. [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#hashfiles)
+  ```yaml
+  name: Cache Example
+  on:
+    push:
+      branches:
+        - main
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Cache dependencies
+          uses: actions/cache@v3
+          with:
+            path: ~/.npm
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-node-modules-
+  ```
+- Hiện tại Gitea Action chưa hỗ trợ. Nhưng có thể sử dụng: https://gitea.com/actions/go-hashfiles
+#### 9. `workflow_dispatch` đã được thêm vào `v1.23.0-rc0`.
+
+### Những tính năng còn thiếu:
+#### 1. Package repository authorization
+- Trong Gitea Actions, hiện tại token mặc định `GITEA_TOKEN` cho một job không có khả năng tự động tải lên kho lưu trữ package (ví dụ: upload image OCI).
+- Điều này khác với GitHub Actions, nơi `GITHUB_TOKEN` có thể được sử dụng để thực hiện các tác vụ liên quan đến package repository với các phạm vi quyền hạn cụ thể.
+- Sử dụng thay thế thủ công với PAT: https://github.com/go-gitea/gitea/issues/23642#issuecomment-2119876692
+#### 2. Problem Matchers: [Tham khảo thêm](https://github.com/actions/toolkit/blob/main/docs/problem-matchers.md)
+- Cho phép tự động nhận diện và phân loại các lỗi trong quá trình chạy workflow. Mục tiêu của Problem Matchers là giúp quá trình debug dễ dàng hơn, tự động xác định lỗi và hiển thị thông tin chi tiết về lỗi trong giao diện GitHub Actions, giúp người phát triển dễ dàng tìm và sửa lỗi.
+  ```yaml
+  name: Lint Code
+  on: [push]
+  jobs:
+    lint:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Install dependencies
+          run: npm install
+
+        - name: Run eslint
+          run: npm run lint
+          problem-matcher: ${{ github.action_path }}/problem-matchers/eslint.json
+  ```
+
+#### 3. Create an error annotation. [Tham khảo thêm](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#example-creating-an-annotation-for-an-error)
+- Sử dụng để tạo ra các thông báo lỗi (error annotations) trong giao diện GitHub, giúp người phát triển dễ dàng nhận diện và điều hướng đến những phần có vấn đề trong mã nguồn hoặc output của công cụ kiểm tra. Điều này rất hữu ích khi bạn muốn làm rõ các lỗi hoặc thông báo trong quá trình chạy workflow.
+![](https://user-images.githubusercontent.com/1402241/79634976-31327f00-816e-11ea-9863-81378c3622d4.png)
+  ```yaml
+  name: Error Annotation Example
+  on: [push]
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        - name: Run a command with error
+          run: |
+            echo "This is a test"
+            echo "::error file=app.js,line=20::This is a sample error in app.js"
+  ```
+- Services steps chưa có logs trên gia diện của Gitea:
+  ```yaml
+  jobs:
+    # This workflow contains a single job called "build"
+    example-job:
+      runs-on: ubuntu-latest
+      services:
+        mysql:
+          image: mysql:5.7
+          ports:
+            - 3306:3306
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Run a database migration
+          run: |
+            mysql -h 127.0.0.1 -u root -e "CREATE DATABASE testdb;"
+  ```
