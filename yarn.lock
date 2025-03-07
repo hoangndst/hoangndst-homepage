@@ -2092,6 +2092,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/core@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@eslint/core@npm:0.12.0"
+  dependencies:
+    "@types/json-schema": ^7.0.15
+  checksum: 3979af324102a3af2742060360563ba6b9525b8e1e524ad3d3e31e65af27db554b61d1cdfeaa42e15fb7d9ce9097c44225fd9e4f8193576accc1772457b88c12
+  languageName: node
+  linkType: hard
+
 "@eslint/core@npm:^0.7.0":
   version: 0.7.0
   resolution: "@eslint/core@npm:0.7.0"
@@ -2131,11 +2140,12 @@ __metadata:
   linkType: hard
 
 "@eslint/plugin-kit@npm:^0.2.0":
-  version: 0.2.2
-  resolution: "@eslint/plugin-kit@npm:0.2.2"
+  version: 0.2.7
+  resolution: "@eslint/plugin-kit@npm:0.2.7"
   dependencies:
+    "@eslint/core": ^0.12.0
     levn: ^0.4.1
-  checksum: 08935d81f59f8b2ccc6df1e2517684d6cb9911390e210dacd861be60a000224b0b2f5aa9364ff78e4b14152d1d777aa621f587479aae07d0670b2e14a5a18ef6
+  checksum: e5d9be6ae54c7abd4605025e5831ac16dd0636ac5d41fbfcd8898a5d29711a2fb1fc8c784aa68a1469e66c8d41965da70d7a7516f9c2bca1c84342dd344bbb8e
   languageName: node
   linkType: hard
 
