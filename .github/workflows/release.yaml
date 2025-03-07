@@ -67,3 +67,5 @@ jobs:
           push: true
           platforms: linux/arm64 # for Raspberry Pi
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.REGISTRY_PREFIX }}:${{ steps.get_version.outputs.VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

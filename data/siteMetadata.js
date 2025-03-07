@@ -59,7 +59,7 @@ const siteMetadata = {
       repo: 'hoangndst/hoangndst-homepage',
       repositoryId: 'R_kgDOIPvQkg',
       category: '@hoangndst',
-      categoryId: 'DIC_kwDOIPvQks4Ckjsy',
+      categoryId: 'DIC_kwDOIPvQks4CkjuW',
       mapping: 'pathname', // supported options: pathname, url, title
       reactions: '1', // Emoji reactions: 1 = enable / 0 = disable
       // Send discussion metadata periodically to the parent window: 1 = enable / 0 = disable
