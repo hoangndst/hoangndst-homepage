@@ -58,6 +58,14 @@ jobs:
       - name: Get Release Version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
     
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -67,5 +75,13 @@ jobs:
           push: true
           platforms: linux/arm64 # for Raspberry Pi
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.REGISTRY_PREFIX }}:${{ steps.get_version.outputs.VERSION }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
+          cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
+      
+      - # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf ${{ runner.temp }}/.buildx-cache
+          mv ${{ runner.temp }}/.buildx-cache-new ${{ runner.temp }}/.buildx-cache
