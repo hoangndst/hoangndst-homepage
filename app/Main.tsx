@@ -9,7 +9,7 @@ import Talk from '@/components/Talk'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 
-const MAX_DISPLAY = 5
+const MAX_DISPLAY = 2
 
 export default function Home({ posts }) {
   const el = React.useRef(null)
