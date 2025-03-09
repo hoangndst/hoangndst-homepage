@@ -3,18 +3,18 @@ title: 'Kratix Multi-Cluster'
 date: '2025-03-08'
 lastmod: '2025-03-08'
 tags: ['tech', 'platform-engineering', 'idp', 'kratix']
-summary: 'Triển khai Kratix theo mô hình multi-cluster (platform - workers)'
+summary: 'Deploy Kratix in a multi-cluster model (platform - workers)'
 images: ['/static/blog/kratix-multi-cluster/topo.png']
 ---
 ## Table of Contents
-1. [Mô hình triển khai Kratix theo mô hình multi-cluster (platform - workers)](#1-mô-hình-triển-khai-kratix-theo-mô-hình-multi-cluster-platform---workers)
-2. [Cài đặt các công cụ cần thiết](#2-cài-đặt-các-công-cụ-cần-thiết)
-3. [Triển khai cụm Platform](#3-triển-khai-cụm-platform)
-4. [Triển khai các cụm worker](#4-triển-khai-các-cụm-worker)
-5. [Tiến hành cài đặt các Promise lên cụm Platform. (Example Jenkins)](#5-tiến-hành-cài-đặt-các-promise-lên-cụm-platform-example-jenkins)
-6. [Kết luận](#6-kết-luận)
+1. [Deploy Kratix in a multi-cluster model (platform - workers)](#1-deploy-kratix-in-a-multi-cluster-model-platform---workers)
+2. [Install necessary tools](#2-install-necessary-tools)
+3. [Deploy Platform cluster](#3-deploy-platform-cluster)
+4. [Deploy Worker clusters](#4-deploy-worker-clusters)
+5. [Install Promises on the Platform cluster (Example Jenkins)](#5-install-promises-on-the-platform-cluster-example-jenkins)
+6. [Conclusion](#6-conclusion)
 
-## 1. Mô hình triển khai Kratix theo mô hình multi-cluster (platform - workers)
+## 1. Deploy Kratix in a multi-cluster model (platform - workers)
 <div style={{ textAlign: "center" }}>
   <img
     src="/static/blog/kratix-multi-cluster/topo.png"
@@ -23,30 +23,30 @@ images: ['/static/blog/kratix-multi-cluster/topo.png']
   />
 </div>
 
-## 2. Cài đặt các công cụ cần thiết
+## 2. Install necessary tools
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) - Kubernetes IN Docker
 - [docker](https://docs.docker.com/get-docker/) - Docker Engine
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - Kubernetes Command Line Tool
 
-## 3. Triên khai cụm Platform
-- Khởi tạo cụm platform cluster bằng kind
+## 3. Deploy Platform cluster
+- Create the platform cluster using kind
   ```sh
   kind create cluster --image kindest/node:v1.27.3 --name platform
   export PLATFORM="kind-platform"
   ```
-- Cài đặt cert-manager trên cụm platform
+- Install cert-manager on the platform cluster
   ```sh
   kubectl --context $PLATFORM apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
   ```
-- Cài đặt kratix trên cụm platform
+- Install kratix on the platform cluster
   ```sh
   kubectl apply --context $PLATFORM --filename https://github.com/syntasso/kratix/releases/latest/download/kratix.yaml
   ```
-- Cấu hình State Store cho Kratix
+- Configure State Store for Kratix
 
-  Kratix sử dụng GitOps để cung cấp tài nguyên trên cụm worker. Ta có thể cấu hình Kratix với nhiều kho lưu trữ GitOps khác nhau bằng cách tạo State Storei. Kratix hỗ trợ Bucket State Store và Git State Store.
+  Kratix uses GitOps to provide resources on the worker cluster. We can configure Kratix with multiple GitOps repositories by creating a State Store. Kratix supports Bucket State Store and Git State Store.
   
-  Ở đây ta sẽ dụng Git State Store, khi sử dụng GitStateStore ta cần cho Kratix quyền có thể push resource lên repository bằng cách tạo token hoặc cung cấp user password bằng secret trong K8S.
+  Here we will use Git State Store. When using GitStateStore, we need to give Kratix permission to push resources to the repository by creating a token or providing user password via secret in K8S.
 
   Github Token:
   ```sh
@@ -63,7 +63,7 @@ images: ['/static/blog/kratix-multi-cluster/topo.png']
     username: [username base64]
     password: [password base64]
   ```
-- Cấu hình GitStateStore cho Kratix:
+- Configure GitStateStore for Kratix:
   ```sh
   kubectl apply --context $PLATFORM --filename platfom_v1alpha1_gitstatestore.yaml
   ```
@@ -81,23 +81,23 @@ images: ['/static/blog/kratix-multi-cluster/topo.png']
     url: https://github.com/Choco-Boba/backstage
     branch: main
   ```
-## 4. Triển khai các cụm worker:
-- Khởi tạo cụm worker bằng kind:
+## 4. Deploy Worker clusters:
+- Create the worker cluster using kind:
   ```sh
   kind create cluster --image kindest/node:v1.27.3 --name worker
   export WORKER="kind-worker"
   ```
-- Cài đặt Flux trển cụm worker:
+- Install Flux on the worker cluster:
   ```sh
   kubectl apply --context $WORKER --filename https://raw.githubusercontent.com/syntasso/kratix/main/hack/destination/gitops-tk-install.yaml
   ```
-- Cấu hình Flux cho cụm worker
+- Configure Flux for the worker cluster
   
-  Ta cấu hình nơi lưu trữ các resource để Flux thực hiện nhiệm vụ đồng bộ và triển khai tài nguyên trên cụm woker:
+  We configure the storage location for resources so that Flux can synchronize and deploy resources on the worker cluster:
   
-  Yêu cầu cần có:
+  Requirements:
   
-  Secret lưu trữ Github/Gilab token hoặc username password. Tham khảo thêm tại: https://docs.kratix.io/main/reference/statestore/gitstatestore#auth
+  Secret storing Github/Gitlab token or username password. Refer to: https://docs.kratix.io/main/reference/statestore/gitstatestore#auth
   ```yaml
   apiVersion: source.toolkit.fluxcd.io/v1beta1
   kind: GitRepository
@@ -153,7 +153,7 @@ images: ['/static/blog/kratix-multi-cluster/topo.png']
     path: "kratix/worker-1/dependencies/"
     prune: true
   ```
-- Bước cuối ta đăng ký cụm worker vừa triển khai với cụm platform đã được cài đặt Kratix. Xem thêm tại https://docs.kratix.io/main/reference/destinations/intro
+- Finally, register the worker cluster with the platform cluster where Kratix is installed. See more at https://docs.kratix.io/main/reference/destinations/intro
 
   ```yaml
   kubectl apply --context $PLATFORM --filename platform_v1alplha1_worker.yaml
@@ -171,9 +171,9 @@ images: ['/static/blog/kratix-multi-cluster/topo.png']
       name: default
       kind: GitStateStore
   ```
-- Sau khi đăng ký cụm worker với cụm platform ta sẽ thấy kratix sẽ bắt đầu thực hiện đẩy tài nguyên đầu tiên (namespace kratix-worker-system) lên folder của cụm worker (vừa được đăng ký) lên git repository.
+- After registering the worker cluster with the platform cluster, Kratix will start pushing the first resource (namespace kratix-worker-system) to the folder of the worker cluster (just registered) on the git repository.
 
-  Folder của cụm sẽ được đặt tên theo tên Destination:
+  The folder of the cluster will be named according to the Destination name:
   
   <div style={{ textAlign: "center" }}>
     <img
@@ -183,15 +183,15 @@ images: ['/static/blog/kratix-multi-cluster/topo.png']
     />
   </div>
 
-  Các cụm worker nếu muốn join vào cũng thực hiện tương tự từ bước cài đặt Flux.
+  Other worker clusters that want to join will also follow the same steps from installing Flux.
 
-### 5. Tiến hành cài đặt các Promise lên cụm Platform. (Example Jenkins)
-Ta có thể tìm kiếm các tài nguyên Promise trên Marketplace của Kratix hoặc cũng có thể tự viết các Promise: [Kratix Marketplace](https://docs.kratix.io/marketplace)
-- Promise Jenkins: https://github.com/syntasso/kratix-marketplace/tree/main/jenkins
+### 5. Install Promises on the Platform cluster (Example Jenkins)
+We can find Promise resources on the Kratix Marketplace or write our own Promises: [Kratix Marketplace](https://docs.kratix.io/marketplace)
+- Jenkins Promise: https://github.com/syntasso/kratix-marketplace/tree/main/jenkins
   ```sh
   kubectl apply --context $PLATFORM --filename promise.yaml
   ```
-- Sau khi cài đặt Promise Jenkins trên cụm Platform Kratix sẽ bắt đầu đẩy các tài nguyên lên folder của cụm worker đã được đăng ký.
+- After installing the Jenkins Promise on the Platform cluster, Kratix will start pushing resources to the folder of the registered worker cluster.
   <div style={{ textAlign: "center" }}>
     <img
       src="/static/blog/kratix-multi-cluster/folder_2.png"
@@ -199,14 +199,15 @@ Ta có thể tìm kiếm các tài nguyên Promise trên Marketplace của Krati
       style={{ width: "100%", display: "block", margin: "0 auto" }}
     />
   </div>
-  Tiếp đó cụm worker sẽ đồng bộ từ git repository và triển khai những tài nguyên cần thiết mà kratix đã yêu cầu.
+  Then the worker cluster will synchronize from the git repository and deploy the necessary resources that Kratix has requested.
   
-  Ở đây với Jenkins Promise thì Kratix sẽ đẩy resource dependencies là 1 Jenkins Operator lên cụm worker.
+  Here with the Jenkins Promise, Kratix will push the resource dependencies, which is a Jenkins Operator, to the worker cluster.
   
-  Cứ mỗi 1 lần khi yêu cầu 1 instance Jenkins thì Jenkins Operator sẽ thực hiện nhiệm vụ tạo ra tài nguyên này trên cụm worker.
+  Each time a Jenkins instance is requested, the Jenkins Operator will create this resource on the worker cluster.
 
-### 6. Kết luận
-- Với mô hình triển khai Kratix theo mô hình multi-cluster (platform - workers) ta có thể dễ dàng mở rộng cụm worker mà không ảnh hưởng đến cụm platform. Cụm platform sẽ quản lý và cung cấp tài nguyên cho cụm worker thông qua GitOps. Cụm worker sẽ đồng bộ và triển khai tài nguyên mà cụm platform yêu cầu.
-- Mô hình Platform Orchestrator này khá hay nhưng đòi hỏi các cụm Workers phải cài các tài nguyên cần thiết như đã nêu trên. Ta sẽ cùng so sánh với một Platform Orchestrator khác ở bài blog tiếp theo nhé.
+### 6. Conclusion
+- With the Kratix multi-cluster deployment model (platform - workers), we can easily scale the worker cluster without affecting the platform cluster. The platform cluster will manage and provide resources for the worker cluster through GitOps. The worker cluster will synchronize and deploy the resources requested by the platform cluster.
+- This Platform Orchestrator model is quite interesting but requires the worker clusters to install the necessary resources as mentioned above. We will compare it with another Platform Orchestrator in the next blog post.
 > [!NOTE]  
 > Checkout up coming talk about **Platform Orchestrator** at [FOSSASIA Summit 2025](https://eventyay.com/e/4c0e0c27/session/9434).
+
