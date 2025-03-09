@@ -1,0 +1,78 @@
+---
+title: 'Calculating Flight Paths'
+date: '2025-03-02'
+lastmod: '2025-03-02'
+tags: ['math', 'calculus']
+summary: 'At what angle should the pilot leave Daytona Beach to fly in a straight line and land in Prescott?'
+images:
+  ['/static/blog/calculating-flight-paths/back.png']
+---
+
+<details>
+  <summary style={{ fontSize: "1.5em", fontWeight: "bold" }}>Table of Contents</summary>
+  1. [Question](#1-question) <br />
+  2. [Solution](#2-solution) <br />
+  3. [Conclusion](#3-conclusion) <br />
+</details>
+
+## 1. Question
+$Question$ A pilot is flying from Daytona Beach to Prescott. The two cities are 1874 miles away from one another, and the angle from Daytona Beach to Prescott is W28N. At takeoff, there is a 12 mph wind blowing N37E that blows constantly throughout the entire 4-hour flight. At what angle should the pilot leave Daytona Beach to fly in a straight line and land in Prescott?
+<div style={{ textAlign: "center" }}>
+  <img
+    src="/static/blog/calculating-flight-paths/back.png"
+    alt="Flight Path Calculation Diagram"
+    style={{ width: "80%", display: "block", margin: "0 auto" }}
+  />
+  <p style={{ textAlign: "center" }}>Figure 1: Flight Path Calculation Diagram</p>
+</div>
+
+## 2. Solution
+We call the velocity of the plane relative to the ground $V_g$. Cause two cities are 1874 miles away from one another and it took an entire 4-hour flight:
+
+$$
+\Rightarrow V_g = \dfrac{1874}{4} = 468.5 (miles/hour)
+$$
+
+The angle from Daytona Beach to Prescott is $W28N = 152 (degrees)$ in the X-Y coordinate, which means it is in the 2nd quadrant:
+
+$$
+\begin{align*}
+V_gx&=-468.5\cos(28)\approx -413.66 \\
+V_gy&=468.5\sin(28) \approx 219.95 \\
+\end{align*}
+$$
+
+We call the velocity of the wind $V_w = 12(miles/hour)$. Cause wind blowing $N37E = 233 (degrees)$ in the $X-Y$ coordinate, which means it is in the 3rd quadrant:
+
+$$
+\begin{align*} 
+V_wx&=  -12\sin(37) \approx -7.22 \\ 
+V_wy &=  -12\cos(37) \approx -9.58
+\end{align*}
+$$
+
+We call vector $\vec{V_p}$ the way the pilot leaves Daytona Beach to fly in a straight line and land in Prescott.
+
+$$
+\begin{align*}
+V_gx&=V_px + V_wx  & \Rightarrow V_px &= V_gx - V_wx = -413.66-(-7.22)=-406.44 \\
+V_gy&=V_py + V_wy & \Rightarrow V_py &= V_gy - V_wy = 219.95-(-9.58)=229.53 \\
+\end{align*}
+$$
+
+Cause $V_px < 0$ and $V_py > 0$ so that means $\vec{V_p}$ is in the 2nd quadrant. We call the angle between $\vec{V_p}$ and the X-axis $\alpha$ (where 
+ is the angle from the West to the North):
+
+$$
+\tan(\alpha) = \left| \dfrac{V_py}{V_px}\right|=\left| \dfrac{229.53}{-406.44}\right| \approx 0.565
+$$
+
+$$
+\Rightarrow \alpha = \arctan(0.565) \approx 29.46 (degrees)
+$$
+
+Thus, the pilot should leave Daytona Beach at an angle of $W29.46N$ to fly in a straight line and land in Prescott. 
+That means the plane flew northeast at an angle of $1.46 (degrees)$.
+
+## 3. Conclusion
+The pilot should leave Daytona Beach at an angle of $W29.46N$ to fly in a straight line and land in Prescott. That means the plane flew northeast at an angle of $1.46 (degrees)$.
