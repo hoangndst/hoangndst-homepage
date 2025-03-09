@@ -22,3 +22,13 @@ jobs:
         with:
           webhook_url: ${{ secrets.WEBHOOK_URL }}?tag=${{ steps.get_version.outputs.VERSION }}
           verify_ssl: false
+
+      - name: Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🚀 Release ${{ steps.get_version.outputs.VERSION }} of ${{ github.repository }} has been deployed!
+
+            💻 Website: https://hoangndst.com

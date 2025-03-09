@@ -1,0 +1,128 @@
+---
+title: 'Stack and Queue'
+date: '2021-05-05'
+lastmod: '2021-05-05'
+tags: ['stack', 'queue', 'data-structure']
+summary: 'Giới thiệu về Stack và Queue'
+images: ['/static/blog/stack-and-queue/fig-1.png']
+---
+### 1. Queue
+First-in-first-out Data Structure. Trong cấu trúc dữ liệu FIFO, phần tử đầu tiên được thêm vào hàng đợi sẽ được xử lý trước.
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-1"
+        src="/static/blog/stack-and-queue/fig-1.png"
+        alt="Queue"
+        style={{ width: "80%", display: "block", margin: "0 auto" }}
+    />
+    <p style={{ textAlign: "center" }}>Figure 1: Queue</p>
+</div>
+
+Như trong hình trên, hàng đợi là một cấu trúc dữ liệu FIFO điển hình. Thao tác chèn còn được gọi là `enqueue` và phần tử mới luôn được thêm vào cuối hàng đợi. Thao tác xóa được gọi là `dequeue`. Bạn chỉ được phép xóa phần tử đầu tiên.
+
+Bắt đầu với class cơ bản nhất:
+<div id="init-code">
+```cpp
+#include <iostream>
+using namespace std;
+
+class Queue {
+    int *arr;
+    int front, rear, size;
+    unsigned capacity;
+public:
+};
+```
+</div>
+
+- `front` là vị trí của phần tử đầu
+- `rear` là vị trí của thành phần cuối
+- `size` là số phần tử đang có
+- `capacity` là sức chứa của Queue
+
+`Queue(k)`: Khởi tạo với kích thước của hàng đợi là `k`.
+<div id="init-queue">
+```cpp
+public:
+    Queue(int k) {
+        arr = new int[k];
+        capacity = k;
+        front = 0;
+        rear = capacity - 1;
+        size = 0;
+    }
+```
+</div>
+
+`isEmpty()`: Kiểm tra xem hàng đợi có trống hay không.
+
+`isFull()`: Kiểm tra xem hàng đợi đã đầy hay chưa.
+<div id="queue-1">
+```cpp
+    bool isEmpty() {
+        if (size == 0) return true;
+        return false;
+    }
+    bool isFull() {
+        if(size == capacity) return true;
+        return false;
+    }
+```
+</div>
+
+`int Front()`: Lấy phần tử đầu cảu Queue, nếu trống trả về -1.
+
+`int Rear()`: Lấy phần tử cuối của Queue, nếu trống trả về -1.
+<div id="queue-2">
+```cpp
+    int Front() {
+        if(isEmpty()) return -1;
+        return arr[front];
+    }
+    int Rear() {
+        if(isEmpty()) return -1;
+        return arr[rear];
+    }
+```
+</div>
+
+`bool enQueue(int value)`: Chèn một phần tử vào hàng đợi. Trả về `true` nếu hoạt động thành công.
+<div id="queue-3">
+```cpp
+    bool enQueue(int value) {
+        if(isFull()) return false;
+        rear = (rear + 1) % capacity;
+        arr[rear] = value;
+        size++;
+        return true;
+    }
+```
+</div>
+
+Tại sao `rear = (rear + 1) % capacity` ? Để dễ hiểu thì hãy lấy VD ra:
+- Cho `capacity = 5` -> `rear = capaciy - 1 = 4`. Ban đầu Queue trống `rear = (rear + 1) % capacity = 0` thì ta có phần tử đầu tiên cũng là phần tử cuối cùng vì chỉ có 1 phần tử.
+- Tiếp thêm lần 2, `rear = (rear + 1) % capacity = 1` Khi đó `rear = 1` và `front = 0` , tiếp tục cho đến khi hết Queue.
+
+Tương tự `bool deQueue()` cũng làm tương tự với `front`.
+<div id="queue-4">
+```cpp
+    bool deQueue() {
+        if(isEmpty()) return false;
+        front = (front + 1) % capacity;
+        size--;
+        return true;
+    }
+};
+```
+</div>
+
+#### Time Complexity:
+| Operation | Time Complexity |
+|:---------:|:---------------:|
+| enQueue   | $O(1)$          |
+| deQueue   | $O(1)$          |
+| Front     | $O(1)$          |
+| Rear      | $O(1)$          |
+
+> [!NOTE]
+> To be updated
