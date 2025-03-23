@@ -2,6 +2,11 @@ import { ReactNode } from 'react'
 import type { Authors } from 'contentlayer/generated'
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
+import Link from '@/components/Link'
+import type { Talks } from 'contentlayer/generated'
+import { allTalks } from 'contentlayer/generated'
+import { formatDate } from 'pliny/utils/formatDate'
+import siteMetadata from '@/data/siteMetadata'
 
 interface Props {
   children: ReactNode
@@ -99,6 +104,40 @@ export default function AuthorLayout({ children, content }: Props) {
               </div>
               <div className="not-prose">
                 <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                  Talks 🎤
+                </h2>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                  {allTalks
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sort by date (descending)
+                    .map((talk: Talks) => {
+                      return (
+                        <li key={talk.event} className="flex items-center justify-between">
+                          <div>
+                            <h3 className="text-gray-500">
+                              <a
+                                href={talk.url || '#'}
+                                className="text-blue-500 no-underline hover:text-blue-700"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {talk.event}
+                              </a>
+                            </h3>
+                            {/* <p className="text-gray-500">Honors Program</p> */}
+                            <p className="text-gray-500"></p>
+                          </div>
+                          <span className="text-gray-400">
+                            <time suppressHydrationWarning dateTime={talk.date}>
+                              {formatDate(talk.date, siteMetadata.locale)}
+                            </time>
+                          </span>
+                        </li>
+                      )
+                    })}
+                </ul>
+              </div>
+              <div className="not-prose">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
                   Education
                 </h2>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
@@ -120,6 +159,60 @@ export default function AuthorLayout({ children, content }: Props) {
                       </p>
                     </div>
                     <span className="text-gray-400">Oct 2020 - Dec 2024</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="not-prose">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                  Awards
+                </h2>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                  <li className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        ECE Pioneering Competitive Scholarship 🏅
+                      </h3>
+                      <p className="text-gray-500">$19.500 per year (International Student)</p>
+                      <p className="text-gray-500">
+                        <a
+                          href="https://www.utsa.edu/"
+                          className="text-blue-500 no-underline hover:text-blue-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          The University of Texas at San Antonio
+                        </a>
+                      </p>
+                    </div>
+                    <span className="text-gray-400">2025</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        Viettel Digital Talent
+                        <a
+                          href="https://jobs.viettel.vn/content/Viettel-Digital-Talent/?locale=en_US"
+                          className="text-blue-500 no-underline hover:text-blue-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {' '}
+                          🏅
+                        </a>
+                      </h3>
+                      <p className="text-gray-500">Talent Engineer in Cloud Computing</p>
+                      <p className="text-gray-500">
+                        <a
+                          href="https://www.utsa.edu/"
+                          className="text-blue-500 no-underline hover:text-blue-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Viettel Group
+                        </a>
+                      </p>
+                    </div>
+                    <span className="text-gray-400">2023</span>
                   </li>
                 </ul>
               </div>
