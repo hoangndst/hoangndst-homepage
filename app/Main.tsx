@@ -50,9 +50,27 @@ export default function Home({ posts }) {
           <div className="dark:text-grey text-gray mb-8  mt-4 text-base">
             <span ref={el} />
           </div>
-
+          <div className="flex flex-wrap items-center justify-center pt-6">
+            <blockquote className="pl-4 text-center text-xl/5 font-medium text-gray-500 dark:text-gray-400">
+              <p>"The people who are crazy enough to think they can change the world</p>
+              <p>
+                {' '}
+                are the ones who do." -{' '}
+                <span className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                  <Link
+                    href="https://www.goodreads.com/quotes/9859550-the-people-who-are-crazy-enough-to-think-they-can"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Steve Jobs
+                  </Link>
+                </span>
+              </p>
+            </blockquote>
+          </div>
+          {/* short divide y */}
+          <div className="divide-y divide-gray-200 dark:divide-gray-700" />
           <Talk />
-
           <p className="text-gray dark:text-gray text-lg leading-7">{siteMetadata.description}</p>
         </div>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -72,7 +90,7 @@ export default function Home({ posts }) {
                         <Image
                           alt={title}
                           src={images[0]}
-                          className="object-cover object-center"
+                          className="rounded-lg object-cover object-center"
                           width={215}
                           height={150}
                         />
