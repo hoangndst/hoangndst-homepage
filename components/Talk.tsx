@@ -23,8 +23,8 @@ const Talk = () => {
   }, [])
 
   return (
-    <div className="dark:text-grey text-gray flex flex-col items-center justify-center pb-12 pt-12">
-      <p className="text-s text-gray dark:text-gray pb-12 leading-7 md:mt-5">
+    <div className="dark:text-grey text-gray flex flex-col items-center justify-center pb-6 pt-6 md:space-y-5">
+      <p className="text-s text-gray dark:text-gray leading-7 md:mt-5">
         <Link href="/about">Checkout my latest conference talks 🎤</Link>
       </p>
       <ul className="">
@@ -36,7 +36,7 @@ const Talk = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center">
                   <Link
                     href={talk.url || '#'}
-                    className="text-xl font-bold text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                    className="text-xl font-medium text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                   >
                     {talk.event}
                   </Link>
