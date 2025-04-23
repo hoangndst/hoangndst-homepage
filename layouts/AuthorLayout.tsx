@@ -87,7 +87,7 @@ export default function AuthorLayout({ children, content }: Props) {
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">Software Engineer Intern</h3>
+                      <h3 className="text-lg font-semibold">Software Engineer</h3>
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
@@ -204,7 +204,7 @@ export default function AuthorLayout({ children, content }: Props) {
                       <p className="text-gray-500">Talent Engineer in Cloud Computing</p>
                       <p className="text-gray-500">
                         <a
-                          href="https://www.utsa.edu/"
+                          href="https://viettel.com.vn/en/"
                           className="text-blue-500 no-underline hover:text-blue-700"
                           target="_blank"
                           rel="noopener noreferrer"
