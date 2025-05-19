@@ -5,8 +5,14 @@ import { useEffect, useState } from 'react'
 import Link from './Link'
 
 const PAGE_SIZE = 10
+const MIN_CONTAINER_HEIGHT = 400
 
-// Helper to format date to human readable
+/**
+ * Formats a date string into a human-readable string.
+ * @param {string | undefined} dateString - The date string to format.
+ * @returns {string} The formatted date, or '-' if undefined, or the original string if invalid.
+ * If dateString is undefined, returns '-'. If dateString is invalid, returns the original string.
+ */
 function formatDate(dateString?: string) {
   if (!dateString) return '-'
   const date = new Date(dateString)
@@ -97,11 +103,13 @@ const Documents = () => {
     fetchDocuments()
   }, [])
 
-  const totalPages = Math.ceil(documents.length / PAGE_SIZE)
+  const totalPages = Math.max(1, Math.ceil(documents.length / PAGE_SIZE))
   const paginatedDocuments = documents.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   return (
-    <div className="min-h-[400px] w-full rounded-lg bg-gray-900 p-2 text-gray-100 shadow-md sm:p-4">
+    <div
+      className={`min-h-[${MIN_CONTAINER_HEIGHT}px] w-full rounded-lg bg-gray-900 p-2 text-gray-100 shadow-md sm:p-4`}
+    >
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xl font-bold">
           <svg
@@ -125,6 +133,7 @@ const Documents = () => {
           onClick={() => fetchDocuments()}
           disabled={isLoading}
           title="Refresh"
+          aria-label="Refresh documents"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +226,7 @@ const Documents = () => {
       </div>
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-center gap-4">
+        <div className="mt-4 flex items-center justify-center gap-4 text-sm">
           <button
             className="rounded bg-gray-800 px-3 py-1 text-gray-300 hover:bg-gray-700 disabled:opacity-50"
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
