@@ -33,5 +33,4 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
             🚀 Release ${{ steps.get_version.outputs.VERSION }} of ${{ github.repository }} has been deployed!
-
             💻 Website: https://hoangndst.com
