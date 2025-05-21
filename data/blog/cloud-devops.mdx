@@ -1,0 +1,275 @@
+---
+title: 'Cloud DevOps'
+date: '2025-05-21'
+lastmod: '2025-05-21'
+tags: ['devops', 'cloud']
+summary: 'Fundamentals of Cloud DevOps'
+images: ['/static/blog/cloud-devops/image2.png']
+---
+> [!NOTE]  
+> Freaking long blog. Be sure to read it in a comfortable place. 🤫
+# What is DevOps?
+
+DevOps is more than a cultural shift. It is a change in an organization's operational model for delivering software and a change in behavioral methods for choosing what to develop, what to deploy, and when to deploy it.
+
+At a minimum, an effective DevOps environment should target four key features.
+
+- Improve communication: Effective communication breaks down silos, collaborates, and provides regular feedback. Improved communication between teams, regardless of size, will support continuous improvement.
+- Shift left focus: The Shift Left focus moves the testing job, shifting the responsibility to the developers who define how a successful application runs.
+- Security: DevSecOps offers the necessary role-based access controls, compliance requirements, vulnerability scans, and authentication to secure the delivery pipeline to provide application security. 
+- Automation: Automation increases deployment frequency by reducing time-intensive, repeatable manual steps. Think of this as using containers and microservices with infrastructure as code.
+
+## Case Studies: DevOps Systems 
+
+1. Lack of Communication and Testing: At 11:32 am Wednesday, July 8, 2015, the NYSE trading floor trading was halted for nearly four hours amid a technical issue. The New York Stock Exchange issued a statement the following day explaining what happened. The exchange said the problem's root cause was the configuration compatibility of a software update. Therefore, software configuration testing should have been done before deployment.
+2. Code Deployment without Testing: A season ticket holder wanted to sell his tickets to buyers using StubHub. The ticket holder decided on a price of $543. However, the first digit of the price was dropped after he submitted the price. As a result, the tickets were sold within minutes before the holder received a notification to "review before posting." The ticker holder lost money because StubHub's system hadn't checked for errors. StubHub failed to implement a method called quality check, which could have asked end users to verify their transactions, costing ticket holders millions.
+3. Lack of Automation and Post-Production Testing: Knight Capital wanted to take advantage of changes due to new SEC regulations. The manual deployments of the new regulations occurred on seven out of eight server stacks, resulting in the latest software conflicting with itself. In this case, Knight Capital failed to retest the software after deployment and to automate the many time-intensive manual deployment steps necessary for this critical project.
+4. Code Updates Deployed without Testing: The FAA implemented a shutdown at major airports in the Northeast U.S. Flights resumed operations after a four-hour-long delay at an air traffic control center in Virginia. This shutdown affected all flights in and out of NYC, Boston, and Washington.
+ 
+ The issue resulted after launching a recent software upgrade to provide additional controller tools. However, the FAA disabled the new features while the agency and its system contractor completed their assessment. Unfortunately, neither the FAA nor the contractors tested the upgrade, resulting in the shutdown.
+
+# Source Control Management and Git
+
+**Source control management** is the practice of tracking modifications to source code. With the tool in place, the team can see all the existing versions of the code, track who made changes to the code, and manage coding collaboration. 
+
+It is important, as multiple developers usually work in a shared code base. As they work simultaneously in a shared codebase, they may make conflicting code changes and/or overwrite someone else’s changes.
+
+The most used source control system is **Git**. Git was created by Linus Torvalds in 2005 to manage the Linux kernel development, which had hundreds if not thousands of developers working on it simultaneously. Several companies provide hosted Git, such as: 
+
+- GitHub and GitLab
+- AWS CodeCommit 
+- GCP Cloud Source Repositories 
+- Azure Repos 
+
+These hosted Git providers make collaboration easier between teams.
+
+### Standard Features of Git
+
+Although GitHub and other Git repositories may include additional features, such as a Graphical User Interface (GUI), embedded security, and their own continuous integration pipeline, the standard features listed below are shared within all Git options, reinforcing why Git is the choice to store all the source data. 
+
+# Containers, Artifact Registries and Scan/Test Tools
+
+## Containers
+
+A container is a standard unit of software that packages up code and all its dependencies, so the application runs quickly and reliably from one computing environment to another. A container image is a lightweight, standalone, executable package of software that includes everything needed to run an application. Containers ensure consistency within environments when changes need to be replicated.
+
+### The Value Add of Containers
+
+Organizations that "containerize" systems can see certain benefits. Containers can:
+
+- Simplify the process of testing and deployment.
+- Automate processes to increase productivity.
+- Improve business value.
+- With the use of tools such as Kubernetes, containers can help organizations adapt to changing demands. 
+
+Containers can run locally, on-premises, and in the cloud.
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-1"
+        src="/static/blog/cloud-devops/image1.png"
+        alt="Model Context Protocol Diagram"
+        style={{ width: "80%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+    />
+    <p style={{ textAlign: "center" }}>Figure 1: Containerization</p>
+</div>
+
+## Container and Artifact Registries
+
+A container registry is a repository or collection of repositories used to store and access container images. Container registries can support container-based application development, often as part of DevOps processes. 
+
+Container registries save developers valuable time in creating and delivering cloud-native applications, acting as the intermediary for sharing container images between systems. Container registries can be public or private. A popular container registry feature is the ability to scan container images for known vulnerabilities automatically.
+
+In the last years, the concept of artifact registry was created.Artifact registries extend the capability of the container registries. The artifact registry stores container images, as well as other formats, including OS packages, and language packages for popular languages like Java, Python and Node.
+
+## DevSecOps Tools and Scan Tests
+
+DevSecOps (Development, Security, and Operations) is an extension of the DevOps model, in which developers, security, and operations teams work together closely through all stages of the software development life cycle (SDLC) and continuous integration/continuous deployment (CI/CD) pipelines. Several procedures and tools are available to strengthen security measures in your DevOps environment.
+
+Good vulnerability scanners rely on well-known databases such as the National Vulnerability Database (NVD) to identify previously discovered vulnerabilities. Because NVD reports many known commercial and open-source vulnerabilities, vulnerability scanning tools can identify top-level code vulnerabilities present in the code due to insecure coding.
+
+# Infrastructure as Code
+
+Infrastructure as Code, or IaC, describes managing some or all aspects of a data center, such as virtual machines, storage networks, etc.
+
+When speaking about IaC, we're not only talking about an IT system's underlying infrastructure but also configuration management and templating.
+
+1. Cloud Services: Ansible, Puppet, SaltStack, Chef.
+
+2. Operations(Server Templating): Docker, HashiCorp Vagrant, HashiCorp Packer.
+
+3. Infrastructure Provisioning Tools: AWS CloudFormation, Microsoft Azure Resource Manager, Google Cloud Deployment Manager, HashiCorp Terraform.
+
+> Terraform is cloud agnostic and allows you to define your infrastructure for each cloud service provider.
+
+## IaC Security
+
+IaC security refers to addressing cloud configuration issues in IaC rather than deployed cloud resources. Because IaC does not represent infrastructure, IaC security isn't "securing IaC," but ensuring that it is configured to provide secure resources. Again, adhering to safety best practices can help minimize security risks.
+
+Development
+
+- Scan for misconfigurations
+- Prevent hard coding secrets into your IaC code
+- Prevent code tampering
+- Avoid complexity
+- Establish consistent governance of tools
+
+Deployment
+
+- Identify and correct environmental/cloud drift
+- Reduce the time and impacts of code leaks
+
+Operations
+
+- Automate IaC security scanning
+- Reduce the time and impacts of code leaks
+
+# CI/CD Pipeline for DevOps
+
+## Shortcomings of the Traditional Method 
+
+The traditional delivery process is widely used in the IT industry. Nevertheless, it has several drawbacks. Let's look at these drawbacks to understand the need for a better approach.
+
+- **Slow Delivery**: Under the traditional IT model, the risk of late delivery is possible. For example, imagine a customer receiving the product long after the specified requirements. This slow delivery results in an unsatisfactory time to market and delays customer feedback.
+- **Long Feedback Cycle**: The feedback cycle is not only related to customers but also to developers. For example, imagine that you accidentally created a bug and learned about it months later during the User Acceptance Testing (UAT) phase. Dealing with bugs, minor or large ones, can take weeks to address.
+- **Lack of Automation**: A company can receive valuable information by monitoring the steps in developing and releasing products. However, if few product releases exist, there are limited opportunities to discover which processes can be automated.
+- **Risky Hot Fixes**: Hot fixes can usually take longer for the complete UAT phase. Instead, either developers will use a shortened UAT phase or opt out of testing altogether.
+- **Stress**: Unpredictable releases and tightly scheduled release cycles can stress developers and testers.
+- **Poor Communication**: The traditional IT delivery model favors the "waterfall method," which divides activities into linear sequential phases, passing work down from one team to another. Over time, people care only about their segment of work rather than the complete product. If anything goes wrong, that usually leads to the blame game instead of cooperation.
+
+## Benefits of the CI/CD Pipeline
+
+The backbone of the DevOps methodology is the CI/CD pipeline. A pipeline is a sequence of automated operations, usually part of the software delivery and quality assurance process.
+The CI/CD pipeline is a sequence of automated operations, usually part of the software delivery and quality assurance process. It is a chain of scripts that provide the following additional benefits.
+
+- **Fast Delivery**: Continuous delivery reduces the time to market, making it possible for customers to use the product as soon as development is completed. However, remember that the software delivers no revenue until it is in the hands of its users. 
+- **Fast Feedback Cycle**: Imagine that you created a bug in the code, which goes into production the same day. With a fast feedback cycle, developers can take information regarding bugs or errors and quickly address them. This improved process of receiving and implementing feedback and the quick rollback strategy are the best ways to keep production stable.
+- **Low-Risk Releases**: The process becomes repeatable and much safer if developers release application code daily.
+- **Flexible Release Options**: If developers need to release code immediately, the CI/CD pipeline has been prepared, eliminating the need for additional time/cost associated with the release decision.
+
+## The Continuous Integration Pipeline
+
+The CI pipeline, the starting point of the CI/CD pipeline, provides the first set of feedback to developers.
+
+Common Continuous Integration Tools 
+The DevOps environment hosts many tools to support it, which allows CI/CD and delivery. Sample of four popular tools: Github, Jenkins, Maven and Selium
+
+## Environments of the CD Pipeline
+
+- **Development**: In the development environment, developers verify that the application's main features are working correctly. This environment always contains the latest version of the code. The development environment enables developers to integrate and act in the same way as the QA environment.
+- **Quality Assurance/Testing Environment**: The quality assurance environment or testing environment is intended for the Quality Assurance (QA) team to perform exploratory testing and for external applications dependent on the services to perform integration testing. 
+Once the Quality Assurance manager is satisfied with the build in the quality assurance environment, this person can then trigger the deployment in the staging environment. 
+- **Staging**: In the staging environment, final tests, such as acceptance tests, are performed before applications go to production. These tests determine if the business requirements or contracts are met. Note that the staging environment is a clone of the production environment. Therefore, the staging environment should also include multiple locations if the application is deployed in various locations.
+- **Production**: The production environment is the environment for end users to access. It exists in every company and is the most critical environment. This environment is the final stage for your application.
+
+Common Tools for CD Pipeline: Many tools support a DevOps environment. This illustration shows three familiar continuous delivery tools: Docker, Kubernetes and Splunk. 
+
+## CI/CD Security Best Practices
+
+The conversation about security, specifically DevSecOps, is essential for reducing risk, securing applications, and eliminating the need to provide additional security measures separate from the workflow. 
+
+# Practical Applications of DevOps
+
+## From Traditional Development and Delivery to DevOps
+
+DevOps is a culture of philosophies, tools and practices. It enables improved communication, collaboration, product development and release acceleration. The DevOps philosophy includes working together, communicating, sharing best practices, and finding ways to work smarter through automation. This drives innovation within an organization. DevOps evolves and improves products faster than traditional software development and infrastructure management processes. 
+
+Traditionally, the development and operations teams were separate organizations. The development team handled application and code changes. The operations team managed infrastructure, hardware, software, maintenance and disaster recovery. Operations were also tasked with environmental availability and security. Any changes required a stringent protocol and approval process. This inhibited innovation because implementing new ideas became process-heavy and required multiple approvals. 
+
+Innovation is the key initiative to create differentiation and gain a competitive advantage. Speeding up innovation requires the development and operations teams to work together using flexible infrastructure and policies that automate workflow and the ability to measure performance. 
+
+- **Infrastructure Automation**: Infrastructure automation uses technology to perform tasks with reduced human assistance to control the hardware, software, networking components, operating system, and data storage components used to deliver information technology services and solutions.
+- **Testing and Benchmarking**: As the infrastructure and workflow become automated, there is a requirement to measure and maintain infrastructure and application performance to meet the demands and scale of the organization's requirements. Therefore, both teams need to work together to establish the baseline performance and be able to measure and maintain these values to maintain customer satisfaction while implementing changes. 
+- **Performance Monitoring**: As the infrastructure and workflow become automated, the application and infrastructure performance needs to be monitored and measured to ensure it meets the SLA (Service Level Agreements). In addition, any change can impact different parts of the infrastructure. 
+Therefore, counters from the hardware (CPU, memory, storage, network), operating system, virtualization layers, and application are analyzed. If these counters do not meet the SLA, alerts are sent to the responsible teams to intervene and deploy mitigation procedures
+
+## Business Needs Addressed by DevOps
+
+Implementing DevOps in an organization can create a culture that addresses three important business needs critical to an organization's growth.
+
+- **Automation Framework**: The automation process works effectively within a culture that promotes communication, working together, and sharing experience and knowledge. For the DevOps tools and automation process to work, close relationships between operations, quality assurance/quality control testing, and development are necessary. With a good understanding of application performance, operations, and QA/QC can successfully educate developers on the importance of maintaining application performance and availability as applications scale up and down. 
+- **Agreed-Upon Measurements and KPIs**: Companies must have an approach aligned with DevOps to improve quality and consistency. The method includes continuous testing and quality monitoring. In addition, business KPIs, system metrics and application behavior must be communicated and agreed upon. They should be transparent, meaningful, and able to be visualized by everyone on the DevOps team.
+- **Synchronization of Teams**: The synchronization between two teams (development and operations) facilitates increased agility, efficiency, innovation, and problem-solving. In addition, these two teams work together to test software and verify the results at every stage. This mix of collaboration, automation and testing leads to continuous process improvement.
+
+DevOps addresses three key business needs: continuous integration to leverage new features and capabilities, improved software quality, and continuous delivery to facilitate more frequent releases.
+
+## Support for a DevOps Ecosystem
+
+DevOps tools are critical for the automation of the software development life cycle. The DevOps approach is evolving swiftly. As a result, the emergence of tools designed to incorporate those with little or no programming knowledge, microservices and containerization, and other recent technologies. When looking at the right stack of DevOps tool(s), it is important to consider the following: 
+
+- Integration with other systems and tools
+- Compatibility with a range of platforms
+- Customization capabilities
+- Performance
+- Scaling capabilities
+- Compatibility with cloud platforms
+- Price 
+
+Tools for the DevOps Ecosystem
+
+Let's look at eight widely used tools in the DevOps Ecosystem. This infographic is not an exhaustive list but a sample of commonly used tools.
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-2"
+        src="/static/blog/cloud-devops/image2.png"
+        alt="DevOps Ecosystem"
+        style={{ width: "80%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+    />
+    <p style={{ textAlign: "center" }}>Figure 2: DevOps Ecosystem</p>
+</div>
+
+# Application of DevOps in AWS Cloud Platform
+
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-3"
+        src="/static/blog/cloud-devops/image3.png"
+        alt="AWS CodePipeline"
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+    />
+    <p style={{ textAlign: "center" }}>Figure 3: AWS CodePipeline</p>
+</div>
+
+AWS Cloud Development Kit
+
+- End-to-end solutions that make it easier to get started quickly 
+- Security as job zero 
+- Competitively priced and low TCO 
+- Expertise not required 
+- Built for the developer and organization
+- Integrated with most popular non-AWS tools 
+
+# Application of DevOps for the Azure Cloud Platform
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-4"
+        src="/static/blog/cloud-devops/image4.png"
+        alt="Azure DevOps"
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+    />
+    <p style={{ textAlign: "center" }}>Figure 4: Azure DevOps</p>
+</div>
+
+Azure Development Tools:
+
+- Azure Developer CLI: Azure Developer CLI is a framework that allows developers to focus on application building without worrying about builds, testing, and deployment. Instead, developers can focus their time and attention on building the applications.
+- AZD Templates: Traditional enterprise applications are transitioned to a cloud service environment. This can be a new on-premises cloud environment, or in the public cloud, or a hybrid solution.
+- Visual Studio Code: Visual Studio Code is a flagship product that Microsoft offers to make it very easy to edit and develop node, Python and .NET Core Azure solutions.
+- Bicep Files: A Bicep file declares Azure resources and resource properties, without writing a sequence of programming commands to create resources.
+- Azure Pipelines: Azure Pipelines is a cloud service that supports continuous integration and continuous delivery (CI/CD) to build, test, and deploy applications. It works with any language, platform, and cloud. Azure Pipelines can be used to build and push Docker images to Azure Container Registry or any other container registry.
+- Azure Artifact: Azure Artifacts is a service that allows teams to share and manage packages, such as NuGet, npm, and Maven packages. It provides a secure and scalable way to host and share packages within an organization.
+- Azure App Insights: Azure Application Insights is an application performance management (APM) service that provides real-time monitoring and diagnostics for applications. It helps developers identify and troubleshoot issues in their applications, providing insights into performance, usage, and exceptions.
+# Application of DevOps for the Google Cloud Platform
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-5"
+        src="/static/blog/cloud-devops/image5.png"
+        alt="Google Cloud DevOps"
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+    />
+    <p style={{ textAlign: "center" }}>Figure 5: DevOps and CI/CD on Google Cloud</p>
+</div>
+
+References: [DevOps and CI/CD on Google Cloud explained](https://cloud.google.com/blog/topics/developers-practitioners/devops-and-cicd-google-cloud-explained)
+
+# Conclusion
+DevOps is a culture of philosophies, tools and practices. It enables improved communication, collaboration, product development and release acceleration. The DevOps philosophy includes working together, communicating, sharing best practices, and finding ways to work smarter through automation. This drives innovation within an organization. DevOps evolves and improves products faster than traditional software development and infrastructure management processes.
