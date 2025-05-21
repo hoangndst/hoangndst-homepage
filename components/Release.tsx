@@ -60,10 +60,18 @@ const Release = () => {
                 {latestRelease || 'Loading...'}
               </span>
               <span
+                role="button"
+                tabIndex={0}
                 className="cursor-pointer px-1 text-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
                 onClick={(e) => {
                   e.stopPropagation()
                   setIsVisible(false)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.stopPropagation()
+                    setIsVisible(false)
+                  }
                 }}
                 aria-label="Close"
               >
