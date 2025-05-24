@@ -13,6 +13,12 @@ const projectsData: Project[] = [
     href: 'https://github.com/KusionStack/kusion',
   },
   {
+    title: 'Kusion Backstage Plugin',
+    description: 'Kusion Plugins and Modules that integrates with the Backstage developer portal platform. Enables developers to manage Kusion directly through Backstage.',
+    imgSrc: 'https://raw.githubusercontent.com/KusionStack/kusion/main/docs/overview.jpg',
+    href: 'https://github.com/KusionStack/kusion-backstage-plugin',
+  },
+  {
     title: 'Homepage',
     description: `My personal website. CI/CD Automation. Hosted on Raspberry Pi.`,
     imgSrc: '/static/images/homepage.png',

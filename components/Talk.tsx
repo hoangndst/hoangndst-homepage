@@ -33,14 +33,14 @@ const Talk = () => {
           .map((talk: Talks) => {
             return (
               <li key={talk.event} className="mb-4">
-                <div className="flex flex-col sm:flex-row sm:items-center">
+                <div className="flex flex-col items-center text-center sm:flex-row sm:items-center sm:text-left">
                   <Link
                     href={talk.url || '#'}
                     className="text-xl font-medium text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                   >
                     {talk.event}
                   </Link>
-                  <div className="mt-1 text-sm text-gray-500 dark:text-gray-400 sm:ml-2 sm:mt-0">
+                  <div className="mt-1 text-center text-sm text-gray-500 dark:text-gray-400 sm:ml-2 sm:mt-0 sm:text-left">
                     <span>
                       🗓️{' '}
                       <time suppressHydrationWarning dateTime={talk.date}>

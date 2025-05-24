@@ -7,6 +7,7 @@ import type { Talks } from 'contentlayer/generated'
 import { allTalks } from 'contentlayer/generated'
 import { formatDate } from 'pliny/utils/formatDate'
 import siteMetadata from '@/data/siteMetadata'
+import Spotify from '@/components/Spotify'
 
 interface Props {
   children: ReactNode
@@ -45,6 +46,7 @@ export default function AuthorLayout({ children, content }: Props) {
               <SocialIcon kind="youtube" href={siteMetadata.youtube} />
               <SocialIcon kind="x" href={x} />
             </div>
+            <Spotify />
           </div>
           <div className="prose max-w-none dark:prose-invert xl:col-span-2">
             <div className="space-y-8">
@@ -75,10 +77,19 @@ export default function AuthorLayout({ children, content }: Props) {
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
-                          className="text-blue-500 no-underline hover:text-blue-700"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Viettel_logo_2021.svg"
+                            alt="Viettel Logo"
+                            width={40}
+                            height={40}
+                            className="mr-2 inline"
+                            style={{ minWidth: 40, minHeight: 40 }}
+                            unoptimized
+                          />
                           Viettel Group
                         </a>
                       </p>
@@ -91,10 +102,19 @@ export default function AuthorLayout({ children, content }: Props) {
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
-                          className="text-blue-500 no-underline hover:text-blue-700"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Viettel_logo_2021.svg"
+                            alt="Viettel Logo"
+                            width={40}
+                            height={40}
+                            className="mr-2 inline"
+                            style={{ minWidth: 40, minHeight: 40 }}
+                            unoptimized
+                          />
                           Viettel Group
                         </a>
                       </p>
@@ -151,10 +171,23 @@ export default function AuthorLayout({ children, content }: Props) {
                       <p className="text-gray-500">
                         <a
                           href="https://uet.vnu.edu.vn"
-                          className="text-blue-500 no-underline hover:text-blue-700"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <span
+                            className="mr-2 inline-flex items-center justify-center rounded-full bg-white"
+                            style={{ width: 30, height: 30 }}
+                          >
+                            <Image
+                              src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg"
+                              alt="UET Logo"
+                              width={30}
+                              height={30}
+                              style={{ display: 'block', maxWidth: 30, maxHeight: 30 }}
+                              unoptimized
+                            />
+                          </span>
                           VNU University of Engineering and Technology
                         </a>
                       </p>
@@ -177,10 +210,19 @@ export default function AuthorLayout({ children, content }: Props) {
                       <p className="text-gray-500">
                         <a
                           href="https://www.utsa.edu/"
-                          className="text-blue-500 no-underline hover:text-blue-700"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <Image
+                            src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
+                            alt="UTSA Logo"
+                            width={30}
+                            height={30}
+                            className="mr-2 inline"
+                            style={{ minWidth: 30, minHeight: 30 }}
+                            unoptimized
+                          />
                           The University of Texas at San Antonio
                         </a>
                       </p>
@@ -205,10 +247,19 @@ export default function AuthorLayout({ children, content }: Props) {
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
-                          className="text-blue-500 no-underline hover:text-blue-700"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
+                          <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Viettel_logo_2021.svg"
+                            alt="Viettel Logo"
+                            width={40}
+                            height={40}
+                            className="mr-2 inline"
+                            style={{ minWidth: 40, minHeight: 40 }}
+                            unoptimized
+                          />
                           Viettel Group
                         </a>
                       </p>
