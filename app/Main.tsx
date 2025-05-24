@@ -58,7 +58,7 @@ export default function Home({ posts }) {
         <ul className="pt-4">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
-            const { slug, date, title, summary, tags, images, readingTime, authors } = post
+            const { slug, date, title, summary, tags, images, readingTime, authors = [] } = post
             return (
               <li key={slug} className="px-1 py-2 sm:px-1 sm:py-2">
                 <article className="flex flex-col gap-4 overflow-hidden rounded-xl border border-gray-200 bg-white p-4 transition-colors duration-150 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 sm:flex-row">
@@ -82,7 +82,9 @@ export default function Home({ posts }) {
                         {summary}
                       </div>
                       <div className="mt-4 flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
-                        <span className="inline-flex items-center">@{authors[0]}</span>
+                        <span className="inline-flex items-center">
+                          @{authors?.[0] || 'hoangndst'}
+                        </span>
                         <span>|</span>
                         <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
                         <span>|</span>

@@ -21,7 +21,11 @@ export default function Spotify() {
       try {
         const res = await fetch('/api/spotify')
         const data = await res.json()
-        setTrack(data)
+        if (data.error) {
+          setTrack(null)
+        } else {
+          setTrack(data)
+        }
       } catch {
         setTrack(null)
       } finally {
