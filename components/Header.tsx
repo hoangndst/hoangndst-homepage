@@ -8,14 +8,19 @@ import SearchButton from './SearchButton'
 import WorkBadge from './WorkBadge'
 
 const Header = () => {
-  let headerClass = 'flex items-center w-full bg-white dark:bg-gray-950 justify-between py-10'
+  let headerClass =
+    'flex items-center w-full bg-white dark:bg-gray-950 justify-between py-4 sm:py-6 lg:py-10 px-4 sm:px-8 transition-colors duration-300'
   if (siteMetadata.stickyNav) {
-    headerClass += ' sticky top-0 z-50'
+    headerClass += ' sticky top-0 z-50 backdrop-blur bg-opacity-80 dark:bg-opacity-80'
   }
 
   return (
     <header className={headerClass}>
-      <Link href="/" aria-label={siteMetadata.headerTitle}>
+      <Link
+        href="/"
+        aria-label={siteMetadata.headerTitle}
+        className="flex-shrink-0 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+      >
         <div className="flex items-center justify-between">
           <div className="mr-3">
             <Logo />

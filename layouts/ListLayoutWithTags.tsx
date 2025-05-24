@@ -25,51 +25,91 @@ interface ListLayoutProps {
 function Pagination({ totalPages, currentPage }: PaginationProps) {
   const pathname = usePathname()
   const basePath = pathname.split('/')[1]
-  const prevPage = currentPage - 1 > 0
-  const nextPage = currentPage + 1 <= totalPages
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+  const prevPage = currentPage > 1
+  const nextPage = currentPage < totalPages
 
   return (
-    <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-      <nav className="flex justify-between">
-        {!prevPage && (
-          <button
-            className="cursor-auto rounded-lg px-4 py-2 disabled:opacity-50"
-            disabled={!prevPage}
-          >
+    <nav className="flex items-center justify-center space-x-2 py-4">
+      {/* Previous Button */}
+      {prevPage ? (
+        <Link
+          href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
+          className="rounded px-2 py-1 text-sm transition-colors duration-150 hover:bg-gray-100 hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500"
+        >
+          <span className="flex items-center gap-1">
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                fillRule="evenodd"
+                d="M12.293 4.293a1 1 0 010 1.414L8.414 9H16a1 1 0 110 2H8.414l3.879 3.293a1 1 0 11-1.414 1.414l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
             Previous
-          </button>
-        )}
-        {prevPage && (
-          <Link
-            href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
-            rel="prev"
-            className="rounded-lg bg-transparent px-4 py-2 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-          >
+          </span>
+        </Link>
+      ) : (
+        <span className="cursor-not-allowed rounded px-2 py-1 text-sm opacity-50">
+          <span className="flex items-center gap-1">
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                fillRule="evenodd"
+                d="M12.293 4.293a1 1 0 010 1.414L8.414 9H16a1 1 0 110 2H8.414l3.879 3.293a1 1 0 11-1.414 1.414l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
             Previous
-          </Link>
-        )}
-        <span>
-          {currentPage} of {totalPages}
+          </span>
         </span>
-        {!nextPage && (
-          <button
-            className="cursor-auto rounded-lg px-4 py-2 disabled:opacity-50"
-            disabled={!nextPage}
-          >
+      )}
+
+      {/* Page Numbers */}
+      {pageNumbers.map((num) => (
+        <Link
+          key={num}
+          href={num === 1 ? `/${basePath}/` : `/${basePath}/page/${num}`}
+          className={`mx-3 rounded px-3 py-1 text-sm transition-colors duration-150 ${
+            num === currentPage
+              ? 'border border-gray-300 bg-gray-200 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white'
+              : 'hover:bg-gray-100 hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500'
+          }`}
+        >
+          {num}
+        </Link>
+      ))}
+
+      {/* Next Button */}
+      {nextPage ? (
+        <Link
+          href={`/${basePath}/page/${currentPage + 1}`}
+          className="rounded px-2 py-1 text-sm transition-colors duration-150 hover:bg-gray-100 hover:text-primary-500 dark:hover:bg-gray-700 dark:hover:text-primary-500"
+        >
+          <span className="flex items-center gap-1">
             Next
-          </button>
-        )}
-        {nextPage && (
-          <Link
-            href={`/${basePath}/page/${currentPage + 1}`}
-            rel="next"
-            className="rounded-lg bg-transparent px-4 py-2 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-          >
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                fillRule="evenodd"
+                d="M7.707 15.707a1 1 0 010-1.414L11.586 11H4a1 1 0 110-2h7.586l-3.879-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
+        </Link>
+      ) : (
+        <span className="cursor-not-allowed rounded px-2 py-1 text-sm opacity-50">
+          <span className="flex items-center gap-1">
             Next
-          </Link>
-        )}
-      </nav>
-    </div>
+            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                fillRule="evenodd"
+                d="M7.707 15.707a1 1 0 010-1.414L11.586 11H4a1 1 0 110-2h7.586l-3.879-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
+        </span>
+      )}
+    </nav>
   )
 }
 
