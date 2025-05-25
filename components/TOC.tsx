@@ -107,7 +107,7 @@ const TOC = ({
         {items.map((item, index) => {
           const isActive = activeId === item.url.slice(1) // Remove the # from the URL
           return (
-            <li key={index} className={liClassName}>
+            <li key={item.url} className={liClassName}>
               <a
                 href={item.url}
                 className={`underline decoration-transparent underline-offset-[3px] transition-colors duration-200 hover:decoration-inherit xl:py-0 ${
