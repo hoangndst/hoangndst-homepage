@@ -15,7 +15,7 @@ Tại sao phải tối ưu hóa độ phức tạp của thuật toán?
         id="figure-1"
         src="/static/blog/bigO/fig-1.png"
         alt="Big O"
-        style={{ width: "80%", display: "block", margin: "0 auto" }}
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
     />
     <p style={{ textAlign: "center" }}>Figure 1: Big O</p>
 </div>
@@ -26,7 +26,7 @@ Tại sao phải tối ưu hóa độ phức tạp của thuật toán?
 
 ### 2. Ví dụ
 <div id="time-complexity">
-```python
+```python:bigO.py caption="bigO.py" showLineNumbers
 import time
 start = time.time()
 i = 0
@@ -45,7 +45,7 @@ print("time: " +  str(time.time() - start))
 Tại sao lại tính được như vậy?
 
 <div id="time-complexity-explain">
-```python
+```python:bigO_2.py caption="bigO_2.py" showLineNumbers
 import time
 start = time.time()
 i = 0 # phep gan +1
@@ -64,7 +64,7 @@ Thật dễ để hiểu đúng không?
 
 Đến với vị dụ tiếp theo:
 <div id="time-complexity-2">
-```python
+```python:bigO_3.py caption="bigO_3.py" showLineNumbers
 n = 10
 x = 1
 y = 2
@@ -83,7 +83,7 @@ for i in range(n): # phep so sanh i < n ? va phep i++ => +2
 
 Đối với đoạn `code` dưới đây thì sao?
 <div id="time-complexity-3">
-```python
+```python:bigO_4.py caption="bigO_4.py" showLineNumbers
 n = 10
 x = 1
 y = 2

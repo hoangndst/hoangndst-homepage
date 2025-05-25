@@ -5,12 +5,13 @@ import Talk from '@/components/Talk'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import Spotify from '@/components/Spotify'
+import SectionContainer from '@/components/SectionContainer'
 
 const MAX_DISPLAY = 4
 
 export default function Home({ posts }) {
   return (
-    <>
+    <SectionContainer>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-4 pt-6 sm:px-4 md:space-y-5 lg:px-0">
           <div className="flex flex-col space-y-2 pb-8 pt-6 md:flex-row md:items-center md:justify-between md:space-y-0 md:space-y-5">
@@ -121,6 +122,6 @@ export default function Home({ posts }) {
           </Link>
         </div>
       )}
-    </>
+    </SectionContainer>
   )
 }

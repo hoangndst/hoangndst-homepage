@@ -9,6 +9,7 @@ import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import TOC from '@/components/TOC'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -30,42 +31,37 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags, readingTime } = content
+  const { filePath, path, slug, date, title, tags, readingTime, toc } = content
   const basePath = path.split('/')[0]
 
   return (
-    <SectionContainer>
-      <ScrollTopAndComment />
-      <article>
-        <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
-          <header className="pt-6 xl:pb-6">
-            <div className="space-y-1 text-center">
-              <dl className="space-y-10">
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                    </time>
-                    {readingTime && (
-                      <>
-                        <span className="mx-2">|</span>
-                        <span>{readingTime.text}</span>
-                      </>
-                    )}
-                  </dd>
-                </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-              </div>
+    <>
+      <div className="grid grid-cols-[minmax(0px,1fr)_min(768px,100%)_minmax(0px,1fr)] gap-y-6 pt-4 *:px-4">
+        <section className="col-start-2 flex flex-col gap-y-6">
+          <div className="flex flex-col gap-y-3 text-center">
+            <div>
+              <PageTitle>{title}</PageTitle>
             </div>
-          </header>
-          <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0">
-            <dl className="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
+            <dl className="text-muted-foreground flex flex-wrap items-center justify-center gap-2 text-sm">
+              <div>
+                <dt className="sr-only">Published on</dt>
+                <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                  <time dateTime={date}>
+                    {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                  </time>
+                  {readingTime && (
+                    <>
+                      <span className="mx-2">|</span>
+                      <span>{readingTime.text}</span>
+                    </>
+                  )}
+                </dd>
+              </div>
+            </dl>
+            <dl>
               <dt className="sr-only">Authors</dt>
               <dd>
-                <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
+                <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:space-x-0 xl:space-y-8">
                   {authorDetails.map((author) => (
                     <li className="flex items-center space-x-2" key={author.name}>
                       {author.avatar && (
@@ -77,108 +73,279 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                           className="h-10 w-10 rounded-full"
                         />
                       )}
-                      <dl className="whitespace-nowrap text-sm font-medium leading-5">
-                        <dt className="sr-only">Name</dt>
-                        <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                        <dt className="sr-only">Twitter</dt>
-                        <dd>
-                          {author.github && (
-                            <Link
-                              href={author.github}
-                              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                            >
-                              {author.github.replace('https://github.com/', '@')}
-                            </Link>
-                          )}
-                        </dd>
-                      </dl>
+                      <div className="whitespace-nowrap text-left text-sm font-medium leading-5">
+                        <div className="text-gray-900 dark:text-gray-100">{author.name}</div>
+                        {author.github && (
+                          <Link
+                            href={author.github}
+                            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                          >
+                            {author.github.replace('https://github.com/', '@')}
+                          </Link>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>
               </dd>
             </dl>
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pb-8 pt-10 dark:prose-invert">{children}</div>
-              <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
-                <Link href={discussUrl(path)} rel="nofollow">
-                  Discuss on X
-                </Link>
-                {` • `}
-                <Link href={editUrl(filePath)}>View on GitHub</Link>
+            {tags && (
+              <div className="flex flex-wrap justify-center gap-2">
+                {tags.map((tag) => (
+                  <Tag key={tag} text={tag} className="text-xs" />
+                ))}
               </div>
-              {siteMetadata.comments && (
-                <div
-                  className="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300"
-                  id="comment"
-                >
-                  <Comments slug={slug} />
-                </div>
-              )}
-            </div>
-            <footer>
-              <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
-                {tags && (
-                  <div className="py-4 xl:py-8">
-                    <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                      Tags
-                    </h2>
-                    <div className="flex flex-wrap">
-                      {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {(next || prev) && (
-                  <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && prev.path && (
-                      <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Previous Article
-                        </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${prev.path}`}>{prev.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                    {next && next.path && (
-                      <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                          Next Article
-                        </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${next.path}`}>{next.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="pt-4 xl:pt-8">
-                <Link
-                  href={`/${basePath}`}
-                  className="inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-primary-500 transition-colors duration-150 hover:bg-gray-100 hover:text-primary-600 dark:hover:bg-gray-700 dark:hover:text-primary-400"
-                  aria-label="Back to the blog"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12.293 4.293a1 1 0 010 1.414L8.414 9H16a1 1 0 110 2H8.414l3.879 3.293a1 1 0 11-1.414 1.414l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Back to the blog
-                </Link>
-              </div>
-            </footer>
+            )}
           </div>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            {/* Next Post Button (left) */}
+            {next && next.path ? (
+              <Link
+                href={`/${next.path}`}
+                aria-label="Next Post"
+                className="focus-visible:ring-ring border-input group flex h-full w-full items-center justify-start whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 sm:w-1/2"
+              >
+                <div className="mr-2 flex-shrink-0">
+                  <svg
+                    width="1em"
+                    height="1em"
+                    className="size-4 transition-transform group-hover:-translate-x-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 19l-7-7 7-7" />
+                    <path d="M19 12H5" />
+                  </svg>
+                </div>
+                <div className="flex flex-col items-start text-wrap">
+                  <span className="text-muted-foreground text-left text-xs">Next Post</span>
+                  <span className="w-full text-ellipsis text-pretty text-left text-sm">
+                    {next.title}
+                  </span>
+                </div>
+              </Link>
+            ) : (
+              <div className="border-input flex h-full w-full cursor-not-allowed items-center justify-start whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium opacity-50 transition-colors duration-150 ease-in-out dark:border-gray-800 dark:bg-gray-950 sm:w-1/2">
+                <div className="mr-2 flex-shrink-0">
+                  <svg
+                    width="1em"
+                    height="1em"
+                    className="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 19l-7-7 7-7" />
+                    <path d="M19 12H5" />
+                  </svg>
+                </div>
+                <div className="flex flex-col items-start text-wrap">
+                  <span className="text-muted-foreground text-left text-xs">Next Post</span>
+                  <span className="w-full text-ellipsis text-pretty text-left text-sm">
+                    Latest Post
+                  </span>
+                </div>
+              </div>
+            )}
+            {/* Previous Post Button (right) */}
+            {prev && prev.path ? (
+              <Link
+                href={`/${prev.path}`}
+                aria-label="Previous Post"
+                className="focus-visible:ring-ring border-input group flex h-full w-full items-center justify-end whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 sm:w-1/2"
+              >
+                <div className="order-2 mr-2 flex flex-col items-end text-wrap">
+                  <span className="text-muted-foreground text-right text-xs">Previous Post</span>
+                  <span className="w-full text-ellipsis text-pretty text-right text-sm">
+                    {prev.title}
+                  </span>
+                </div>
+                <div className="order-3 flex-shrink-0">
+                  <svg
+                    width="1em"
+                    height="1em"
+                    className="size-4 transition-transform group-hover:translate-x-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 5l7 7-7 7" />
+                    <path d="M5 12h14" />
+                  </svg>
+                </div>
+              </Link>
+            ) : (
+              <div className="border-input flex h-full w-full cursor-not-allowed items-center justify-end whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium opacity-50 transition-colors duration-150 ease-in-out dark:border-gray-800 dark:bg-gray-950 sm:w-1/2">
+                <div className="order-2 mr-2 flex flex-col items-end text-wrap">
+                  <span className="text-muted-foreground text-right text-xs">Previous Post</span>
+                  <span className="w-full text-ellipsis text-pretty text-right text-sm">
+                    Last Post
+                  </span>
+                </div>
+                <div className="order-3 flex-shrink-0">
+                  <svg
+                    width="1em"
+                    height="1em"
+                    className="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 5l7 7-7 7" />
+                    <path d="M5 12h14" />
+                  </svg>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+        <TOC toc={toc} />
+        <article className="prose col-start-2 max-w-none dark:prose-invert [&>:first-child>*]:mt-0">
+          {children}
+        </article>
+        <div className="col-start-2 flex flex-col gap-4 sm:flex-row">
+          {/* Next Post Button (left) */}
+          {next && next.path ? (
+            <Link
+              href={`/${next.path}`}
+              aria-label="Next Post"
+              className="focus-visible:ring-ring border-input group flex h-full w-full items-center justify-start whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 sm:w-1/2"
+            >
+              <div className="mr-2 flex-shrink-0">
+                <svg
+                  width="1em"
+                  height="1em"
+                  className="size-4 transition-transform group-hover:-translate-x-1"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 19l-7-7 7-7" />
+                  <path d="M19 12H5" />
+                </svg>
+              </div>
+              <div className="flex flex-col items-start text-wrap">
+                <span className="text-muted-foreground text-left text-xs">Next Post</span>
+                <span className="w-full text-ellipsis text-pretty text-left text-sm">
+                  {next.title}
+                </span>
+              </div>
+            </Link>
+          ) : (
+            <div className="border-input flex h-full w-full cursor-not-allowed items-center justify-start whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium opacity-50 transition-colors duration-150 ease-in-out dark:border-gray-800 dark:bg-gray-950 sm:w-1/2">
+              <div className="mr-2 flex-shrink-0">
+                <svg
+                  width="1em"
+                  height="1em"
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 19l-7-7 7-7" />
+                  <path d="M19 12H5" />
+                </svg>
+              </div>
+              <div className="flex flex-col items-start text-wrap">
+                <span className="text-muted-foreground text-left text-xs">Next Post</span>
+                <span className="w-full text-ellipsis text-pretty text-left text-sm">
+                  Latest Post
+                </span>
+              </div>
+            </div>
+          )}
+          {/* Previous Post Button (right) */}
+          {prev && prev.path ? (
+            <Link
+              href={`/${prev.path}`}
+              aria-label="Previous Post"
+              className="focus-visible:ring-ring border-input group flex h-full w-full items-center justify-end whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 sm:w-1/2"
+            >
+              <div className="order-2 mr-2 flex flex-col items-end text-wrap">
+                <span className="text-muted-foreground text-right text-xs">Previous Post</span>
+                <span className="w-full text-ellipsis text-pretty text-right text-sm">
+                  {prev.title}
+                </span>
+              </div>
+              <div className="order-3 flex-shrink-0">
+                <svg
+                  width="1em"
+                  height="1em"
+                  className="size-4 transition-transform group-hover:translate-x-1"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 5l7 7-7 7" />
+                  <path d="M5 12h14" />
+                </svg>
+              </div>
+            </Link>
+          ) : (
+            <div className="border-input flex h-full w-full cursor-not-allowed items-center justify-end whitespace-nowrap rounded-xl border bg-white px-4 py-2 text-sm font-medium opacity-50 transition-colors duration-150 ease-in-out dark:border-gray-800 dark:bg-gray-950 sm:w-1/2">
+              <div className="order-2 mr-2 flex flex-col items-end text-wrap">
+                <span className="text-muted-foreground text-right text-xs">Previous Post</span>
+                <span className="w-full text-ellipsis text-pretty text-right text-sm">
+                  Last Post
+                </span>
+              </div>
+              <div className="order-3 flex-shrink-0">
+                <svg
+                  width="1em"
+                  height="1em"
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 5l7 7-7 7" />
+                  <path d="M5 12h14" />
+                </svg>
+              </div>
+            </div>
+          )}
         </div>
-      </article>
-    </SectionContainer>
+        <div className="col-start-2 max-w-none divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
+            <Link href={discussUrl(path)} rel="nofollow">
+              Discuss on X
+            </Link>
+            {` • `}
+            <Link href={editUrl(filePath)}>View on GitHub</Link>
+          </div>
+          {siteMetadata.comments && (
+            <div className="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300" id="comment">
+              <Comments slug={slug} />
+            </div>
+          )}
+        </div>
+      </div>
+      <ScrollTopAndComment />
+    </>
   )
 }

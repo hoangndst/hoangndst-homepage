@@ -8,34 +8,17 @@ images:
   ['/static/blog/model-context-protocol/1.png']
 authors: ['hoangndst']
 ---
-<details>
-  <summary style={{ fontSize: "1.5em", fontWeight: "bold" }}>Table of Contents</summary>
-1. [Introduction](#1-introduction) <br />
-2. [Architecture](#2-architecture) <br />
-3. [Server Development](#3-server-development) <br />
-   3.1. [Core concepts](#31-core-concepts) <br />
-   3.2. [Setup](#32-setup) <br />
-   3.3. [Create modules for each tool](#33-create-modules-for-each-tool) <br />
-   3.4. [Setup MCP server](#34-setup-mcp-server) <br />
-   3.5. [Build the server](#35-build-the-server) <br />
-4. [Testing your server](#4-testing-your-server) <br />
-    4.1. [With continue](#41-with-continue) <br />
-    4.2. [With Cursor](#42-with-cursor) <br />
-    4.3. [With Claude for Desktop](#43-with-claude-for-desktop) <br />
-5. [Conclusion](#5-conclusion) <br />
-</details>
-
 ## 1. Introduction
 > Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context to LLMs.
 > Think of MCP like USB-C port for AI applications. Just as USB-C offers a standardized way to connect your devices to various peripherals,
 > MCP provides a standardized way to connect AI models to different data sources and tools.
-
+---
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-1"
         src="/static/blog/model-context-protocol/1.png"
         alt="Model Context Protocol Diagram"
-        style={{ width: "80%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
     />
     <p style={{ textAlign: "center" }}>Figure 1: Model Context Protocol Diagram</p>
 </div>
@@ -49,7 +32,7 @@ along with pre-built connectors for popular systems such as Google Drive and Git
         id="figure-1"
         src="/static/blog/model-context-protocol/2.png"
         alt="Model Context Protocol Architecture"
-        style={{ width: "80%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
     />
     <p style={{ textAlign: "center" }}>Figure 2: Model Context Protocol Architecture (Source: <a href="https://www.descope.com/learn/post/mcp">descope</a>)</p>
 </div>
@@ -75,11 +58,11 @@ MCP Servers can provide 3 main types of capabilities:
 3. **Prompts**: Pre-written templates that helps users accomplish specific tasks.
 
 ### 3.2. Setup
-#### 1. Install <code>uv</code> and setup Python project:
+Install <code>uv</code> and setup Python project:
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
-#### 2. Create a new project and install dependencies:
+Create a new project and install dependencies:
 ```bash
 # Create project folder
 uv init mcp-server-danchoicloud
@@ -93,14 +76,14 @@ source .venv/bin/activate
 uv add "mcp[cli]" httpx
 ```
 ### 3.3. Create modules for each tool
-#### 1. Create a new folder called `modules` and create a file called `sieu_nhan.py` inside it. This file will contain the code for the `get_sieu_nhan` tool.
+Create a new folder called `modules` and create a file called `sieu_nhan.py` inside it. This file will contain the code for the `get_sieu_nhan` tool.
 ```bash
 mkdir modules
 touch modules/sieu_nhan.py
 ```
 
-#### 2. Import the necessary libraries
-```python
+Import the necessary libraries
+```python:sieu_nhan.py caption="sieu_nhan.py" showLineNumbers
 import base64
 from enum import Enum
 
@@ -114,8 +97,8 @@ class SieuNhanTools(str, Enum):
     GET_SIEU_NHAN = 'get_sieu_nhan'
 ```
 
-#### 3. Create a function to get random image of "sieu nhan"
-```python
+Create a function to get random image of "sieu nhan"
+```python:sieu_nhan.py caption="get_sieu_nhan function" showLineNumbers
 async def get_sieu_nhan():
     """
     Get a random superhero from the API.
@@ -131,8 +114,8 @@ async def get_sieu_nhan():
             return None
 ```
 
-#### 4. Create a function to convert the image to base64
-```python
+Create a function to convert the image to base64
+```python:sieu_nhan.py caption="get_image_base64 function" showLineNumbers
 async def get_image_base64(img_url: str) -> str | None:
     """
     Fetch an image from the given URL and return its base64-encoded data.
@@ -150,8 +133,8 @@ async def get_image_base64(img_url: str) -> str | None:
 ```
 Cause `ImageContent` requires base64-encoded image data, we need to convert the image to base64 before returning it.
 
-#### 5. Create Tool function
-```python
+Create Tool function
+```python:sieu_nhan.py caption="get_sieu_nhan_tools function" showLineNumbers
 async def get_sieu_nhan_tools() -> TextContent | ImageContent:
     """
     Get a random superhero from the API and format it for display.
@@ -175,12 +158,12 @@ async def get_sieu_nhan_tools() -> TextContent | ImageContent:
         return TextContent(type="text", text="Failed to retrieve superhero data.")
 ```
 ### 3.4. Setup MCP server
-#### 1. Create a file called `server.py` in the root directory of your project.
+Create a file called `server.py` in the root directory of your project.
 ```bash
-touch server.py
+$ touch server.py
 ```
-#### 2. Import the necessary libraries
-```python
+Import the necessary libraries
+```python:server.py caption="server.py" showLineNumbers
 from typing import Sequence
 
 from mcp.server import Server
@@ -188,8 +171,9 @@ from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent, ImageContent
 from mcp_server_danchoicloud.modules.sieu_nhan import SieuNhanTools, get_sieu_nhan_tools
 ```
-#### 3. Create a list of tools
-```python
+
+Create a list of tools
+```python:server.py caption="serve function" showLineNumbers
 async def serve() -> None:
     server = Server('mcp_server_danchoicloud', 'v0.1.0')
 
@@ -213,8 +197,9 @@ async def serve() -> None:
             )
         ]
 ```
-#### 4. Create a function to call the tool
-```python
+
+Create a function to call the tool
+```python:server.py caption="handle_call_tool function" showLineNumbers
     @server.call_tool()
     async def handle_call_tool(
             name: str, arguments: dict | None
@@ -230,37 +215,32 @@ async def serve() -> None:
         except Exception as e:
             raise ValueError(f"Error processing mcp_server_danchoicloud query: {str(e)}")
 ```
-#### 5. Initialize the server
-```python
+
+Initialize the server
+```python:server.py caption="initialize_server function" showLineNumbers
     options = server.create_initialization_options()
     async with stdio_server() as (read_stream, write_stream):
         await server.run(read_stream, write_stream, options)
 ```
 ### 3.5. Build the server
+
 We will build the server using `Docker`:
 <details>
 <summary>Exmaple `Dockerfile`</summary>
-```Dockerfile
-# Use a Python image with uv pre-installed
+```dockerfile:Dockerfile caption="Dockerfile" showLineNumbers
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS uv
 
-# Install the project into `/app`
 WORKDIR /app
 
-# Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
 
-# Copy from the cache instead of linking since it's a mounted volume
 ENV UV_LINK_MODE=copy
 
-# Install the project's dependencies using the lockfile and settings
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project --no-dev --no-editable
 
-# Then, add the rest of the project source code and install it
-# Installing separately from its dependencies allows optimal layer caching
 ADD . /app
 RUN uv sync --frozen --no-dev --no-editable
 
@@ -270,17 +250,15 @@ WORKDIR /app
 
 COPY --from=uv --chown=app:app /app/.venv /app/.venv
 
-# Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
-# when running the container, add --db-path and a bind mount to the host's db file
 ENTRYPOINT ["mcp-server-danchoicloud"]
 ```
 </details>
 
 Build the Docker image:
 ```bash
-docker build . -t hoangndst/mcp-server-danchoicloud:v0.1.0
+$ docker build . -t hoangndst/mcp-server-danchoicloud:v0.1.0
 ```
 
 ## 4. Testing your server.
@@ -292,14 +270,14 @@ In this article, we will use Claude for Desktop as the MCP host because it suppo
         id="figure-3"
         src="/static/blog/model-context-protocol/3.png"
         alt="Testing MCP server with continue"
-        style={{ width: "80%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
     />
     <p style={{ textAlign: "center" }}>Figure 3: Testing MCP server with continue</p>
 </div>
 
 <details>
 <summary>`/home/$USER/.continue/config.yaml`</summary>
-```yaml
+```yaml:config.yaml caption="config.yaml" showLineNumbers
 mcpServers:
   - name: danchoicloud
     command: /usr/bin/docker
@@ -308,22 +286,23 @@ mcpServers:
       - -i
       - --rm
       - hoangndst/mcp-server-danchoicloud:v0.1.0
-```
+``` 
 </details>
+
 ### 4.2. With [Cursor](https://www.cursor.com/)
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-4"
         src="/static/blog/model-context-protocol/4.png"
         alt="Testing MCP server with cursor"
-        style={{ width: "80%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
     />
     <p style={{ textAlign: "center" }}>Figure 4: Testing MCP server with cursor</p>
 </div>
 
 <details>
 <summary>`/home/$USER/.cursor/mcp.json`</summary>
-```json
+```json:mcp.json caption="mcp.json" showLineNumbers
 {
   "mcpServers": {
     "danchoicloud": {
@@ -335,8 +314,10 @@ mcpServers:
 ```
 </details>
 ### 4.3. With Claude for Desktop
-Edit configuration file `/home/$USER/.config/Claude/claude_desktop_config.json`:
-```json
+Edit configuration file:
+
+`~/.config/Claude/claude_desktop_config.json`
+```json:claude_desktop_config.json caption="claude_desktop_config.json" showLineNumbers
 {
     "mcpServers": {
       "danchoicloud": {
@@ -351,7 +332,7 @@ Edit configuration file `/home/$USER/.config/Claude/claude_desktop_config.json`:
         id="figure-5"
         src="/static/blog/model-context-protocol/5.png"
         alt="Testing MCP server with Claude for Desktop"
-        style={{ width: "60%", display: "block", margin: "0 auto", borderRadius: "8px" }}
+        style={{ width: "100%", display: "block", margin: "0 auto", borderRadius: "8px" }}
     />
     <p style={{ textAlign: "center" }}>Figure 5: Testing MCP server with Claude for Desktop</p>
 </div>

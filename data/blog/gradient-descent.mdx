@@ -8,25 +8,8 @@ images: ['/static/blog/gradient-descent/ga-animation-2.gif']
 authors: ['hoangndst']
 ---
 
-<details>
-  <summary style={{ fontSize: "1.5em", fontWeight: "bold" }}>Table of Contents</summary>
-1. [Introduction](#1-introduction) <br />
-    1.1. [Why do we need GD?](#11-why-do-we-need-gd) <br />
-    1.2. [Method](#12-method) <br />
-2. [Gradient Descent and Linear Regression](#2-gradient-descent-and-linear-regression) <br />
-    2.1. [Matrix Derivatives](#21-matrix-derivatives) <br />
-    2.2. [Numerical Differentiation](#22-numerical-differentiation) <br />
-    2.3. [Simulation with Python](#23-simulation-with-python) <br />
-3. [Going into more detail](#3-going-into-more-detail) <br />
-    3.1. [When to stop?](#31-when-to-stop) <br />
-    3.2. [Stuck at local minima](#32-stuck-at-local-minima) <br />
-    3.3. [Learning Rate](#33-learning-rate) <br />
-4. [Conclusion](#4-conclusion) <br />
-5. [References](#5-references) <br />
-</details>
-
-### 1. Introduction
-#### 1.1. Why do we need GD?
+## 1. Introduction
+### 1.1. Why do we need GD?
 We can easily find the prediction function from a given dataset using the formula of linear regression:
 
 $$
@@ -37,7 +20,7 @@ However, since it involves an inverse function, it is manageable with small data
 
 Or when finding the extremum of a function, the equation $f'(x)=0$ cannot be solved easily. In this case, we can use the gradient descent algorithm to find an approximate solution.
 
-#### 1.2 Method
+### 1.2 Method
 Gradient Descent is a first-order iterative optimization algorithm for finding a local extremum of a differentiable function. To find a local minimum of a function using gradient descent, one takes steps proportional to the negative of the gradient (or approximate gradient) of the function at the current point. Conversely, taking steps proportional to the positive of the gradient leads to finding a local maximum; this method is called gradient ascent.
 
 More specifically, GD repeatedly changes the value of $x \; (x := x + \beta)$ so that in each iteration, it is hoped that $f(x)$ becomes smaller and approaches the minimum.
@@ -61,10 +44,10 @@ According to [Figure 1](#figure-1), at point $x_0$ we have $f'(x_{0}) < 0 \Right
     <p style={{ textAlign: "center" }}>Figure 1: Gradient Descent Diagram</p>
 </div>
 
-### 2. Gradient Descent and Linear Regression.
+## 2. Gradient Descent and Linear Regression.
 Now let's go through the concept of matrix derivatives (to work with multi-dimensional data) and numerical differentiation (to calculate the approximate gradient at a specific value of $x$).
 
-#### 2.1 Matrix Derivatives
+### 2.1 Matrix Derivatives
 In the previous example, $x$ was just a one-dimensional vector, but in reality, the problems presented can also have $x$ as a vector in $n$-dimensional space.
 
 In linear regression, $x$ is a vector, and its derivative formula is:
@@ -77,7 +60,7 @@ $$
 \end{bmatrix}\tag{1}
 $$
 
-#### 2.2 Numerical Differentiation
+### 2.2 Numerical Differentiation
 According to numerical differentiation, we can calculate the derivative according to [(3)](#eq-3) with a small error compared to the normal formula [(2)](#eq-2).
 
 We will use it to check if we have calculated the derivative correctly.
@@ -99,7 +82,7 @@ $$
 </div>
 You can read more here: Numerical Differentiation - [Wikipedia](https://en.wikipedia.org/wiki/Numerical_differentiation)
 
-#### 2.3 Simulation with Python
+### 2.3 Simulation with Python
 Summarizing the Linear Regression problem. First, consider the following two sets:
 
 $$
@@ -170,9 +153,7 @@ $$
     <p style={{ textAlign: "center" }}>Figure 2: Gradient Descent Animation</p>
 </div>
 
-<details>
-<summary>Code <a href="#figure-2">Figure 2</a>: Gradient Descent Animation</summary>
-```python
+```py:gradient_descent.py caption="gradient_descent.py" showLineNumbers
 from matplotlib import animation
 from matplotlib.animation import writers
 import numpy as np
@@ -248,11 +229,11 @@ check_grad(x_init)
 iteration = 100
 learning_rate = 0.0001
 x_list = gradient_descent(x_init, learning_rate, iteration)
-# Plot all line
+
 for i in range(len(x_list)):
     y0_gd = x_list[i][0] + x_list[i][1]*x0_gd
     plt.plot(x0_gd, y0_gd, color="black", alpha=0.3)
-# Draw animation
+
 line , = ax.plot([],[], color="blue")
 def update(i):
     plt.xlabel('Iteration: {}   Learning rate: {}'.format(len(x_list) - 1, learning_rate))
@@ -261,23 +242,15 @@ def update(i):
     return line,
 
 iters = np.arange(0,len(x_list), 1)
-# Legend for plot
+
 plt.legend(('Data', 'Solution by Linear Regression', 'Initial Line For GD'), loc=(0.48, 0.01))
 plt.title("Gradient Descent")
 line_ani = animation.FuncAnimation(fig1, update, iters, interval=50, blit=True)
 
-# Save animation to gif file
-# Writer = writers['ffmpeg']
-# writer = Writer(fps=15, metadata={'artist': 'Me'}, bitrate=1800)
-
-# line_ani.save('GA Animation.gif', writer)
-
 plt.show()
 ```
-</details>
-
-### 3. Going into more detail
-#### 3.1 When to stop?
+## 3. Going into more detail
+### 3.1 When to stop?
 The relationship between the number of changes in $x$ (*Iteration*) and the value of $f(x)$ (*Cost Value*) [Figure 3.1](#figure-3a). It is easy to see that the *Cost Value* tends to approach $0$ and remains stable after iteration 50. Repeating the remaining iterations does not seem to reduce the *Cost Value* much and may not be necessary.
 
 Based on this, we can come up with a good **threshold** to stop the GD function.
@@ -304,9 +277,7 @@ Based on this, we can come up with a good **threshold** to stop the GD function.
 
 [Figure 3.2](#figure-3b) shows that when the *threshold* of the gradient value is around $0.02$ ( $|Grad|< 0.02 $ ), we get a relatively good result compared to the result from Linear Regression.
 
-<details>
-<summary>Code <a href="#figure-3b">Figure 3.2</a>: Gradient Descent Animation 2</summary>
-```python
+```py:gradient_descent_2.py caption="gradient_descent_2.py" showLineNumbers
 import numpy as np
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
@@ -417,9 +388,8 @@ line_ani = animation.FuncAnimation(fig1, update, iters, interval=50, blit=True)
 
 plt.show()
 ```
-</details>
 
-#### 3.2. Stuck at local minima
+### 3.2. Stuck at local minima
 When randomly initializing $x$ and running, as mentioned above, there will be many local minima. Random initialization can cause us to get stuck at local minima, not the global minimum, as shown in [Figure 4](#figure-4), resulting in a non-optimal solution. When working with higher-dimensional spaces, there are even more local minima.
 
 <div style={{ textAlign: "center" }}>
@@ -432,7 +402,7 @@ When randomly initializing $x$ and running, as mentioned above, there will be ma
     <p style={{ textAlign: "center" }}>Figure 4: Stuck at local minima</p>
 </div>
 
-#### 3.3. Learning Rate
+### 3.3. Learning Rate
 The learning rate ($\alpha$) is a very important parameter. A small $\alpha$ as in [Figure 5](#figure-5) can slow down GD and make it very slow to converge. On the other hand, a large $\alpha$ as in [Figure 5](#figure-5) can make GD unable to converge.
 
 <div style={{ textAlign: "center" }}>
@@ -445,10 +415,10 @@ The learning rate ($\alpha$) is a very important parameter. A small $\alpha$ as 
     <p style={{ textAlign: "center" }}>Figure 5: Learning Rate (left: small $\alpha$, right: big $\alpha$)</p>
 </div>
 
-### 4. Conclusion
+## 4. Conclusion
 Gradient Descent is a very popular and powerful optimization method. It can help us find the extrema of a function quickly and efficiently. However, choosing the learning rate and the initial point is an important issue that needs to be carefully considered.
 
-### 5. References
+## 5. References
 1. [Gradient Descent - Wikipedia](https://en.wikipedia.org/wiki/Gradient_descent)
 2. [Blog by TiepVu](https://machinelearningcoban.com/2017/01/12/gradientdescent/)
 3. [Numerical Differentiation - Wikipedia](https://en.wikipedia.org/wiki/Numerical_differentiation)
