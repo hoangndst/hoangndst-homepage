@@ -7,14 +7,6 @@ summary: 'Deploy Kratix in a multi-cluster model (platform - workers)'
 images: ['/static/blog/kratix-multi-cluster/topo.png']
 authors: ['hoangndst']
 ---
-## Table of Contents
-1. [Deploy Kratix in a multi-cluster model (platform - workers)](#1-deploy-kratix-in-a-multi-cluster-model-platform---workers)
-2. [Install necessary tools](#2-install-necessary-tools)
-3. [Deploy Platform cluster](#3-deploy-platform-cluster)
-4. [Deploy Worker clusters](#4-deploy-worker-clusters)
-5. [Install Promises on the Platform cluster (Example Jenkins)](#5-install-promises-on-the-platform-cluster-example-jenkins)
-6. [Conclusion](#6-conclusion)
-
 ## 1. Deploy Kratix in a multi-cluster model (platform - workers)
 <div style={{ textAlign: "center" }}>
   <img
@@ -53,8 +45,7 @@ authors: ['hoangndst']
   ```sh
   kubectl apply --context $PLATFORM --filename github-secret.yaml
   ```
-  `github-secret.yaml`:
-  ```yaml
+  ```yaml:github-secret.yaml caption="github-secret.yaml" showLineNumbers
   apiVersion: v1
   kind: Secret
   metadata:
@@ -68,8 +59,7 @@ authors: ['hoangndst']
   ```sh
   kubectl apply --context $PLATFORM --filename platfom_v1alpha1_gitstatestore.yaml
   ```
-  `platfom_v1alpha1_gitstatestore.yaml`:
-  ```yaml
+  ```yaml:platfom_v1alpha1_gitstatestore.yaml caption="platfom_v1alpha1_gitstatestore.yaml" showLineNumbers
   apiVersion: platform.kratix.io/v1alpha1
   kind: GitStateStore
   metadata:
@@ -99,7 +89,7 @@ authors: ['hoangndst']
   Requirements:
   
   Secret storing Github/Gitlab token or username password. Refer to: https://docs.kratix.io/main/reference/statestore/gitstatestore#auth
-  ```yaml
+  ```yaml:flux_worker_1.yaml caption="flux_worker_1.yaml" showLineNumbers
   apiVersion: source.toolkit.fluxcd.io/v1beta1
   kind: GitRepository
   metadata:
@@ -156,11 +146,10 @@ authors: ['hoangndst']
   ```
 - Finally, register the worker cluster with the platform cluster where Kratix is installed. See more at https://docs.kratix.io/main/reference/destinations/intro
 
-  ```yaml
+  ```sh
   kubectl apply --context $PLATFORM --filename platform_v1alplha1_worker.yaml
   ```
-  `platform_v1alplha1_worker.yaml`:
-  ```yaml
+  ```yaml:platform_v1alplha1_worker.yaml caption="platform_v1alplha1_worker.yaml" showLineNumbers
   apiVersion: platform.kratix.io/v1alpha1
   kind: Destination
   metadata:
@@ -186,7 +175,7 @@ authors: ['hoangndst']
 
   Other worker clusters that want to join will also follow the same steps from installing Flux.
 
-### 5. Install Promises on the Platform cluster (Example Jenkins)
+## 5. Install Promises on the Platform cluster (Example Jenkins)
 We can find Promise resources on the Kratix Marketplace or write our own Promises: [Kratix Marketplace](https://docs.kratix.io/marketplace)
 - Jenkins Promise: https://github.com/syntasso/kratix-marketplace/tree/main/jenkins
   ```sh
@@ -206,9 +195,8 @@ We can find Promise resources on the Kratix Marketplace or write our own Promise
   
   Each time a Jenkins instance is requested, the Jenkins Operator will create this resource on the worker cluster.
 
-### 6. Conclusion
+## 6. Conclusion
 - With the Kratix multi-cluster deployment model (platform - workers), we can easily scale the worker cluster without affecting the platform cluster. The platform cluster will manage and provide resources for the worker cluster through GitOps. The worker cluster will synchronize and deploy the resources requested by the platform cluster.
 - This Platform Orchestrator model is quite interesting but requires the worker clusters to install the necessary resources as mentioned above. We will compare it with another Platform Orchestrator in the next blog post.
 > [!NOTE]  
 > Checkout up coming talk about **Platform Orchestrator** at [FOSSASIA Summit 2025](https://eventyay.com/e/4c0e0c27/session/9434).
-

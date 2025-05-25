@@ -5,9 +5,19 @@
  * https://github.com/PrismJS/prism-themes
  */
 
+/* Inline code */
+:not(pre) > code {
+  @apply relative rounded bg-gray-200 px-[0.3rem] py-[0.2rem] font-mono text-sm text-gray-200 dark:bg-gray-700;
+  /* Remove backtick from inline code */
+  &::before,
+  &::after {
+    content: none !important;
+  }
+}
+
 /* Code title styles */
 .remark-code-title {
-  @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200 dark:bg-gray-800;
+  @apply break-words rounded-t-md border-x border-t border-gray-800 bg-gray-900 px-4 py-2 text-sm font-medium text-gray-200 dark:border-gray-800;
 }
 
 .remark-code-title + div > pre {

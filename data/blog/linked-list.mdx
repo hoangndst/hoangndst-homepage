@@ -8,7 +8,7 @@ images: ['/static/blog/linked-list/fig-1.png']
 authors: ['hoangndst']
 ---
 
-### 1. Introduction
+## 1. Introduction
 Danh sách liên kết là một cấu trúc dữ liệu tuyến tính, trong đó các phần tử không được lưu trữ tại các vị trí bộ nhớ liền kề. Các phần tử trong danh sách được liên kết được liên kết bằng cách sử dụng con trỏ như được hiển thị trong hình ảnh bên dưới:
 
 <div style={{ textAlign: "center" }}>
@@ -16,13 +16,13 @@ Danh sách liên kết là một cấu trúc dữ liệu tuyến tính, trong đ
         id="figure-1"
         src="/static/blog/linked-list/fig-1.png"
         alt="Linked List Diagram"
-        style={{ width: "80%", display: "block", margin: "0 auto" }}
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
     />
     <p style={{ textAlign: "center" }}>Figure 1: Linked List Diagram</p>
 </div>
 
 Bắt đầu với cấu trúc đơn giản nhất
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 struct Node {
     int data;
     Node *next;
@@ -30,7 +30,7 @@ struct Node {
 ```
 
 Trong hàm main ta khai báo như sau:
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 int main() {
     Node *one = new Node();
     Node *two = new Node();
@@ -52,20 +52,20 @@ int main() {
 ```
 Như vậy chúng ta đã có một list. Giờ chúng ta muốn thêm một phần tử zero vào một vị trí bất kì thì làm thế nào?
 
-### 2. Thêm phần tử vào đầu danh sách liên kết
+## 2. Thêm phần tử vào đầu danh sách liên kết
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-2"
         src="/static/blog/linked-list/fig-2.png"
         alt="Add Node to Head"
-        style={{ width: "80%", display: "block", margin: "0 auto" }}
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
     />
     <p style={{ textAlign: "center" }}>Figure 2: Add Node to Head</p>
 </div>
 
-#### 2.1. Code
+### 2.1. Code
 <div id="add-head">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void addhead(int data, Node **head) {
     Node* new_head = new Node();
     new_head->data = data;
@@ -75,8 +75,8 @@ void addhead(int data, Node **head) {
 ```
 </div>
 
-#### 2.2. Test
-```cpp
+### 2.2. Test
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 int main() {
     ...
     addhead(0, &head); // set head->data = 0
@@ -87,20 +87,20 @@ Cho những bạn chưa hiểu tại sao trong hàm [`addhead(0, &head)`](#add-h
 
 Chúng ta đưa vào địa trỉ để thay đổi giá trị nó, cái này gọi là tham chiếu, còn nếu là `Node *head` thì chỉ truyền vào giá trị, ta không thay đổi được sau khi kết thúc hàm, đó gọi là tham trị.
 
-### 3. Thêm sau một vị trí cho trước
+## 3. Thêm sau một vị trí cho trước
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-3"
         src="/static/blog/linked-list/fig-3.png"
         alt="Add Node After"
-        style={{ width: "80%", display: "block", margin: "0 auto" }}
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
     />
     <p style={{ textAlign: "center" }}>Figure 3: Add Node After</p>
 </div>
 
-#### 3.1. Code
+### 3.1. Code
 <div id="add-after">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void insertAfter(Node *index, int data) {
     if (index == NULL) return;
     Node *new_node = new Node();
@@ -112,7 +112,7 @@ void insertAfter(Node *index, int data) {
 </div>
 Phần này khá dễ hiểu mọi người hãy nhìn hình [Figure 3](#figure-3) sẽ hiểu.
 
-### 4. Thêm vào cuối danh sách
+## 4. Thêm vào cuối danh sách
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-4"
@@ -123,9 +123,9 @@ Phần này khá dễ hiểu mọi người hãy nhìn hình [Figure 3](#figure-
     <p style={{ textAlign: "center" }}>Figure 4: Add Node to Tail</p>
 </div>
 
-#### 4.1. Code
+### 4.1. Code
 <div id="add-tail">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void append(Node **head, int data) {
     Node *new_node = new Node();
     new_node->data = data;
@@ -142,8 +142,8 @@ void append(Node **head, int data) {
 ```
 </div>
 
-#### 4.2. Test
-```cpp
+### 4.2. Test
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void printlist(Node *node) {
     while(node) {
         cout << node->data << " ";
@@ -164,12 +164,12 @@ int main() {
 ```
 Kết quả sẽ là `0 1 2 3 4`.
 
-### 5. Xóa phần tử có giá trị bằng x
+## 5. Xóa phần tử có giá trị bằng x
 Cho một Linked List chúng ta hay xóa phần tử có $value = x$
 
-#### 5.1. Code
+### 5.1. Code
 <div id="delete-node">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void delete_value(Node **head, int x) {
     Node *tmp = *head;
     Node *prev = NULL;
@@ -189,10 +189,10 @@ void delete_value(Node **head, int x) {
 ```
 </div>
 
-### 6. Xóa phần tử tại vị trí cho trước
-#### 6.1. Code
+## 6. Xóa phần tử tại vị trí cho trước
+### 6.1. Code
 <div id="delete-index">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void delete_pos(Node **head, int pos) {
     if (*head == NULL) return;
     Node *tmp = *head;
@@ -224,10 +224,10 @@ Xem hoạt ảnh sau để có thể dễ dàng hiểu:
     <p style={{ textAlign: "center" }}>Figure 5: Delete Node at Index</p>
 </div>
 
-### 7. Xóa một Linked List?
-#### 7.1. Code
+## 7. Xóa một Linked List?
+### 7.1. Code
 <div id="delete-list">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void delete_list(Node **head) {
     Node *curr = *head;
     Node *next = NULL;
@@ -240,10 +240,11 @@ void delete_list(Node **head) {
 }
 ```
 </div>
-### 8. Tìm độ dài của Linked List
-#### 8.1. Code
+
+## 8. Tìm độ dài của Linked List
+### 8.1. Code
 <div id="length-list">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 int len_list(Node *head) {
     if (head == NULL) return 0;
     int len = 0;
@@ -258,10 +259,10 @@ int len_list(Node *head) {
 
 Ở đây chúng ta chỉ cần xét giá trị không cần thiết phài `Node **head` để truy đến địa trỉ, chúng ta chỉ cần biến đếm và không cần thay đổi giá trị gì cả 😙.
 
-### 9. Check xem trong Linked List có giá trị nào bằng x không:
-#### 9.1. Code
+## 9. Check xem trong Linked List có giá trị nào bằng x không:
+### 9.1. Code
 <div id="check-value">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 bool find(Node *head, int x) {
     while(head) {
         if (head->data == x) return true;
@@ -272,10 +273,10 @@ bool find(Node *head, int x) {
 ```
 </div>
 
-### 10. Lấy giá trị tại vị trí cho trước
-#### 10.1. Code
+## 10. Lấy giá trị tại vị trí cho trước
+### 10.1. Code
 <div id="get-value">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 int getNth (Node *head, int index) {
     int len = len_list(head);
     if (index > len) return -1;
@@ -287,7 +288,7 @@ int getNth (Node *head, int index) {
 ```
 </div>
 
-### 11. Tìm độ dài của LOOP trong Linked List
+## 11. Tìm độ dài của LOOP trong Linked List
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-6"
@@ -300,7 +301,7 @@ int getNth (Node *head, int index) {
 
 ### 11.1. Đầu tiên hay tìm hiểu cách kiểm tra xem có loop trong linked list hay không?
 <div id="loop-detect">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 bool loopDetect(Node *head) {
     Node *fast = head;
     Node *slow = head;
@@ -317,7 +318,7 @@ Ta cho `slow`, `fast` chạy cho đến khi hai con trỏ bằng nhau thì chứ
 
 Còn một cách nữa là sử dụng `Set`:
 <div id="loop-detect-set">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 bool loopDetect(Node *head) {
     set<Node *> s;
     while(head) {
@@ -336,7 +337,7 @@ bool loopDetect(Node *head) {
 ### 11.2. Tìm độ dài của LOOP
 Chúng ta đã có cách kiểm tra và biết vị trí LOOP chính là tại `slow` || `fast` tại thời điểm nó bằng nhau. Giờ hay tiếp với hàm tìm độ dài của LOOP này.
 <div id="count-from">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 int countFrom(Node *loopIndex) {
     int len = 1;
     Node *tmp = loopIndex;
@@ -350,7 +351,7 @@ int countFrom(Node *loopIndex) {
 </div>
 Hàm [`countFrom`](#count-from) là hàm đếm độ dài và input là con trỏ tại vị trí có LOOP, tức là vị trí `end->next`, đã đi đến đây thì bạn sẽ dễ dàng hiểu được hàm.
 <div id="count-loop">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 int countLoop(Node *head) {
     Node *slow = head;
     Node *fast = head;
@@ -367,10 +368,10 @@ int countLoop(Node *head) {
 ```
 </div>
 
-### 12. Xóa phần tử lặp của một Linked List chưa được sắp xếp:
-#### 12.1. Code
+## 12. Xóa phần tử lặp của một Linked List chưa được sắp xếp:
+### 12.1. Code
 <div id="remove-duplicate">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 void removeDuplicates (Node **head) {
     Node *curr = *head;
     Node *prev = NULL;
@@ -392,10 +393,10 @@ void removeDuplicates (Node **head) {
 
 Ta sẽ sử dụng `Hashing` để có thể có độ phức tạp là $O(n)$.
 
-### 13. Intersection of Two Linked Lists (LeetCode) | Giao điểm của hai danh sách được liên kết.
-#### 13.1. Code
+## 13. Intersection of Two Linked Lists (LeetCode) | Giao điểm của hai danh sách được liên kết.
+### 13.1. Code
 <div id="intersection">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 Node *getIntersectionNode (Node *headA, Node *headB) {
     set<Node *> s;
     while(headA) {
@@ -415,10 +416,10 @@ Node *getIntersectionNode (Node *headA, Node *headB) {
 ```
 </div>
 
-### 14. Reverse Linked Lists (LeetCode) | Đảo ngược Linked List
-#### 14.1. Code
+## 14. Reverse Linked Lists (LeetCode) | Đảo ngược Linked List
+### 14.1. Code
 <div id="reverse-list">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 Node *reverseList(Node **head) {
     Node *curr = *head;
     Node *prev = NULL;
@@ -435,10 +436,10 @@ Node *reverseList(Node **head) {
 - Time complexity : $O(n)$. Assume that $n$ is the list's length, the time complexity is $O(n)$.
 - Space complexity : $O(1)$.
 
-### 15. Remove Elements (LeetCode)
-#### 15.1. Code
+## 15. Remove Elements (LeetCode)
+### 15.1. Code
 <div id="remove-elements">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 Node *removeElements(Node **head, int value) {
     Node *curr = head;
     Node *prev = new Node();
@@ -457,7 +458,7 @@ Node *removeElements(Node **head, int value) {
 ```
 </div>
 
-### 16. Odd Even Linked List (LeetCode)
+## 16. Odd Even
 <div style={{ textAlign: "center"}}>
     <img
         id="figure-7"
@@ -469,9 +470,10 @@ Node *removeElements(Node **head, int value) {
 </div>
 
 Ở đây bài toán mặc định phần tử đầu tiên là lẻ, phần tử thứ hai là chẵn, ta sẽ giải quyết theo hướng chia ra làm hai list rồi nối chúng lại với nhau.
-#### 16.1. Code
+
+### 16.1. Code
 <div id="odd-even">
-```cpp
+```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
 Node *oddevenList(Node **head) {
     Node *odd = *head;
     Node *even = odd->next;

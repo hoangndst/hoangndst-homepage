@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.task-list-item::before {
-  @apply hidden;
-}
-
+/* Hide default list marker for task lists */
 .task-list-item {
   @apply list-none;
 }
@@ -22,25 +19,19 @@
   @apply my-5;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
+/* Hide scrollbars for elements with .no-scrollbar */
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
-/* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-  transition:
-    background-color 600000s 0s,
-    color 600000s 0s;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-.katex-display {
-  overflow: auto hidden;
+/* Prevent autofill background and color override */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
 }
 
 .content-header-link {
@@ -48,7 +39,6 @@ input:-webkit-autofill:focus {
   margin-left: -24px;
   padding-right: 4px;
 }
-
 .content-header:hover .content-header-link,
 .content-header-link:hover {
   opacity: 1;
@@ -57,4 +47,45 @@ input:-webkit-autofill:focus {
 .linkicon {
   display: inline-block;
   vertical-align: middle;
+}
+
+@layer components {
+  /* Add scroll margin to any element with an ID (potential anchor target) */
+  [id] {
+    @apply scroll-mt-28;
+  }
+
+  article {
+    @apply prose-headings:scroll-mt-28 prose-headings:break-words;
+    @apply prose-img:mx-auto prose-img:rounded-lg prose-img:border prose-img:border-gray-200 prose-img:dark:border-gray-700;
+    @apply prose-blockquote:!not-italic;
+
+    .katex-display {
+      @apply overflow-x-auto overflow-y-hidden py-4;
+    }
+
+    /* Remove background from <mark> elements */
+    mark {
+      @apply bg-transparent;
+    }
+
+    /* Set code font family */
+    :not(pre) > code,
+    pre,
+    code {
+      font-family: 'Cascadia Code PL', 'Cascadia Code', 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+    }
+
+    /* Code block styling */
+    pre {
+      @apply static max-h-[600px] overflow-auto rounded-xl border border-gray-800 py-4 text-sm dark:border-gray-800;
+      > code {
+        @apply whitespace-pre-wrap;
+        counter-reset: line;
+        .code-line {
+          @apply px-4 text-xs;
+        }
+      }
+    }
+  }
 }
