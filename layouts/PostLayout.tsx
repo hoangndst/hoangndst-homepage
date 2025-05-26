@@ -90,7 +90,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               </dd>
             </dl>
             {tags && (
-              <div className="flex flex-wrap justify-center gap-2">
+              <div className="flex flex-wrap justify-center">
                 {tags.map((tag) => (
                   <Tag key={tag} text={tag} className="text-xs" />
                 ))}

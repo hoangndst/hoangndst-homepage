@@ -14,7 +14,7 @@ First-in-first-out Data Structure. Trong cấu trúc dữ liệu FIFO, phần t�
         id="figure-1"
         src="/static/blog/stack-and-queue/fig-1.png"
         alt="Queue"
-        style={{ width: "80%", display: "block", margin: "0 auto" }}
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
     />
     <p style={{ textAlign: "center" }}>Figure 1: Queue</p>
 </div>
@@ -23,7 +23,7 @@ Như trong hình trên, hàng đợi là một cấu trúc dữ liệu FIFO đi�
 
 Bắt đầu với class cơ bản nhất:
 <div id="init-code">
-```cpp
+```cpp:queue.cpp caption="queue.cpp" showLineNumbers
 #include <iostream>
 using namespace std;
 
@@ -43,7 +43,7 @@ public:
 
 `Queue(k)`: Khởi tạo với kích thước của hàng đợi là `k`.
 <div id="init-queue">
-```cpp
+```cpp:queue.cpp caption="queue.cpp" showLineNumbers
 public:
     Queue(int k) {
         arr = new int[k];
@@ -59,7 +59,7 @@ public:
 
 `isFull()`: Kiểm tra xem hàng đợi đã đầy hay chưa.
 <div id="queue-1">
-```cpp
+```cpp:queue.cpp caption="queue.cpp" showLineNumbers
     bool isEmpty() {
         if (size == 0) return true;
         return false;
@@ -75,7 +75,7 @@ public:
 
 `int Rear()`: Lấy phần tử cuối của Queue, nếu trống trả về -1.
 <div id="queue-2">
-```cpp
+```cpp:queue.cpp caption="queue.cpp" showLineNumbers
     int Front() {
         if(isEmpty()) return -1;
         return arr[front];
@@ -89,7 +89,7 @@ public:
 
 `bool enQueue(int value)`: Chèn một phần tử vào hàng đợi. Trả về `true` nếu hoạt động thành công.
 <div id="queue-3">
-```cpp
+```cpp:queue.cpp caption="queue.cpp" showLineNumbers
     bool enQueue(int value) {
         if(isFull()) return false;
         rear = (rear + 1) % capacity;
@@ -106,7 +106,7 @@ Tại sao `rear = (rear + 1) % capacity` ? Để dễ hiểu thì hãy lấy VD 
 
 Tương tự `bool deQueue()` cũng làm tương tự với `front`.
 <div id="queue-4">
-```cpp
+```cpp:queue.cpp caption="queue.cpp" showLineNumbers
     bool deQueue() {
         if(isEmpty()) return false;
         front = (front + 1) % capacity;
