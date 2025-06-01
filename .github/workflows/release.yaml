@@ -73,7 +73,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/arm64 # for Raspberry Pi
+          platforms: linux/amd64 # for mr4x2 server
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.REGISTRY_PREFIX }}:${{ steps.get_version.outputs.VERSION }}
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
