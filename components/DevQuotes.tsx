@@ -11,7 +11,7 @@ export default function DevQuotes() {
 
   return (
     <ScrambledText
-      className="break-words text-center text-lg font-medium text-gray-500 dark:text-gray-400 sm:text-lg/5"
+      className="break-words text-center text-lg/5 font-medium text-gray-500 dark:text-gray-400 sm:text-lg/5"
       radius={100}
       duration={1.2}
       speed={0.5}
