@@ -6,6 +6,8 @@ import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import Spotify from '@/components/Spotify'
 import SectionContainer from '@/components/SectionContainer'
+import Gopher from '@/components/Gopher'
+import DevQuotes from '@/components/DevQuotes'
 
 const MAX_DISPLAY = 4
 
@@ -14,7 +16,7 @@ export default function Home({ posts }) {
     <SectionContainer>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-4 pt-6 sm:px-4 md:space-y-5 lg:px-0">
-          <div className="flex flex-col space-y-2 pb-8 pt-6 md:flex-row md:items-center md:justify-between md:space-y-0 md:space-y-5">
+          <div className="flex flex-col space-y-2 pt-6 md:flex-row md:items-center md:justify-between md:space-y-0 md:space-y-5">
             <div className="w-full text-center md:text-left">
               <h1 className="text-2xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
                 I'm{' '}
@@ -28,29 +30,15 @@ export default function Home({ posts }) {
               </div>
             </div>
             <div className="mt-4 flex w-full justify-center md:mt-0 md:w-auto md:justify-end">
-              <Spotify />
+              <Gopher />
             </div>
           </div>
-          <div className="flex flex-wrap items-center justify-center px-2 pt-6 sm:px-0">
-            <blockquote className="pl-2 text-center text-lg font-medium text-gray-500 dark:text-gray-400 sm:pl-4 sm:text-xl/5">
-              <p>"The people who are crazy enough to think they can change the world</p>
-              <p>
-                {' '}
-                are the ones who do." -{' '}
-                <span className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                  <Link
-                    href="https://www.goodreads.com/quotes/9859550-the-people-who-are-crazy-enough-to-think-they-can"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Steve Jobs
-                  </Link>
-                </span>
-              </p>
-            </blockquote>
+          <div className="flex flex-wrap items-center justify-center px-2 sm:px-0">
+            <DevQuotes />
           </div>
-          {/* short divide y */}
-          <div className="divide-y divide-gray-200 dark:divide-gray-700" />
+          <div className="flex flex-wrap items-center justify-center sm:px-0">
+            <Spotify />
+          </div>
           <Talk />
           <p className="text-gray dark:text-gray px-2 text-base leading-7 sm:px-0 sm:text-lg">
             {siteMetadata.description}

@@ -49,6 +49,10 @@ input:-webkit-autofill:focus {
   vertical-align: middle;
 }
 
+.font-mono {
+  font-family: 'Cascadia Code', 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+}
+
 @layer components {
   /* Add scroll margin to any element with an ID (potential anchor target) */
   [id] {
