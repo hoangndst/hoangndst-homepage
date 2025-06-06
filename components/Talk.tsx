@@ -23,8 +23,8 @@ const Talk = () => {
   }, [])
 
   return (
-    <div className="dark:text-grey text-gray flex flex-col items-center justify-center pb-6 pt-6 md:space-y-5">
-      <p className="text-s text-gray dark:text-gray leading-7 md:mt-5">
+    <div className="dark:text-grey text-gray flex flex-col items-center justify-center pb-6 pt-2 md:space-y-5">
+      <p className="text-s text-gray dark:text-gray leading-7">
         <Link href="/about">Checkout my latest conference talks 🎤</Link>
       </p>
       <ul className="">

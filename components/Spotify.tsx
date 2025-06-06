@@ -56,7 +56,7 @@ export default function Spotify() {
       href={track.songUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="mt-4 flex w-full max-w-[400px] items-center space-x-3 overflow-hidden rounded p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800"
+      className="mt-4 flex w-full max-w-[350px] items-center space-x-3 overflow-hidden rounded p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800"
     >
       <Image
         src={track.albumImageUrl}
