@@ -154,9 +154,12 @@ const Squares: React.FC<SquaresProps> = ({
   }, [direction, speed, borderColor, hoverFillColor, squareSize])
 
   return (
-    <canvas ref={canvasRef} className="block h-full w-full border-none">
-      {children}
-    </canvas>
+    <div className="relative block h-full w-full">
+      <canvas ref={canvasRef} className="block h-full w-full border-none" />
+      <div className="absolute top-0 left-0 w-full h-full">
+        {children}
+      </div>
+    </div>
   )
 }
 

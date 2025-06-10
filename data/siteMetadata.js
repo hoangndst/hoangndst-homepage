@@ -6,7 +6,7 @@ const siteMetadata = {
   description: 'Tech stuffs, thoughts and more',
   openToWork: true,
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://hoangndst.com',
   siteRepo: 'https://github.com/hoangndst/hoangndst-homepage',
   siteLogo: `https://hoangndst.com/static/images/logo.png`,
