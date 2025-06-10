@@ -6511,6 +6511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: fb681b242cccabed45494468f64282a7d375ea970e0adbcc5dcc92dcb7aba49b2081c2c9739d41bf71ce89ed68dd73bebfe06ca35129490704775d091895710b
+  languageName: node
+  linkType: hard
+
 "debounce@npm:^1.2.1":
   version: 1.2.1
   resolution: "debounce@npm:1.2.1"
@@ -8533,6 +8540,7 @@ __metadata:
     prettier: ^3.0.0
     prettier-plugin-tailwindcss: ^0.5.11
     react: rc
+    react-activity-calendar: ^2.7.12
     react-dom: rc
     reading-time: 1.5.0
     rehype-autolink-headings: ^7.1.0
@@ -11553,6 +11561,17 @@ __metadata:
   dependencies:
     inherits: ~2.0.3
   checksum: ebc23639248e4fe40a789f713c20548e513e053b3dc4924b6cb0ad741e3f264dcff948225c8737834dd4f9ec286dbc06a1a7c13858ea382d9379f4303bcc0916
+  languageName: node
+  linkType: hard
+
+"react-activity-calendar@npm:^2.7.12":
+  version: 2.7.12
+  resolution: "react-activity-calendar@npm:2.7.12"
+  dependencies:
+    date-fns: ^4.1.0
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0
+  checksum: 515f17f56daea772dff5122e7a18adeadcb857d3d1a98f48ebc00fc53b2d1f9faa7aebda8217aa4c255bb0682c2fe99a9cb9d4d9a551f0a51af2758274508aa4
   languageName: node
   linkType: hard
 

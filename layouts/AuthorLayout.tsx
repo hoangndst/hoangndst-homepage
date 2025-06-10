@@ -177,14 +177,14 @@ export default function AuthorLayout({ children, content }: Props) {
                         >
                           <span
                             className="mr-2 inline-flex items-center justify-center rounded-full bg-white"
-                            style={{ width: 30, height: 30 }}
+                            style={{ width: 25, height: 25 }}
                           >
                             <Image
                               src="https://upload.wikimedia.org/wikipedia/vi/b/bf/Logo_HUET.svg"
                               alt="UET Logo"
-                              width={30}
-                              height={30}
-                              style={{ display: 'block', maxWidth: 30, maxHeight: 30 }}
+                              width={25}
+                              height={25}
+                              style={{ display: 'block', maxWidth: 25, maxHeight: 25 }}
                               unoptimized
                             />
                           </span>
@@ -206,7 +206,9 @@ export default function AuthorLayout({ children, content }: Props) {
                       <h3 className="text-lg font-semibold">
                         ECE Pioneering Competitive Scholarship 🏅
                       </h3>
-                      <p className="text-gray-500">$19.500 per year (International Student)</p>
+                      <p className="text-gray-500">
+                        Electrical and Computer Engineering Department
+                      </p>
                       <p className="text-gray-500">
                         <a
                           href="https://www.utsa.edu/"
@@ -217,10 +219,10 @@ export default function AuthorLayout({ children, content }: Props) {
                           <Image
                             src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
                             alt="UTSA Logo"
-                            width={30}
-                            height={30}
+                            width={25}
+                            height={25}
                             className="mr-2 inline"
-                            style={{ minWidth: 30, minHeight: 30 }}
+                            style={{ minWidth: 25, minHeight: 25 }}
                             unoptimized
                           />
                           The University of Texas at San Antonio
