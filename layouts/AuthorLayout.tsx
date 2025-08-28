@@ -162,6 +162,37 @@ export default function AuthorLayout({ children, content }: Props) {
                   Education
                 </h2>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                <li className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        Master of Science in Computer Engineering
+                      </h3>
+                      <p className="text-gray-500">
+                        <a
+                          href="https://www.utsa.edu/"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span
+                            className="mr-2 inline-flex items-center justify-center rounded-full bg-white"
+                            style={{ width: 25, height: 25 }}
+                          >
+                            <Image
+                              src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
+                              alt="UTSA Logo"
+                              width={25}
+                              height={25}
+                              style={{ display: 'block', maxWidth: 25, maxHeight: 25 }}
+                              unoptimized
+                            />
+                          </span>
+                          The University of Texas at San Antonio
+                        </a>
+                      </p>
+                    </div>
+                    <span className="text-gray-400">Aug 2025 - Present</span>
+                  </li>
                   <li className="flex items-center justify-between">
                     <div>
                       <h3 className="text-lg font-semibold">
