@@ -58,7 +58,7 @@ export default function AuthorLayout({ children, content }: Props) {
               </div>
               <div className="not-prose pt-8 text-center">
                 <a
-                  href="/static/resume/HoangDinhNguyen_Resume.pdf"
+                  href="/static/resume/Steven_Nguyen_Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -71,6 +71,31 @@ export default function AuthorLayout({ children, content }: Props) {
                   Experience
                 </h2>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                  <li className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold">Graduate Research Assistant</h3>
+                      <p className="text-gray-500">
+                        <a
+                          href="https://www.utsa.edu/"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Image
+                            src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
+                            alt="UTSA Logo"
+                            width={25}
+                            height={25}
+                            className="mr-2 inline"
+                            style={{ minWidth: 25, minHeight: 25 }}
+                            unoptimized
+                          />
+                          The University of Texas at San Antonio
+                        </a>
+                      </p>
+                    </div>
+                    <span className="group relative text-gray-400">Sept 2025 - Present</span>
+                  </li>
                   <li className="flex items-center justify-between">
                     <div>
                       <h3 className="text-lg font-semibold">Cloud Engineer</h3>
@@ -94,7 +119,7 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="group relative text-gray-400">Feb 2023 - Apr 2025</span>
+                    <span className="group relative text-gray-400">Jan 2023 - Apr 2025</span>
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
@@ -162,7 +187,7 @@ export default function AuthorLayout({ children, content }: Props) {
                   Education
                 </h2>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
-                <li className="flex items-center justify-between">
+                  <li className="flex items-center justify-between">
                     <div>
                       <h3 className="text-lg font-semibold">
                         Master of Science in Computer Engineering
