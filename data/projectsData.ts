@@ -13,6 +13,12 @@ const projectsData: Project[] = [
     href: 'https://github.com/KusionStack/kusion',
   },
   {
+    title: 'Container Monitoring Mobile App',
+    description: 'A mobile app for monitoring container metrics and logs. Supports AI-powered chat to interact with Docker containers hosts.',
+    imgSrc: 'https://raw.githubusercontent.com/hoangndst/container-monitoring-app/refs/heads/main/assets/images/demo_2.png',
+    href: 'https://github.com/hoangndst/container-monitoring-app',
+  },
+  {
     title: 'Kusion Backstage Plugin',
     description: 'Kusion Plugins and Modules that integrates with the Backstage developer portal platform. Enables developers to manage Kusion directly through Backstage.',
     imgSrc: 'https://raw.githubusercontent.com/KusionStack/kusion/main/docs/overview.jpg',
@@ -37,10 +43,16 @@ const projectsData: Project[] = [
     href: 'https://viettelcloud.vn/en/products/8/30',
   },
   {
-    title: 'Ratelimit',
-    description: `Golang rate limit library.`,
+    title: 'Container Monitoring Genkit',
+    description: `An AI-powered container monitoring and management tool built with Genkit framework.`,
     imgSrc: '/static/images/golang.png',
-    href: 'https://github.com/hoangndst/ratelimit',
+    href: 'https://github.com/hoangndst/container-monitoring-genkit',
+  },
+  {
+    title: "@danchoicloud_bot",
+    description: "Telegram chat bot to help manage my everyday tasks.",
+    imgSrc: '/static/images/danchoicloud_bot.png',
+    href: "https://github.com/hoangndst/danchoicloud",
   },
   {
     title: 'Project Management System',
@@ -80,6 +92,12 @@ const projectsData: Project[] = [
     href: 'https://github.com/hoangndst/caro-ai',
   },
   {
+    title: 'Ratelimit',
+    description: `Golang rate limit library.`,
+    imgSrc: '/static/images/golang.png',
+    href: 'https://github.com/hoangndst/ratelimit',
+  },
+  {
     title: '510Pay',
     description: `An funny online web app I made for my homies at My Dinh dormitory to manage our money.`,
     imgSrc: 'https://raw.githubusercontent.com/hoangndst/510pay/master/src/images/readme/7.png',
@@ -96,12 +114,6 @@ const projectsData: Project[] = [
     description: "All helpful container deployment and management on Docker and Kubernetes.",
     imgSrc: '/static/images/golang.png',
     href: "https://github.com/hoangndst/stuffops",
-  },
-  {
-    title: "@danchoicloud_bot",
-    description: "Telegram chat bot to notify, remind, send random girl images, manage tasks and more.",
-    imgSrc: '/static/images/danchoicloud_bot.png',
-    href: "https://github.com/hoangndst/danchoicloud",
   },
   {
     title: "@buddy",
