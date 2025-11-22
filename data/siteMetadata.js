@@ -1,9 +1,9 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
   title: '@hoangndst',
-  author: 'Hoang Dinh Nguyen',
+  author: 'Hoang Nguyen',
   headerTitle: '@hoangndst',
-  description: 'Tech stuffs, thoughts and more',
+  description: 'I build tech stuff',
   openToWork: true,
   language: 'en-us',
   theme: 'dark', // system, dark or light

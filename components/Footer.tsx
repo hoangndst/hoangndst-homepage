@@ -2,6 +2,8 @@ import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import GitHubSponsor from './GitHubSponsor'
+import BuyMeACoffee from './BuyMeACoffee'
 
 export default function Footer() {
   return (
@@ -12,6 +14,10 @@ export default function Footer() {
             <NewsletterForm />
           </div>
         )}
+        <div className="flex items-center justify-center gap-3 pb-6">
+          <GitHubSponsor />
+          <BuyMeACoffee />
+        </div>
         <div className="mb-3 flex space-x-4">
           <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} />
           <SocialIcon kind="github" href={siteMetadata.github} size={6} />
