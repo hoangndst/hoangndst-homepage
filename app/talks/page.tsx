@@ -50,9 +50,13 @@ export default function Talks() {
                         </Link>
                       </h2>
                       <div className="mt-2 flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="inline-flex items-center text-primary-500">{talk.event}</span>
+                        <span className="inline-flex items-center text-primary-500">
+                          {talk.event}
+                        </span>
                         <span>|</span>
-                        <time dateTime={talk.date}>{formatDate(talk.date, siteMetadata.locale)}</time>
+                        <time dateTime={talk.date}>
+                          {formatDate(talk.date, siteMetadata.locale)}
+                        </time>
                       </div>
                       <div className="prose mt-2 max-w-none text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
                         {talk.summary}
