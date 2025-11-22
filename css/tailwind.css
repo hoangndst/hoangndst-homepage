@@ -84,7 +84,7 @@ input:-webkit-autofill:focus {
     pre {
       @apply static max-h-[600px] overflow-auto rounded-xl border border-gray-800 py-4 text-sm dark:border-gray-800;
       > code {
-        @apply whitespace-pre-wrap;
+        @apply whitespace-pre;
         counter-reset: line;
         .code-line {
           @apply px-4 text-xs;

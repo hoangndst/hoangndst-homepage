@@ -1,7 +1,6 @@
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import Image from '@/components/Image'
-import Talk from '@/components/Talk'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import Spotify from '@/components/Spotify'
@@ -39,7 +38,6 @@ export default function Home({ posts }) {
           <div className="flex flex-wrap items-center justify-center sm:px-0">
             <Spotify />
           </div>
-          <Talk />
           <p className="text-gray dark:text-gray px-2 text-base leading-7 sm:px-0 sm:text-lg">
             {siteMetadata.description}
           </p>

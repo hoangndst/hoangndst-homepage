@@ -156,7 +156,8 @@ export const Talks = defineDocumentType(() => ({
     date: { type: 'date', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     summary: { type: 'string' },
-    url: { type: 'string' },
+    url: { type: 'string', required: true },
+    image: { type: 'string' },
   },
   computedFields,
 }))

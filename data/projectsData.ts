@@ -43,10 +43,10 @@ const projectsData: Project[] = [
     href: 'https://viettelcloud.vn/en/products/8/30',
   },
   {
-    title: 'Container Monitoring Genkit',
+    title: '@danchoicloud Genkit',
     description: `An AI-powered container monitoring and management tool built with Genkit framework.`,
-    imgSrc: '/static/images/golang.png',
-    href: 'https://github.com/hoangndst/container-monitoring-genkit',
+    imgSrc: '',
+    href: 'https://github.com/hoangndst/danchoicloud-genkit',
   },
   {
     title: "@danchoicloud_bot",
@@ -88,13 +88,13 @@ const projectsData: Project[] = [
   {
     title: 'caro-ai',
     description: `This is a project for AI course. The goal is to create a Gomoku AI using Minimax Algorithm with Alpha-Beta Pruning and Zobrist Hashing.`,
-    imgSrc: '/static/images/golang.png',
+    imgSrc: '',
     href: 'https://github.com/hoangndst/caro-ai',
   },
   {
     title: 'Ratelimit',
     description: `Golang rate limit library.`,
-    imgSrc: '/static/images/golang.png',
+    imgSrc: '',
     href: 'https://github.com/hoangndst/ratelimit',
   },
   {
@@ -112,7 +112,7 @@ const projectsData: Project[] = [
   {
     title: "stuffops",
     description: "All helpful container deployment and management on Docker and Kubernetes.",
-    imgSrc: '/static/images/golang.png',
+    imgSrc: '',
     href: "https://github.com/hoangndst/stuffops",
   },
   {
