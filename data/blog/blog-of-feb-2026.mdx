@@ -1,0 +1,115 @@
+---
+title: 'Blog of February 2026'
+date: '2026-02-16'
+lastmod: '2026-02-16'
+tags: ['life', 'chocoboba']
+summary: 'February 2026: Happy Tet Holiday'
+images: ['/static/blog/blog-of-feb-2026/1.jpg']
+authors: ['hoangndst']
+---
+## 1. Introduction
+First of all, I want to wish you all a Happy Tet Holiday! Chúc mọi người một năm mới bình an! 🎉
+
+I had planned not to write anything this month, but then I remembered it's Tet. And I want to say happy new year to you all! 
+I was thinking of posting before midnight in Vietnam, but it's too late, so I'll just stick to midnight here for now 😀. 
+Since this is the first year I'm celebrating Tet away from home, I wanted to write something.
+This blog might be a bit short or have few pictures because I've been quite busy these past two months.
+
+<div style={{ textAlign: 'center' }}>
+  <img
+    src="/static/blog/blog-of-feb-2026/1.jpg"
+    alt="View from my new place"
+    style={{ width: '50%', display: 'block', margin: '0 auto' }}
+  />
+  <p style={{ textAlign: 'center' }}>Figure 0: View from my new place</p>
+</div>
+
+## 2. School and Research
+For the past two months, I haven't had much to do besides studying and working at school. 
+I've been a bit overwhelmed because I registered for quite a few courses in my first semester, plus I've been doing research in the lab. 
+But everything is fine, my grades are high, and my work with the lab is going well. 
+As a new international student, my professor was initially a little hesitant, fearing language or cultural barriers. 
+But after working for a month or two, things have improved. I've found that I complete assigned tasks quite quickly, 
+whereas the tasks I did at Viettel were probably much more hardcore 😀.
+
+My current project is developing a system for [Quitxt](https://quitxt.org/), a collaborative project between 
+[UT San Antonio](https://www.utsa.edu/) and [UT Health San Antonio](https://uthscsa.edu/tobacco-free/quitxt-program), with support from the Cancer Prevention and Research Institute of Texas. 
+I find it quite interesting to be working on a project from the university and the state of Texas. 
+Currently, the system is undergoing an upgrade to integrate AI into the processing flow based on the previous expert protocol. 
+Simply put, it involves developing an additional channel to answer user questions based on patient data and expert data, 
+creating a hybrid AI processing flow that combines logic or treatment strategies predefined by experts for the user/patient 
+with a knowledge stream to answer patient questions and concerns 24/7. I also proposed an architecture, 
+but it requires further research, you can see the figure below. The development phase will likely take more time because this 
+is a healthcare-related project and requires careful review. Besides that, I'm also focusing on upgrading the system, switching 
+to an architecture that will be easier to maintain and monitor in the future. I'll share more details in the future if I can 😀.
+
+<div style={{ textAlign: 'center' }}>
+  <img
+    src="/static/blog/blog-of-feb-2026/3.png"
+    alt="The architecture of the system"
+    style={{ width: '100%', display: 'block', margin: '0 auto' }}
+  />
+  <p style={{ textAlign: 'center' }}>Figure 1: The architecture of the system</p>
+</div>
+
+## 3. New Home
+In January, I moved to a new place. My girlfriend finished her master's degree and will continue working and pursuing her PhD.
+Moving was quite tiring, but the new place has a beautiful trail, and I often go for walks there in the cool afternoons, 
+which I really enjoy. Being close to each other makes me a little less worried because I can help her with some things and take better 
+care of her than before when we lived far apart. She has worked hard all this time and continues to do so. I love her very much, and I'm so proud of her.
+And also, we will celebrate Tet together this year! 🎉
+
+<div style={{ textAlign: 'center' }}>
+  <img
+    src="/static/blog/blog-of-feb-2026/2.jpg"
+    alt="The trail near my new place"
+    style={{ width: '50%', display: 'block', margin: '0 auto' }}
+  />
+  <p style={{ textAlign: 'center' }}>Figure 2: The trail near my new place</p>
+</div>
+
+## 4. Home Lab
+Besides work and study, I also tinker around in my free time. I turned on my two servers, a Raspberry Pi and a Dell, 
+and I'm hosting Home Assistant on the Raspberry and a Kubernetes cluster on my old Dell machine. I'll upgrade later if I have time haha. 
+On the Raspberry, I'm still running Docker Engine, and since the new location is a shared network for all the residents here, 
+I'm running a Cloudflare tunnel for my services on the Raspberry server. As for the Kubernetes cluster, which doesn't have a Load Balancer, 
+I've also deployed a Cloudflare tunnel inside the cluster and pointed the domains to Traefik for routing to other services. Just migrate mu homepage to this server. 
+Currently, I still have some services running on my homelab server in Vietnam, I'll probably create a K8S cluster for both if I have time. I will build a 3D printer in the future, 
+watch this space for more updates 😁.
+
+Some services I'm running on my home lab:
+- Kubernetes cluster for hosting my services.
+- [Cilium](https://cilium.io/): networking.
+- [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/): L4/7 routing.
+- [Traefik](https://traefik.io/traefik): discovery, routing, and load balancing of microservices.
+- [Cloudflare tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/): securing my services.
+- [Home Assistant](https://www.home-assistant.io/): home automation.
+- [Prometheus Operator](https://prometheus-operator.dev/): monitoring.
+- [ArgoCD](https://argo-cd.readthedocs.io/en/stable/): GitOps.
+- ... and more to come!
+
+## 5. Share Thoughts
+Currently, I'm trying to find opportunities in the US job market. If you're in the same situation as me, 
+I think practicing DSA or LeetCode is still very necessary. Some companies may say they've removed LeetCode 
+from their interview process, but big tech companies still have Live Coding rounds. Furthermore, the outcome doesn't 
+just depend on whether you can solve the problem, but also on how you explain your thought process, how you optimized it, 
+and how you explained the Time/Space Complexity. Besides that, you should prepare thoroughly and review your past projects and skills. 
+Your resume shouldn't just mention the projects you completed, you should be able to explain your responsibilities, how you did it, 
+what technologies you used, and what the results were.
+
+There's probably much more to write, but I'm quite busy, so I'll probably share more on future blog posts. 
+I'll try to share more about technology and things I've learned in the United States 😀.
+
+## 6. Happy Tet Holiday!
+
+Cuối cùng chúc mừng năm mới mọi người! 🎉
+
+Chúc bản thân sẽ cố gắng và nỗ lực hơn, học hỏi được nhiều điều hơn và sớm đạt được những điều bản thân đã đề ra. Chúc em yêu của anh đạt được những điều em mong muốn, anh tin em sẽ làm được. Chúc chúng ta sẽ luôn vững vàng và đạt được những điều cả 2 luôn hướng tới.
+
+Chúc gia đình, bố mẹ, 2 em út của anh luôn mạnh khoẻ, luôn vui vẻ, chúc bố mẹ sức khoẻ, công việc thuận lợi, luôn hạnh phúc, chúc 2 em của anh học tốt, ngoan ngoãn, cảm ơn 2 em đã cố gắng khi anh không có ở nhà.
+
+Chúc những người bạn, những người anh em luôn đồng hành cùng tôi. Chúc anh em năm mới vui vẻ, thành công trong sự nghiệp của anh em 😀. Sớm tìm được bạn đời, nếu cưới thì nhớ mua vé máy bay cho bạn. 
+
+<Youtube idOrUrl="_5cUW112Haw"  start={459} />
+
+See you guys in the next blog! Peace out! 🚀
