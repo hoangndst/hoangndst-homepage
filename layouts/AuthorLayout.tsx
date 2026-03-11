@@ -38,7 +38,7 @@ export default function AuthorLayout({ children, content }: Props) {
             )}
             <h3 className="pb-2 pt-4 text-2xl font-bold leading-8 tracking-tight">{name}</h3>
             <div className="text-gray-500 dark:text-gray-400">{occupation}</div>
-            <div className="text-gray-500 dark:text-gray-400">{location}</div>
+            {/* <div className="text-gray-500 dark:text-gray-400">{location}</div> */}
             <div className="flex space-x-3 pt-6">
               <SocialIcon kind="mail" href={`mailto:${email}`} />
               <SocialIcon kind="github" href={github} />
@@ -58,7 +58,7 @@ export default function AuthorLayout({ children, content }: Props) {
               </div>
               <div className="not-prose pt-8 text-center">
                 <a
-                  href="/static/resume/Steven_Nguyen_Resume.pdf"
+                  href="/static/resume/Steven_Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -82,7 +82,7 @@ export default function AuthorLayout({ children, content }: Props) {
                           rel="noopener noreferrer"
                         >
                           <Image
-                            src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
+                            src="/static/images/UTSanAntonio.svg"
                             alt="UTSA Logo"
                             width={25}
                             height={25}
@@ -98,7 +98,7 @@ export default function AuthorLayout({ children, content }: Props) {
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">Cloud Engineer</h3>
+                      <h3 className="text-lg font-semibold">Cloud Solution Engineer</h3>
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
@@ -199,19 +199,40 @@ export default function AuthorLayout({ children, content }: Props) {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <span
-                            className="mr-2 inline-flex items-center justify-center rounded-full bg-white"
-                            style={{ width: 25, height: 25 }}
-                          >
-                            <Image
-                              src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
-                              alt="UTSA Logo"
-                              width={25}
-                              height={25}
-                              style={{ display: 'block', maxWidth: 25, maxHeight: 25 }}
-                              unoptimized
-                            />
-                          </span>
+                          <Image
+                            src="/static/images/UTSanAntonio.svg"
+                            alt="UTSA Logo"
+                            width={25}
+                            height={25}
+                            style={{ display: 'block', maxWidth: 25, maxHeight: 25 }}
+                            unoptimized
+                          />
+                          The University of Texas at San Antonio
+                        </a>
+                      </p>
+                    </div>
+                    <span className="text-gray-400">Aug 2025 - Present</span>
+                  </li>
+                  <li className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        Graduate Certificate in Cloud Computing
+                      </h3>
+                      <p className="text-gray-500">
+                        <a
+                          href="https://www.utsa.edu/"
+                          className="flex items-center text-blue-500 no-underline hover:text-blue-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Image
+                            src="/static/images/UTSanAntonio.svg"
+                            alt="UTSA Logo"
+                            width={25}
+                            height={25}
+                            style={{ display: 'block', maxWidth: 25, maxHeight: 25 }}
+                            unoptimized
+                          />
                           The University of Texas at San Antonio
                         </a>
                       </p>
@@ -273,7 +294,7 @@ export default function AuthorLayout({ children, content }: Props) {
                           rel="noopener noreferrer"
                         >
                           <Image
-                            src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/University_of_Texas_at_San_Antonio_seal.svg/800px-University_of_Texas_at_San_Antonio_seal.svg.png"
+                            src="/static/images/UTSanAntonio.svg"
                             alt="UTSA Logo"
                             width={25}
                             height={25}

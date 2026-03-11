@@ -1,0 +1,34 @@
+---
+title: 'NVIDIA Nemo Agent Toolkit'
+date: '2026-02-27'
+lastmod: '2026-02-27'
+tags: ['ai']
+summary: 'NVIDIA Nemo Agent Toolkit'
+images: ['/static/blog/nvidia-nemo-agent-toolkit/1.jpg']
+authors: ['hoangndst']
+---
+## 1. Introduction
+In this blog, I will build agentic AI system that are observable, deployable, and maintainable. A complete agentic application with observability, API deployment, 
+evaluation, and frontend UI connected to a working agent. You might know how to build a local prototype agent. It works with prompts you send it, gives you the answers you'd
+expect, but shipping it to production is another story. These are "day 2" problems, "day 1" is building the agent, "day 2" is everything else.
+
+Managing multi-agent systems built on heterogeneous models is a complex problem:
+- Architectural complexity: Many tools exist but don't work together.
+- Repeatability: Challenging to guarentee consistent results across different environments.
+- Code reuse: Fragmented solutions result in duplicate work.
+- Performance: System-level acceleration require knowledge of the entire system.
+
+Production requirements:
+- Expose agents as API's
+- Monitor what's happening
+- Check for edge cases
+- Enable continuous learning from feedback
+- Preserve data privacy
+- Build in evaluation to quick identify issues and improve performance
+
+NVIDIA NeMo Agent Toolkit is specifically designed to address these challenges. You don't have to rip out your existing agent framework
+or rewrite your application to use the NeMo Agent Toolkit. It works with agents built in any popular framework, like LangChain or LangGraph or CrewAI or Semantic Kernel
+or Google ADK or LlamaIndex or whatever you're using. It augments what you've already built.
+
+
+

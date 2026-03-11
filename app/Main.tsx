@@ -11,6 +11,7 @@ import DevQuotes from '@/components/DevQuotes'
 const MAX_DISPLAY = 4
 
 export default function Home({ posts }) {
+  const filteredPosts = posts.filter((post) => !post.tags?.includes('chocoboba'))
   return (
     <SectionContainer>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -43,8 +44,8 @@ export default function Home({ posts }) {
           </p>
         </div>
         <ul className="pt-4">
-          {!posts.length && 'No posts found.'}
-          {posts.slice(0, MAX_DISPLAY).map((post) => {
+          {!filteredPosts.length && 'No posts found.'}
+          {filteredPosts.slice(0, MAX_DISPLAY).map((post) => {
             const { slug, date, title, summary, tags, images, readingTime, authors = [] } = post
             return (
               <li key={slug} className="px-1 py-2 sm:px-1 sm:py-2">
@@ -90,7 +91,7 @@ export default function Home({ posts }) {
           })}
         </ul>
       </div>
-      {posts.length > MAX_DISPLAY && (
+      {filteredPosts.length > MAX_DISPLAY && (
         <div className="flex justify-end px-2 pt-4 text-base font-medium leading-6 sm:px-0">
           <Link
             href="/blog"
