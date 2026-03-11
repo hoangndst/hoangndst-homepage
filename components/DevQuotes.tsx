@@ -1,10 +1,10 @@
 'use client'
-import { getRandomQuote } from '@/data/quotesData'
+import { quotes, getRandomQuote } from '@/data/quotesData'
 import ShinyText from '@/components/ShinyText'
 import { useEffect, useState } from 'react'
 
 export default function DevQuotes() {
-  const [quote, setQuote] = useState(getRandomQuote())
+  const [quote, setQuote] = useState(() => quotes[0])
   useEffect(() => {
     setQuote(getRandomQuote())
   }, [])

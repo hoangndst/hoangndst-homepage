@@ -13,6 +13,12 @@ const projectsData: Project[] = [
     href: 'https://github.com/KusionStack/kusion',
   },
   {
+    title: 'Doc Formatter',
+    description: `AI-powered document formatter that perfects your documents before you share, not after.`,
+    href: 'https://github.com/a1y-developer/doc-formatter',
+    imgSrc: '/static/images/doc-formatter.png',
+  },
+  {
     title: 'Container Monitoring Mobile App',
     description: 'A mobile app for monitoring container metrics and logs. Supports AI-powered chat to interact with Docker containers hosts.',
     imgSrc: 'https://raw.githubusercontent.com/hoangndst/container-monitoring-app/refs/heads/main/assets/images/demo_2.png',
@@ -26,21 +32,27 @@ const projectsData: Project[] = [
   },
   {
     title: 'Homepage',
-    description: `My personal website. CI/CD Automation. Hosted on Raspberry Pi.`,
+    description: `My personal website. Blogging about my experiences, projects, and other things that interest me.`,
     imgSrc: '/static/images/homepage.png',
     href: 'https://github.com/hoangndst/hoangndst-homepage',
   },
   {
     title: 'DevOps Sphere',
-    description: `A comprehensive solution designed to optimize the software development process for businesses. By integrating advanced DevOps tools and services, automates CI/CD processes, efficiently manages source code, and ensures security throughout.`,
+    description: `A comprehensive solution designed to optimize the software development process for businesses. By integrating advanced DevOps tools and services, automates CI/CD processes, efficiently manages source code, and ensures security throughout. Developed for Viettel Cloud.`,
     imgSrc: '/static/images/devops-sphere.png',
     href: 'https://viettelcloud.vn/en/products/60',
   },
   {
     title: 'Cluster Upgrade Operator',
-    description: `Automate the process of upgrading a Kubernetes cluster managed by Cluster API.`,
+    description: `Automate the process of upgrading a Kubernetes cluster managed by Cluster API with Rolling Upgrade and BlueGreen Upgrade strategies. Developed for Viettel Cloud.`,
     imgSrc: 'https://cluster-api.sigs.k8s.io/images/introduction.svg',
     href: 'https://viettelcloud.vn/en/products/8/30',
+  },
+  {
+    title: '@danchoicloud GitHub App',
+    description: 'GitHub App for @danchoicloud that supports PR review, task force coordination, CLA checks, and other repository automations.',
+    imgSrc: '/static/images/danchoicloud-gh.png',
+    href: 'https://github.com/a1y-developer/danchoicloud-gh',
   },
   {
     title: '@danchoicloud Genkit',
