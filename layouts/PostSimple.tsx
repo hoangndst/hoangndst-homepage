@@ -8,6 +8,7 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import Breadcrumb from '@/components/Breadcrumb'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -24,6 +25,9 @@ export default function PostLayout({ content, next, prev, children }: LayoutProp
       <ScrollTopAndComment />
       <article>
         <div>
+          <div className="pb-2 pt-6">
+            <Breadcrumb />
+          </div>
           <header>
             <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
               <dl>

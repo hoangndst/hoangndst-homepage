@@ -8,6 +8,7 @@ import { allTalks } from 'contentlayer/generated'
 import { formatDate } from 'pliny/utils/formatDate'
 import siteMetadata from '@/data/siteMetadata'
 import Spotify from '@/components/Spotify'
+import Breadcrumb from '@/components/Breadcrumb'
 
 interface Props {
   children: ReactNode
@@ -19,11 +20,9 @@ export default function AuthorLayout({ children, content }: Props) {
 
   return (
     <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div>
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            About
-          </h1>
+          <Breadcrumb />
         </div>
         <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
           <div className="flex flex-col items-center space-x-2 pt-8">
@@ -36,8 +35,8 @@ export default function AuthorLayout({ children, content }: Props) {
                 className="h-48 w-48 rounded-full"
               />
             )}
-            <h3 className="pb-2 pt-4 text-2xl font-bold leading-8 tracking-tight">{name}</h3>
-            <div className="text-gray-500 dark:text-gray-400">{occupation}</div>
+            <h3 className="pb-2 pt-4 text-xl font-bold leading-8 tracking-tight">{name}</h3>
+            {/* <div className="text-sm text-gray-500 dark:text-gray-400">{occupation}</div> */}
             {/* <div className="text-gray-500 dark:text-gray-400">{location}</div> */}
             <div className="flex space-x-3 pt-6">
               <SocialIcon kind="mail" href={`mailto:${email}`} />
@@ -48,10 +47,10 @@ export default function AuthorLayout({ children, content }: Props) {
             </div>
             <Spotify />
           </div>
-          <div className="prose max-w-none dark:prose-invert xl:col-span-2">
+          <div className="prose prose-sm max-w-none dark:prose-invert xl:col-span-2">
             <div className="space-y-8">
               <div>
-                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-xl font-bold leading-8 tracking-tight dark:border-gray-700">
                   Bio
                 </h2>
                 {children}
@@ -67,13 +66,13 @@ export default function AuthorLayout({ children, content }: Props) {
                 </a>
               </div>
               <div className="not-prose">
-                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-xl font-bold leading-8 tracking-tight dark:border-gray-700">
                   Experience
                 </h2>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">Graduate Research Assistant</h3>
+                      <h3 className="text-base font-semibold">Graduate Research Assistant</h3>
                       <p className="text-gray-500">
                         <a
                           href="https://www.utsa.edu/"
@@ -94,11 +93,13 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="group relative text-gray-400">Sept 2025 - Present</span>
+                    <span className="group relative text-sm text-gray-400">
+                      Sept 2025 - Present
+                    </span>
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">Cloud Solution Engineer</h3>
+                      <h3 className="text-base font-semibold">Cloud Solution Engineer</h3>
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
@@ -119,11 +120,13 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="group relative text-gray-400">Jan 2023 - Apr 2025</span>
+                    <span className="group relative text-sm text-gray-400">
+                      Jan 2023 - Apr 2025
+                    </span>
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">Software Engineer</h3>
+                      <h3 className="text-base font-semibold">Software Engineer</h3>
                       <p className="text-gray-500">
                         <a
                           href="https://viettel.com.vn/en/"
@@ -144,22 +147,22 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="text-gray-400">Aug 2022 - Dec 2022</span>
+                    <span className="text-sm text-gray-400">Aug 2022 - Dec 2022</span>
                   </li>
                 </ul>
               </div>
               <div className="not-prose">
-                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-xl font-bold leading-8 tracking-tight dark:border-gray-700">
                   Talks 🎤
                 </h2>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
                   {allTalks
                     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // Sort by date (descending)
                     .map((talk: Talks) => {
                       return (
                         <li key={talk.event} className="flex items-center justify-between">
                           <div>
-                            <h3 className="text-gray-500">
+                            <h3 className="text-sm text-gray-500">
                               <a
                                 href={talk.url || '#'}
                                 className="text-blue-500 no-underline hover:text-blue-700"
@@ -172,7 +175,7 @@ export default function AuthorLayout({ children, content }: Props) {
                             {/* <p className="text-gray-500">Honors Program</p> */}
                             <p className="text-gray-500"></p>
                           </div>
-                          <span className="text-gray-400">
+                          <span className="text-sm text-gray-400">
                             <time suppressHydrationWarning dateTime={talk.date}>
                               {formatDate(talk.date, siteMetadata.locale)}
                             </time>
@@ -183,13 +186,13 @@ export default function AuthorLayout({ children, content }: Props) {
                 </ul>
               </div>
               <div className="not-prose">
-                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-xl font-bold leading-8 tracking-tight dark:border-gray-700">
                   Education
                 </h2>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-base font-semibold">
                         Master of Science in Computer Engineering
                       </h3>
                       <p className="text-gray-500">
@@ -211,11 +214,11 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="text-gray-400">Aug 2025 - Present</span>
+                    <span className="text-sm text-gray-400">Aug 2025 - Present</span>
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-base font-semibold">
                         Graduate Certificate in Cloud Computing
                       </h3>
                       <p className="text-gray-500">
@@ -237,11 +240,11 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="text-gray-400">Aug 2025 - Present</span>
+                    <span className="text-sm text-gray-400">Aug 2025 - Present</span>
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-base font-semibold">
                         Degree of Engineer in Information Technology
                       </h3>
                       <p className="text-gray-500">Honors Program</p>
@@ -269,18 +272,18 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="text-gray-400">Oct 2020 - Dec 2024</span>
+                    <span className="text-sm text-gray-400">Oct 2020 - Dec 2024</span>
                   </li>
                 </ul>
               </div>
               <div className="not-prose">
-                <h2 className="border-b-2 border-gray-200 pb-2 text-2xl font-bold leading-8 tracking-tight dark:border-gray-700">
+                <h2 className="border-b-2 border-gray-200 pb-2 text-xl font-bold leading-8 tracking-tight dark:border-gray-700">
                   Awards
                 </h2>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-500 dark:text-gray-400">
+                <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-base font-semibold">
                         ECE Pioneering Competitive Scholarship 🏅
                       </h3>
                       <p className="text-gray-500">
@@ -306,11 +309,11 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="text-gray-400">2025</span>
+                    <span className="text-sm text-gray-400">2025</span>
                   </li>
                   <li className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-base font-semibold">
                         Viettel Digital Talent
                         <a
                           href="https://jobs.viettel.vn/content/Viettel-Digital-Talent/?locale=en_US"
@@ -343,7 +346,7 @@ export default function AuthorLayout({ children, content }: Props) {
                         </a>
                       </p>
                     </div>
-                    <span className="text-gray-400">2023</span>
+                    <span className="text-sm text-gray-400">2023</span>
                   </li>
                 </ul>
               </div>

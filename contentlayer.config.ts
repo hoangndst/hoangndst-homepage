@@ -23,6 +23,7 @@ import rehypeCitation from 'rehype-citation'
 import rehypePrismPlus from 'rehype-prism-plus'
 import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
+import headerNavLinks from './data/headerNavLinks'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 
 const root = process.cwd()
@@ -89,6 +90,75 @@ function createSearchIndex(allBlogs) {
     )
     console.log('Local search index generated...')
   }
+}
+
+function normalizePath(value: string) {
+  const parts = value.split('/').filter(Boolean)
+  return `/${parts.join('/')}`.replace(/\/+/g, '/') || '/'
+}
+
+function getRouteFromPath(value: string) {
+  return value === '/' ? '/' : value
+}
+
+function createTerminalManifest(allBlogs) {
+  const directories = new Map<string, { name: string; path: string; route: string }>()
+  directories.set('/', { name: '/', path: '/', route: '/' })
+
+  const rootRoutes = new Set<string>([
+    ...headerNavLinks
+      .filter((link) => link.href !== '/')
+      .map((link) => normalizePath(link.href)),
+    '/documents',
+  ])
+
+  rootRoutes.forEach((routePath) => {
+    const normalizedPath = normalizePath(routePath)
+    directories.set(normalizedPath, {
+      name: normalizedPath.split('/').filter(Boolean).at(-1) || '/',
+      path: normalizedPath,
+      route: getRouteFromPath(normalizedPath),
+    })
+  })
+
+  const files = allBlogs
+    .filter((post) => !isProduction || post.draft !== true)
+    .map((post) => {
+      const slug = post.slug
+      const filePath = normalizePath(`/blog/${slug}.mdx`)
+      const segments = filePath.split('/').filter(Boolean)
+
+      let current = ''
+      for (let i = 0; i < segments.length - 1; i += 1) {
+        current = normalizePath(`${current}/${segments[i]}`)
+        const routePath = normalizePath(`/blog/${segments.slice(1, i + 1).join('/')}`)
+        directories.set(current, {
+          name: segments[i],
+          path: current,
+          route: getRouteFromPath(routePath),
+        })
+      }
+
+      return {
+        name: segments[segments.length - 1] || `${slug}.mdx`,
+        path: filePath,
+        route: `/blog/${slug}`,
+      }
+    })
+    .sort((a, b) => a.path.localeCompare(b.path))
+
+  writeFileSync(
+    './app/terminal-manifest.json',
+    JSON.stringify(
+      {
+        directories: Array.from(directories.values()).sort((a, b) => a.path.localeCompare(b.path)),
+        files,
+      },
+      null,
+      2
+    ),
+    { flag: 'w' }
+  )
 }
 
 export const Blog = defineDocumentType(() => ({
@@ -198,5 +268,6 @@ export default makeSource({
     const { allBlogs } = await importData()
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
+    createTerminalManifest(allBlogs)
   },
 })

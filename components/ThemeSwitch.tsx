@@ -57,7 +57,7 @@ const ThemeSwitch = () => {
     <div className="mr-5 flex items-center">
       <Menu as="div" className="relative inline-block text-left">
         <div className="flex items-center justify-center hover:text-primary-500 dark:hover:text-primary-400">
-          <Menu.Button aria-label="Theme switcher">
+          <Menu.Button aria-label="Theme switcher" className="[&>svg]:h-5 [&>svg]:w-5">
             {mounted ? resolvedTheme === 'dark' ? <Moon /> : <Sun /> : <Blank />}
           </Menu.Button>
         </div>
