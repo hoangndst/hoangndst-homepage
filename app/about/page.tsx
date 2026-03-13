@@ -13,9 +13,11 @@ export default function Page() {
 
   return (
     <SectionContainer>
-      <AuthorLayout content={mainContent}>
-        <MDXLayoutRenderer code={author.body.code} />
-      </AuthorLayout>
+      <div className="mx-auto w-full sm:max-w-[768px]">
+        <AuthorLayout content={mainContent}>
+          <MDXLayoutRenderer code={author.body.code} />
+        </AuthorLayout>
+      </div>
     </SectionContainer>
   )
 }

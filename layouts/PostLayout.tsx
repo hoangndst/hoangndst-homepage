@@ -10,6 +10,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import TOC from '@/components/TOC'
+import Breadcrumb from '@/components/Breadcrumb'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -38,6 +39,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
     <>
       <div className="grid grid-cols-[minmax(0px,1fr)_min(768px,100%)_minmax(0px,1fr)] gap-y-6 pt-4 *:px-4">
         <section className="col-start-2 flex flex-col gap-y-6">
+          <div className="pt-2 sm:-mx-4">
+            <Breadcrumb />
+          </div>
           <div className="flex flex-col gap-y-3 text-center">
             <div>
               <PageTitle>{title}</PageTitle>

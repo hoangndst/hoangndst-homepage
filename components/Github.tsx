@@ -68,7 +68,7 @@ const GithubCalendar: FunctionComponent<Props> = ({ username, ...props }) => {
       </p>
       <div className="[&_.react-activity-calendar\\_\\_legend-month]:text-foreground/80 mx-auto hidden w-fit max-w-full overflow-x-auto sm:block">
         <Calendar
-          data={getFullYearContributions(data.contributions, 350)}
+          data={getFullYearContributions(data.contributions, 260)}
           theme={{
             dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
             light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],

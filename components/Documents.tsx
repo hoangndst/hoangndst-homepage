@@ -2,6 +2,7 @@
 
 import { Doc } from '@/data/documentsData'
 import { useEffect, useState } from 'react'
+import { ChevronLeft, ChevronRight, FileText, Mail, RefreshCw } from 'lucide-react'
 import Link from './Link'
 
 const MIN_CONTAINER_HEIGHT = 400
@@ -29,16 +30,7 @@ function formatDate(dateString?: string) {
 
 // Helper to get a generic document icon
 function getFileIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5 text-blue-400"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-    >
-      <path d="M6 2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.828a2 2 0 0 0-.586-1.414l-3.828-3.828A2 2 0 0 0 10.172 2H6zm2 0v4a2 2 0 0 0 2 2h4" />
-    </svg>
-  )
+  return <FileText className="h-5 w-5 text-blue-400" strokeWidth={1.75} />
 }
 
 // Skeleton loader for table
@@ -124,20 +116,7 @@ const Documents = () => {
     >
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xl font-bold">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-7 w-7 text-blue-500 dark:text-blue-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M3 7l9 6 9-6"
-            />
-          </svg>
+          <Mail className="h-7 w-7 text-blue-500 dark:text-blue-400" strokeWidth={1.75} />
           hoangndst
         </div>
         <button
@@ -147,20 +126,7 @@ const Documents = () => {
           title="Refresh"
           aria-label="Refresh documents"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582M20 20v-5h-.581M5.582 9A7.978 7.978 0 0 1 12 4c2.042 0 3.899.767 5.318 2.018M18.418 15A7.978 7.978 0 0 1 12 20c-2.042 0-3.899-.767-5.318-2.018"
-            />
-          </svg>
+          <RefreshCw className="h-5 w-5" strokeWidth={1.75} />
           Refresh
         </button>
       </div>
@@ -264,20 +230,7 @@ const Documents = () => {
               disabled={currentPage === 1}
               aria-label="Previous page"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
             </button>
             <button
               className="flex items-center justify-center rounded bg-gray-100 px-1 py-1 text-gray-700 hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -285,20 +238,7 @@ const Documents = () => {
               disabled={currentPage === totalPages}
               aria-label="Next page"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
             </button>
           </div>
         </div>

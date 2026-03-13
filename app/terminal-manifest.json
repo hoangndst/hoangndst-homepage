@@ -1,0 +1,116 @@
+{
+  "directories": [
+    {
+      "name": "/",
+      "path": "/",
+      "route": "/"
+    },
+    {
+      "name": "about",
+      "path": "/about",
+      "route": "/about"
+    },
+    {
+      "name": "blog",
+      "path": "/blog",
+      "route": "/blog"
+    },
+    {
+      "name": "documents",
+      "path": "/documents",
+      "route": "/documents"
+    },
+    {
+      "name": "projects",
+      "path": "/projects",
+      "route": "/projects"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "route": "/tags"
+    },
+    {
+      "name": "talks",
+      "path": "/talks",
+      "route": "/talks"
+    }
+  ],
+  "files": [
+    {
+      "name": "back-with-blog.mdx",
+      "path": "/blog/back-with-blog.mdx",
+      "route": "/blog/back-with-blog"
+    },
+    {
+      "name": "bigO.mdx",
+      "path": "/blog/bigO.mdx",
+      "route": "/blog/bigO"
+    },
+    {
+      "name": "blog-of-feb-2026.mdx",
+      "path": "/blog/blog-of-feb-2026.mdx",
+      "route": "/blog/blog-of-feb-2026"
+    },
+    {
+      "name": "blog-of-march-2025.mdx",
+      "path": "/blog/blog-of-march-2025.mdx",
+      "route": "/blog/blog-of-march-2025"
+    },
+    {
+      "name": "blog-of-november-2025.mdx",
+      "path": "/blog/blog-of-november-2025.mdx",
+      "route": "/blog/blog-of-november-2025"
+    },
+    {
+      "name": "calculating-flight-paths.mdx",
+      "path": "/blog/calculating-flight-paths.mdx",
+      "route": "/blog/calculating-flight-paths"
+    },
+    {
+      "name": "cloud-devops.mdx",
+      "path": "/blog/cloud-devops.mdx",
+      "route": "/blog/cloud-devops"
+    },
+    {
+      "name": "gradient-descent.mdx",
+      "path": "/blog/gradient-descent.mdx",
+      "route": "/blog/gradient-descent"
+    },
+    {
+      "name": "kratix-multi-cluster.mdx",
+      "path": "/blog/kratix-multi-cluster.mdx",
+      "route": "/blog/kratix-multi-cluster"
+    },
+    {
+      "name": "l8d2.mdx",
+      "path": "/blog/l8d2.mdx",
+      "route": "/blog/l8d2"
+    },
+    {
+      "name": "linked-list.mdx",
+      "path": "/blog/linked-list.mdx",
+      "route": "/blog/linked-list"
+    },
+    {
+      "name": "model-context-protocol.mdx",
+      "path": "/blog/model-context-protocol.mdx",
+      "route": "/blog/model-context-protocol"
+    },
+    {
+      "name": "nvidia-nemo-agent-toolkit.mdx",
+      "path": "/blog/nvidia-nemo-agent-toolkit.mdx",
+      "route": "/blog/nvidia-nemo-agent-toolkit"
+    },
+    {
+      "name": "platform-engineering.mdx",
+      "path": "/blog/platform-engineering.mdx",
+      "route": "/blog/platform-engineering"
+    },
+    {
+      "name": "stack-and-queue.mdx",
+      "path": "/blog/stack-and-queue.mdx",
+      "route": "/blog/stack-and-queue"
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import PageTitle from '@/components/PageTitle'
 import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import Breadcrumb from '@/components/Breadcrumb'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -27,6 +28,9 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
       <ScrollTopAndComment />
       <article>
         <div>
+          <div className="pb-2 pt-6">
+            <Breadcrumb />
+          </div>
           <div className="space-y-1 pb-10 text-center dark:border-gray-700">
             <div className="w-full">
               <Bleed>
