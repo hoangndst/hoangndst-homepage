@@ -4,18 +4,4 @@
 [![Docker Image Version](https://img.shields.io/docker/v/hoangndst/homepage)](https://hub.docker.com/r/hoangndst/homepage)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/hoangndst/hoangndst-homepage)
 
-Personal website/blog for Hoang Dinh Nguyen (@hoangndst), designed to showcase blog posts, projects, talks, and personal information. Built with Next.js. Hosted on [Raspberry Pi 4B](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
-
-## Notes page (Notion)
-
-To enable the `/notes` page, set the following environment variables:
-
-- `NOTION_API_KEY`: internal integration token from Notion.
-- `NOTION_DATABASE_ID`: database ID of your resources table.
-
-Example `.env.local`:
-
-```bash
-NOTION_API_KEY=secret_xxx
-NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
+Personal website/blog for Hoang Dinh Nguyen (@hoangndst), designed to showcase blog posts, projects, talks, and personal information. Built with Next.js. Hosted on my HomeLab Kubernetes Cluster.
