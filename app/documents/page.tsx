@@ -2,8 +2,9 @@ import DocumentsComponent from '@/components/Documents'
 import { genPageMetadata } from 'app/seo'
 import SectionContainer from '@/components/SectionContainer'
 import Breadcrumb from '@/components/Breadcrumb'
+import type { Metadata } from 'next'
 
-export const metadata = genPageMetadata({ title: 'Documents' })
+export const metadata: Metadata = genPageMetadata({ title: 'Documents' })
 
 export default function Documents() {
   return (

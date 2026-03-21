@@ -3476,6 +3476,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@notionhq/client@npm:^5.14.0":
+  version: 5.14.0
+  resolution: "@notionhq/client@npm:5.14.0"
+  checksum: 058c44da7ec4edf275704d687c3e563e2dd4b230fa30e83f5f7779dff8463c1b25be90f95eb191683448213f26613767703033ecf477876d304a16e4b47c7268
+  languageName: node
+  linkType: hard
+
 "@npmcli/agent@npm:^2.0.0":
   version: 2.2.2
   resolution: "@npmcli/agent@npm:2.2.2"
@@ -8530,6 +8537,7 @@ __metadata:
     "@aws-sdk/client-s3": ^3.777.0
     "@headlessui/react": 2.2.0
     "@next/bundle-analyzer": 15.0.2
+    "@notionhq/client": ^5.14.0
     "@radix-ui/react-scroll-area": ^1.2.9
     "@react-three/drei": ^10.1.2
     "@react-three/fiber": ^9.1.2

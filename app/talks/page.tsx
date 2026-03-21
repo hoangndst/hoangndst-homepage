@@ -6,8 +6,9 @@ import Link from '@/components/Link'
 import Breadcrumb from '@/components/Breadcrumb'
 import { formatDate } from 'pliny/utils/formatDate'
 import siteMetadata from '@/data/siteMetadata'
+import type { Metadata } from 'next'
 
-export const metadata = genPageMetadata({ title: 'Talks' })
+export const metadata: Metadata = genPageMetadata({ title: 'Talks' })
 
 export default function Talks() {
   const talks = allTalks.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
