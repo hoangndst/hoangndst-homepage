@@ -6,8 +6,9 @@ import Image from '@/components/Image'
 import Link from '@/components/Link'
 import { Github as GithubIcon } from '@/components/social-icons/icons'
 import Breadcrumb from '@/components/Breadcrumb'
+import type { Metadata } from 'next'
 
-export const metadata = genPageMetadata({ title: 'Projects' })
+export const metadata: Metadata = genPageMetadata({ title: 'Projects' })
 
 const isGithubUrl = (url?: string) =>
   Boolean(url && /(^https?:\/\/)?(www\.)?github\.com\/.+/i.test(url))

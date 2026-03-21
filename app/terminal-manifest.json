@@ -21,6 +21,11 @@
       "route": "/documents"
     },
     {
+      "name": "notes",
+      "path": "/notes",
+      "route": "/notes"
+    },
+    {
       "name": "projects",
       "path": "/projects",
       "route": "/projects"

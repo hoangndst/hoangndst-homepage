@@ -4,8 +4,12 @@ import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
 import SectionContainer from '@/components/SectionContainer'
 import Breadcrumb from '@/components/Breadcrumb'
+import type { Metadata } from 'next'
 
-export const metadata = genPageMetadata({ title: 'Tags', description: 'Things I blog about' })
+export const metadata: Metadata = genPageMetadata({
+  title: 'Tags',
+  description: 'Things I blog about',
+})
 
 export default async function Page() {
   const tagCounts = tagData as Record<string, number>

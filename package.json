@@ -15,6 +15,7 @@
     "@aws-sdk/client-s3": "^3.777.0",
     "@headlessui/react": "2.2.0",
     "@next/bundle-analyzer": "15.0.2",
+    "@notionhq/client": "^5.14.0",
     "@radix-ui/react-scroll-area": "^1.2.9",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "^9.1.2",
