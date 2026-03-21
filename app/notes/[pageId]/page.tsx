@@ -25,13 +25,13 @@ export default async function NoteDetailPage({ params }: PageProps) {
               {
                 href: '/notes',
                 label: 'Notes',
-                icon: <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />
+                icon: <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />,
               },
               {
                 href: `/notes/${pageId}`,
                 label: pageId,
-                icon: <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />
-              }
+                icon: <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />,
+              },
             ]}
           />
         </div>
