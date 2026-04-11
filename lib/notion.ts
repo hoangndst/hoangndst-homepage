@@ -72,17 +72,6 @@ export type NotionNotePayload = {
   blocks: NoteBlock[]
 }
 
-export type NotionResourceRow = {
-  id: string
-  title: string
-  icon: NoteIcon
-  topic: NotionOption[]
-  status: NotionOption | null
-  priority: NotionOption | null
-  dateAdded: string | null
-  notes: string
-}
-
 const parseRichText = (richText: RichTextItemResponse[] = []): NoteTextSpan[] =>
   richText.map((item) => ({
     text: item.plain_text || '',
@@ -165,7 +154,7 @@ const extractBlockText = (block: BlockObjectResponse): NoteTextSpan[] => {
   }
 }
 
-const mapPageIcon = (icon: PageObjectResponse['icon']): NoteIcon => {
+export const mapPageIcon = (icon: PageObjectResponse['icon']): NoteIcon => {
   if (!icon) return { type: 'none', value: '' }
   if (icon.type === 'emoji') return { type: 'emoji', value: icon.emoji }
   if (icon.type === 'external') return { type: 'external', value: icon.external.url }
@@ -263,13 +252,24 @@ const buildBlocksTree = async (notionClient: Client, blockId: string): Promise<N
   )
 }
 
-const getNotionClient = () => {
+export const getNotionClient = () => {
   const apiKey = process.env.NOTION_API_KEY
   if (!apiKey) throw new Error('Missing NOTION_API_KEY environment variable.')
   return new Client({ auth: apiKey })
 }
 
-const normalizePageToResourceRow = (page: PageObjectResponse): NotionResourceRow => {
+type ResourceRowMeta = {
+  id: string
+  title: string
+  icon: NoteIcon
+  topic: NotionOption[]
+  status: NotionOption | null
+  priority: NotionOption | null
+  dateAdded: string | null
+  notes: string
+}
+
+const normalizePageToResourceRow = (page: PageObjectResponse): ResourceRowMeta => {
   const properties = page.properties || {}
   const titleProperty = (properties['Resource Name'] ||
     Object.values(properties).find(isTitleProperty)) as TitleProperty | undefined
@@ -329,6 +329,52 @@ const normalizePageToResourceRow = (page: PageObjectResponse): NotionResourceRow
   }
 }
 
+const normalizePageToDishRowForDetail = (page: PageObjectResponse) => {
+  const properties = page.properties || {}
+  const titleProperty = (properties['Dish Name'] ||
+    Object.values(properties).find(isTitleProperty)) as TitleProperty | undefined
+  const ratingProperty = properties['Rating']
+  const mealTypeProperty = properties['Meal Type']
+
+  const rating =
+    ratingProperty?.type === 'select' && ratingProperty.select
+      ? { name: ratingProperty.select.name, color: ratingProperty.select.color || 'default' }
+      : ratingProperty?.type === 'status' && ratingProperty.status
+        ? { name: ratingProperty.status.name, color: ratingProperty.status.color || 'default' }
+        : ratingProperty?.type === 'multi_select' && ratingProperty.multi_select.length > 0
+          ? {
+              name: ratingProperty.multi_select[0].name,
+              color: ratingProperty.multi_select[0].color || 'default',
+            }
+          : null
+
+  const mealType =
+    mealTypeProperty?.type === 'multi_select'
+      ? mealTypeProperty.multi_select.map((item) => ({
+          name: item.name,
+          color: item.color || 'default',
+        }))
+      : mealTypeProperty?.type === 'select' && mealTypeProperty.select
+        ? [
+            {
+              name: mealTypeProperty.select.name,
+              color: mealTypeProperty.select.color || 'default',
+            },
+          ]
+        : []
+
+  return {
+    title:
+      titleProperty?.title
+        ?.map((item) => item.plain_text || '')
+        .join('')
+        .trim() || 'Untitled',
+    icon: mapPageIcon(page.icon),
+    rating,
+    mealType,
+  }
+}
+
 const isFullDatabasePage = (
   result:
     | PageObjectResponse
@@ -337,18 +383,23 @@ const isFullDatabasePage = (
     | PartialDataSourceObjectResponse
 ): result is PageObjectResponse => result.object === 'page' && isFullPage(result)
 
-const fetchAllDatabasePages = async (
-  notionClient: Client,
-  databaseId: string
-): Promise<PageObjectResponse[]> => {
-  const pages: PageObjectResponse[] = []
-  let nextCursor: string | undefined
-  const database = await notionClient.databases.retrieve({ database_id: databaseId })
+type DatabaseRetrieve = Awaited<ReturnType<Client['databases']['retrieve']>>
+
+export const getDataSourceIdFromDatabase = (database: DatabaseRetrieve): string => {
   if (!('data_sources' in database) || database.data_sources.length === 0)
     throw new Error('No data source found for this database.')
   const dataSourceId = database.data_sources[0]?.id
   if (!dataSourceId) throw new Error('Invalid data source id for this database.')
+  return dataSourceId
+}
 
+/** Loads all pages sorted by Notion `last_edited_time` (newest first). */
+export const queryAllPagesFromDataSource = async (
+  notionClient: Client,
+  dataSourceId: string
+): Promise<PageObjectResponse[]> => {
+  const pages: PageObjectResponse[] = []
+  let nextCursor: string | undefined
   do {
     const response = await notionClient.dataSources.query({
       data_source_id: dataSourceId,
@@ -359,16 +410,26 @@ const fetchAllDatabasePages = async (
     pages.push(...response.results.filter(isFullDatabasePage))
     nextCursor = response.has_more ? (response.next_cursor ?? undefined) : undefined
   } while (nextCursor)
-
   return pages
 }
 
-export const getNotionResources = async (): Promise<NotionResourceRow[]> => {
+export const getNotionCookingNoteByPageId = async (pageId: string): Promise<NotionNotePayload> => {
   const notionClient = getNotionClient()
-  const databaseId = process.env.NOTION_DATABASE_ID
-  if (!databaseId) throw new Error('Missing NOTION_DATABASE_ID environment variable.')
-  const pages = await fetchAllDatabasePages(notionClient, databaseId)
-  return pages.map(normalizePageToResourceRow)
+  const pageResponse = await notionClient.pages.retrieve({ page_id: pageId })
+  if (!isFullPage(pageResponse))
+    throw new Error('Provided pageId is not a full Notion page response.')
+  const row = normalizePageToDishRowForDetail(pageResponse)
+  const blocks = await buildBlocksTree(notionClient, pageId)
+  return {
+    id: pageResponse.id,
+    title: row.title,
+    lastEditedTime: pageResponse.last_edited_time || new Date().toISOString(),
+    icon: row.icon,
+    topic: row.mealType,
+    status: row.rating,
+    priority: null,
+    blocks,
+  }
 }
 
 export const getNotionNoteByPageId = async (pageId: string): Promise<NotionNotePayload> => {

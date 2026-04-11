@@ -418,7 +418,13 @@ const renderBlocks = (blocks: NoteBlock[]) => {
   return elements
 }
 
-export default function NoteContent({ pageId }: { pageId: string }) {
+type NoteContentProps = {
+  pageId: string
+  /** e.g. `/api/notes` or `/api/cooking` */
+  apiBasePath?: string
+}
+
+export default function NoteContent({ pageId, apiBasePath = '/api/notes' }: NoteContentProps) {
   const [note, setNote] = useState<NotionNotePayload | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -428,7 +434,7 @@ export default function NoteContent({ pageId }: { pageId: string }) {
       setIsLoading(true)
       setError(null)
       try {
-        const response = await fetch(`/api/notes/${pageId}`)
+        const response = await fetch(`${apiBasePath}/${pageId}`)
         const data = (await response.json()) as ApiResponse
         if (!response.ok) return setError(data.error || 'Unable to load note from Notion.')
         if (!data.note) return setError('No note content available.')
@@ -441,7 +447,7 @@ export default function NoteContent({ pageId }: { pageId: string }) {
       }
     }
     fetchNote()
-  }, [pageId])
+  }, [pageId, apiBasePath])
 
   if (isLoading)
     return (
