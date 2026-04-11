@@ -11,6 +11,7 @@ import {
   MessageSquare,
   Tags,
   User,
+  UtensilsCrossed,
 } from 'lucide-react'
 import Link from '@/components/Link'
 
@@ -102,6 +103,10 @@ const iconBySegment = (segment: string, index: number, allSegments: string[]): R
     return <FileText className="h-4 w-4 shrink-0" aria-hidden="true" />
   }
 
+  if (index > 0 && rootSegment === 'cooking') {
+    return <UtensilsCrossed className="h-4 w-4 shrink-0" aria-hidden="true" />
+  }
+
   if (index > 0 && rootSegment === 'tags') {
     return <Tags className="h-4 w-4 shrink-0" aria-hidden="true" />
   }
@@ -111,6 +116,8 @@ const iconBySegment = (segment: string, index: number, allSegments: string[]): R
       return <User className="h-4 w-4 shrink-0" aria-hidden="true" />
     case 'blog':
       return <BookOpen className="h-4 w-4 shrink-0" aria-hidden="true" />
+    case 'cooking':
+      return <UtensilsCrossed className="h-4 w-4 shrink-0" aria-hidden="true" />
     case 'projects':
       return <FolderOpen className="h-4 w-4 shrink-0" aria-hidden="true" />
     case 'tags':

@@ -5,10 +5,10 @@ import { genPageMetadata } from 'app/seo'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = genPageMetadata({
-  title: 'Notes',
+  title: 'Cooking',
 })
 
-export default function NotesPage() {
+export default function CookingPage() {
   return (
     <SectionContainer>
       <div className="mx-auto w-full sm:max-w-[768px]">
@@ -16,7 +16,7 @@ export default function NotesPage() {
           <Breadcrumb />
         </div>
         <div className="py-1">
-          <NotionTable apiPath="/api/notes" rowLinkPrefix="/notes" dateFormat="short" />
+          <NotionTable apiPath="/api/cooking" rowLinkPrefix="/cooking" dateFormat="long" />
         </div>
       </div>
     </SectionContainer>
