@@ -1,0 +1,277 @@
+---
+title: 'Linux: The Big Picture'
+date: '2026-04-27'
+lastmod: '2026-04-27'
+tags: ['linux']
+summary: 'Linux: The Big Picture'
+images: ['/static/blog/how-linux-works/index.png']
+authors: ['hoangndst']
+---
+
+## 1. The big picture
+
+### 1.1 Levels and layers of abstraction in a linux system
+
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-0"
+        src="/static/blog/how-linux-works/the-big-picture/1.png"
+        alt="General Linux system organization"
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
+    />
+</div>
+<p style={{ textAlign: "center" }}>Figure 0: General Linux system organization</p>
+
+- The kernel runs in kernel mode, user processes run in user mode
+- Code running in kernel mode has unrestricted access to Processor (CPU) and Main Memory (RAM)
+    
+    > This is powerful but dangerous privilege that allows kernel to easily corrupt and crash the entire system.
+- User mode restricts access to a (usually quite small) subset of memory and safe CPU operations
+- User space refers to the part of main memory that user processes can access
+    
+    > If a process makes a mistake and crashes, the consequences are limit and can be cleared up by the kernel
+    > 
+
+> The Linux kernel can run kernel threads, which look much like processes but have access to kernel space. Example: `kthreadd` and `kblockd`
+> 
+
+### 1.2 Hardware: understand main memory
+
+It’s often easier to use abstract terms when talking about states. Instead of describing a state using bits, you describe something has done or is doing at the moment.
+
+- The process is waiting for input
+- The process is performing Stage 2 of its startup
+
+> 
+> 
+> 
+> “Because it’s common to refer to the state in abstract terms rather than to the actual bits, the term image refers to a particular physical arrangement of bits.”
+> 
+
+### 1.3 The kernel
+
+The kernel is in charge of managing tasks in four general system areas:
+
+- Processes: The kernel responsible for determining which processes are allowed to use the CPU
+- Memory: The kernel needs to keep track all memory - what is currently allocated to a particular process, what might be shared between processes, and what is free
+- Device drivers: The kernel acts as an interface between hardware (e.g., disk) and processes. It’s usually the kernel’s jobs to operate the hardware
+- System calls and support: Processes normally use system calls to communicate with the kernel
+
+#### 1.3.1 Process Management
+
+You might have a web browser and a spreadsheet open on a desktop computer at them same time, but things are not they appear: the processes behind these applications typically do not run at exactly the same time.
+
+Consider with a one-core CPU. Many processes may able to use the CPU, but only one process can use the CPU at any given time. Each process uses the CPU for another fraction of a second, the pause, then another process takes a turn, and so on.
+
+The kernel is responsible for context switching. To understand, this is situation which process is running in user mode but its time slice is up:
+
+1. The CPU interrupts the current process based on an internal time, switches into kernel mode, and hands control back to the kernel
+2. The kernel records the current state of CPU and memory, which is essential to resuming the process that was just interrupted.
+3. The kernel performs any tasks that might have come up during the preceding time slice
+4. The kernel is now ready to let another process run. The kernel analyzes the list of processes that are ready to run and choose one.
+5. The kernel prepares the memory for this new process and then prepare the CPU
+6. The kernel tells CPU how long the time slice for new process will last.
+7. The kernel switches the CPU into user mode and hands control of the CPU to the process
+
+> When the kernel run? 
+It runs between process time slices during a context switch
+> 
+
+Context Switching (The Bookmark)
+
+- **The Task:** Pausing one app to start another without losing progress.
+- **The Action:** Before swapping, the Kernel saves a "snapshot" (Context) of exactly where the app left off. When it’s that app's turn again, the Kernel "loads the bookmark" so it resumes instantly.
+
+#### 1.3.2 Memory Management
+
+The kernel must manage memory during a context switch:
+
+- The kernel must have its own private area in memory that user processes can’t access
+- Each user process needs it own section of memory, and can’t access the private memory of another process
+- User processes can share memory
+- Some memory in user processes can be read-only
+- The system can use memory than is physically present by using disk space as auxiliary
+
+#### 1.3.3 Device Drivers and Management
+
+The kernel’s role with devices is simple. A device can only accessible in kernel mode because improper access (user process asking to turn off the power) could crash the machine.
+
+#### 1.3.4 System Calls and Support
+
+There are several kind of kernel features available to user processes. For example system calls (syscalls) perform specific tasks that user process alone can not do well or at all (opening, reading, and writing files all involves syscalls)
+
+Two system calls:
+
+- `fork()` When a process calls it, the kernel creates a nearly identical copy of the process
+- `exec()` When a process calls `exec(program)` , the kernel loads and starts `program` , replacing the current process
+    
+    > Other than init, all new user processes on a Linux system start as a result of `fork()` , and most of the time, you also run `exec()` to start a new program instead of running a copy of an existing process.
+    > 
+
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-1"
+        src="/static/blog/how-linux-works/the-big-picture/2.png"
+        alt="System calls"
+        style={{ width: "100%", display: "block", margin: "0 auto" }}
+    />
+</div>
+<p style={{ textAlign: "center" }}>Figure 1: System calls</p>
+
+1. `shell`: When you open Terminal, one process names shell (bash, zsh) is running, waiting for a command
+2. `fork()` : when you type `ls` , `shell` will not transform to `ls` . It calls `fork()` and will have `copy of shell` 
+    
+    > Parent → the origin shell
+    Child → a copy of shell
+    → If the original `shell` transform to `ls` , when after you ran `ls` your terminal or shell will disappear.
+    > 
+3. `exec(ls)` : The `copy of shell` does not know how to list file so it calls `exec(ls)` 
+    
+    > Parent → still the shell
+    Child → now running `ls`
+    → The `ls` process runs, lists the files to your screen, then terminates (calls `exit` )
+    > 
+4. `wait()` : parent waits for child (calls `wait()` or `waitpid()`. This means shell pause, wait for the `ls` process to finish. When the `ls` exits, kernel notifies the shell, `wait()` return and shell resumes
+5. Back to the shell prompt: `ls` is done, shell prints prompt again, ready for next command.
+
+```mermaid
+Shell (parent)
+   |
+   | fork()
+   v
+Shell (parent)        Shell (child)
+                          |
+                          | exec("ls")
+                          v
+                        ls process
+                          |
+                          | exit()
+                          v
+Shell (parent resumes after wait())
+```
+
+### 1.4 User Space
+
+User space is where application run: Your program (Go, Java, Python), Shell (bash, zsh), tools (`ls`, `grep` , `vim` ) → Runs outside the Linux Kernel.
+
+This makes Linux safety, isolation, and security, app crash ≠ system crash, processes don’t interfere, and no direct hardware access. 
+
+Your backend crashes means only that process dies not the OS
+
+| User space | Kernel Space |
+| --- | --- |
+| Apps run here | OS core runs here |
+| No direct hardware | Full hardware access |
+| Isolated processes | Shared kernel memory |
+| Safe | Powerful but risky |
+
+> User space cannot access hardware directly, run privileged CPU instructions, and access kernel memory. If it try → crash (`segfault`)
+> 
+
+User space talks to kernel through system calls (`syscalls` ). User space cannot read disk directly or send packets directly, instead it asks kernel:
+
+```c
+write(1, "Hello\n", 6);
+
+// user program -> syscall -> kernel -> result -> user program 
+```
+
+Example with `ls`
+
+1. `ls` runs in user space
+2. It calls `syscalls` :
+    1. `open()` to open directory
+    2. `getdents()` to read file list
+    3. `write()` to print output
+
+Kernel handles actual disk access, result returned to user space
+
+Process lifecycle:
+
+```bash
+shell -> fork() -> exec() -> program runs -> exit()
+
+# all happends in user space, except syscalls
+```
+
+Memory isolation: each process has its own memory process A ≠ process B, your Go app cannot read memory of another app
+
+> Real connection: Containers → isolated user space environments, shares the same kernel
+Performance: Too many syscalls means slow, can optimize by batching, async I/O, caching
+
+User space = safe area where programs run, kernel does the dangerous work via syscalls
+> 
+
+### 1.5 Users
+
+A user in Linux is an identity used to run processes, own files, control permissions. A user is not just a human, it can also be a system/service account
+
+**Root user (superuser)**: username is root, user id (UID) is 0 - has full control over the system
+
+- read/write any file
+- kill any process
+- change system configuration
+
+One wrong command can break the system 🙂
+
+**Regular users**: created for human, limited permissions
+
+- run programs
+- access their own files
+- use system resources with limits
+
+**System users** (service accounts): used by services (e.g., web server, database), usually no login shell
+
+- run services with restricted permissions
+
+User identity: each user has username is human-friendly names (hoangndst) and UID (user id) numeric (1000). Linux actually uses UID internally not names.
+
+`/etc/passwd` : stores basic user info
+
+```bash
+username:x:UID:GID:home_directory:shell
+steven:x:1000:1000:/home/steven:/bin/bash
+```
+
+`/etc/shadow` : stores encrypted passwords, only readable by root
+
+**Permission and Ownership:** Every file has owner (user), group, and permission
+
+```bash
+-rw-r--r-- 1 steven staff file.txt
+# owner: steven
+# group: staff
+```
+
+**User and Processes:** every process run as a user
+
+```bash
+hoangndst@hoangndst:~$ ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.3  23268 14108 ?        Ss   Mar21   5:29 /usr/lib/systemd/systemd --system --deserialize=85 fixrtc
+root           2  0.0  0.0      0     0 ?        S    Mar21   0:07 [kthreadd]
+root           3  0.0  0.0      0     0 ?        S    Mar21   0:00 [pool_workqueue_release]
+root           4  0.0  0.0      0     0 ?        I<   Mar21   0:00 [kworker/R-rcu_g]
+root           5  0.0  0.0      0     0 ?        I<   Mar21   0:00 [kworker/R-rcu_p]
+root           6  0.0  0.0      0     0 ?        I<   Mar21   0:00 [kworker/R-slub_]
+root           7  0.0  0.0      0     0 ?        I<   Mar21   0:00 [kworker/R-netns]
+root          12  0.0  0.0      0     0 ?        I<   Mar21   0:00 [kworker/R-mm_pe]
+root          13  0.0  0.0      0     0 ?        I    Mar21   0:00 [rcu_tasks_kthread]
+root          14  0.0  0.0      0     0 ?        I    Mar21   0:00 [rcu_tasks_rude_kthread]
+root          15  0.0  0.0      0     0 ?        I    Mar21   0:00 [rcu_tasks_trace_kthread]
+```
+
+### 1.6 Conclusion
+
+This article has provided an overview of the Linux system organization, process management, memory management, device drivers, system calls, user space, users, and permission and ownership.
+With the knowledge of the Linux system organization, you can understand how the Linux system works and how to use the Linux system effectively.
+
+<div style={{ textAlign: "center" }}>
+    <img
+        id="figure-2"
+        src="/static/blog/how-linux-works/the-big-picture/3.png"
+        alt="Just for fun"
+        style={{ width: "80%", display: "block", margin: "0 auto" }}
+    />
+</div>
+<p style={{ textAlign: "center" }}>Figure 2: Just for fun</p>

@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   pr-ci:
     runs-on: ubuntu-latest
@@ -17,63 +20,67 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=4096
 
     steps:
-      - uses: actions/checkout@v4 # v4
+      - uses: actions/checkout@v4
 
-      # Beginning of yarn setup
       - name: use node.js 22.x
-        uses: actions/setup-node@v4 # v4
+        uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          registry-url: https://registry.npmjs.org/ # Needed for auth
+          registry-url: https://registry.npmjs.org/
+
       - name: cache all node_modules
         id: cache-modules
-        uses: actions/cache@v4 # v4
+        uses: actions/cache@v4
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock', '**/package.json') }}
+
       - name: find location of global yarn cache
         id: yarn-cache
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
       - name: cache global yarn cache
-        uses: actions/cache@v4 # v4
+        uses: actions/cache@v4
         if: steps.cache-modules.outputs.cache-hit != 'true'
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: install dependencies
         run: yarn install --immutable
+
       - name: lint
         run: yarn lint
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Cache Docker layers
-        uses: actions/cache@v4
+      - name: Docker image name (CI only, not pushed)
+        id: names
+        run: echo "images=hoangndst/hoangndst-homepage" >> $GITHUB_OUTPUT
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          path: ${{ runner.temp }}/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-    
-      - name: Build and push
-        uses: docker/build-push-action@v6
+          images: ${{ steps.names.outputs.images }}
+          tags: |
+            type=ref,event=pr
+            type=ref,event=branch
+            type=sha,prefix=sha-,format=short
+            type=raw,value=ci,enable=true
+
+      - name: Build image (no push)
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
           push: false
-          platforms: linux/amd64 # for mr4x2 server
-          tags: hoangndst/hoangndst-homepage:latest
-          cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
-          cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
-      
-      - # Temp fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-        name: Move cache
-        run: |
-          rm -rf ${{ runner.temp }}/.buildx-cache
-          mv ${{ runner.temp }}/.buildx-cache-new ${{ runner.temp }}/.buildx-cache
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
