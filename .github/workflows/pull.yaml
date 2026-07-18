@@ -1,86 +1,49 @@
-name: PR CI build
+name: PR checks
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+concurrency:
+  group: pr-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   pr-ci:
+    name: pr-ci
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     env:
       CI: true
       NODE_OPTIONS: --max-old-space-size=4096
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: use node.js 22.x
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          registry-url: https://registry.npmjs.org/
 
-      - name: cache all node_modules
-        id: cache-modules
-        uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock', '**/package.json') }}
+      - name: Enable Corepack
+        run: corepack enable
 
-      - name: find location of global yarn cache
-        id: yarn-cache
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - name: cache global yarn cache
-        uses: actions/cache@v4
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: install dependencies
+      - name: Install dependencies
         run: yarn install --immutable
 
-      - name: lint
+      - name: Lint
         run: yarn lint
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Docker image name (CI only, not pushed)
-        id: names
-        run: echo "images=hoangndst/hoangndst-homepage" >> $GITHUB_OUTPUT
-
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ steps.names.outputs.images }}
-          tags: |
-            type=ref,event=pr
-            type=ref,event=branch
-            type=sha,prefix=sha-,format=short
-            type=raw,value=ci,enable=true
-
-      - name: Build image (no push)
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          file: ./Dockerfile
-          push: false
-          platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Build Cloudflare bundle
+        run: yarn opennextjs-cloudflare build
