@@ -3,19 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "cross-env INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/postbuild.mjs",
     "start": "next dev --turbopack",
     "dev": "cross-env INIT_CWD=$PWD next dev",
-    "build": "cross-env INIT_CWD=$PWD next build && cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/postbuild.mjs",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.777.0",
     "@headlessui/react": "2.2.0",
     "@next/bundle-analyzer": "15.0.2",
     "@notionhq/client": "^5.14.0",
+    "@opennextjs/cloudflare": "latest",
     "@radix-ui/react-scroll-area": "^1.2.9",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "^9.1.2",
@@ -72,7 +77,8 @@
     "lint-staged": "^13.0.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "typescript": "^5.1.3"
+    "typescript": "^5.1.3",
+    "wrangler": "latest"
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [

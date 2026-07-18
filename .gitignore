@@ -47,3 +47,10 @@ yarn-error.log*
 .contentlayer
 
 tsconfig.tsbuildinfo
+# OpenNext
+.open-next
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
