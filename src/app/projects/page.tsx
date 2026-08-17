@@ -49,16 +49,33 @@ function ProjectThumbnail({
   )
 }
 
-function ProjectAction({ title, href }: { title: string; href?: string }) {
-  if (!href) return null
+function ProjectActions({
+  title,
+  href,
+  blogHref,
+}: {
+  title: string
+  href?: string
+  blogHref?: string
+}) {
+  if (!href && !blogHref) return null
 
   return (
-    <Button asChild variant="outline" size="xs">
-      <Link href={href} target="_blank" aria-label={`View ${title}`}>
-        View project
-        <ArrowUpRightIcon />
-      </Link>
-    </Button>
+    <div className="flex flex-wrap gap-2">
+      {href ? (
+        <Button asChild variant="outline" size="xs">
+          <Link href={href} target="_blank" aria-label={`View ${title}`}>
+            View project
+            <ArrowUpRightIcon />
+          </Link>
+        </Button>
+      ) : null}
+      {blogHref ? (
+        <Button asChild variant="ghost" size="xs">
+          <Link href={blogHref}>Read write-up</Link>
+        </Button>
+      ) : null}
+    </div>
   )
 }
 
@@ -86,10 +103,10 @@ export default function Projects() {
           <p className="text-muted-foreground mb-3 font-mono text-xs uppercase tracking-[0.18em]">
             Selected work
           </p>
-          <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+          <h1 className="font-heading text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
             Projects
           </h1>
-          <p className="text-muted-foreground mt-4 max-w-2xl text-base leading-7 text-pretty">
+          <p className="text-muted-foreground mt-4 max-w-2xl text-pretty text-base leading-7">
             Software engineering, cloud infrastructure, AI, and notes from building things.
           </p>
         </header>
@@ -102,7 +119,11 @@ export default function Projects() {
             <Card>
               <div className="grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
                 <div className="border-border/70 border-b md:border-b-0 md:border-r">
-                  <ProjectThumbnail title={featuredProject.title} imgSrc={featuredProject.imgSrc} featured />
+                  <ProjectThumbnail
+                    title={featuredProject.title}
+                    imgSrc={featuredProject.imgSrc}
+                    featured
+                  />
                 </div>
                 <div className="flex flex-col justify-between">
                   <CardHeader className="gap-3">
@@ -121,15 +142,19 @@ export default function Projects() {
                         </Badge>
                       ) : null}
                     </div>
-                    <h3 className="font-heading text-xl font-semibold tracking-tight text-balance">
+                    <h3 className="font-heading text-balance text-xl font-semibold tracking-tight">
                       {featuredProject.title.trim()}
                     </h3>
-                    <CardDescription className="text-sm leading-6 text-pretty">
+                    <CardDescription className="text-pretty text-sm leading-6">
                       {featuredProject.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <ProjectAction title={featuredProject.title.trim()} href={featuredProject.href} />
+                    <ProjectActions
+                      title={featuredProject.title.trim()}
+                      href={featuredProject.href}
+                      blogHref={featuredProject.blogHref}
+                    />
                   </CardContent>
                 </div>
               </div>
@@ -163,7 +188,7 @@ export default function Projects() {
                     <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_9rem] sm:items-center">
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="font-heading text-base font-semibold tracking-tight text-balance">
+                          <h3 className="font-heading text-balance text-base font-semibold tracking-tight">
                             {title}
                           </h3>
                           {isGithubUrl(project.href) ? (
@@ -180,7 +205,7 @@ export default function Projects() {
                             </Badge>
                           ) : null}
                         </div>
-                        <p className="text-muted-foreground mt-1.5 text-sm leading-6 text-pretty">
+                        <p className="text-muted-foreground mt-1.5 text-pretty text-sm leading-6">
                           {project.description}
                         </p>
                       </div>
@@ -188,7 +213,7 @@ export default function Projects() {
                         <ProjectThumbnail title={title} imgSrc={project.imgSrc} />
                       </div>
                     </div>
-                    <ProjectAction title={title} href={project.href} />
+                    <ProjectActions title={title} href={project.href} blogHref={project.blogHref} />
                   </li>
                 )
               })}
@@ -218,7 +243,7 @@ export default function Projects() {
             <Link
               href="https://github.com/hoangndst"
               target="_blank"
-              className="text-muted-foreground text-xs hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground text-xs"
             >
               @hoangndst
             </Link>
