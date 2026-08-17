@@ -46,11 +46,31 @@ yarn-error.log*
 # Contentlayer
 .contentlayer
 
-tsconfig.tsbuildinfo
-# OpenNext
-.open-next
+# Generated content artifacts
+src/lib/content/generated
+public/generated
 
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
+tsconfig.tsbuildinfo
+# OS
+.DS_Store
+*.log
+
+.agents/
+.codex/
+.cursor/
+.gitnexus/
+.idea/
+.vscode/
+.claude/
+.cursor/
+.agent/
+.codex/
+.gitnexus/
+.idea/
+.vscode/
+.claude/
+
+skills-lock.json
+.mcp.json
+
+.env*

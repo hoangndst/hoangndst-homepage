@@ -1,0 +1,104 @@
+---
+title: 'On alert noise and the four hours between'
+date: '2026-08-01'
+lastmod: '2026-08-01'
+tags: ['ai']
+summary: 'The expensive gap between an alert and a root cause, and what happens when a machine does the boring detective work.'
+authors: ['hoangndst']
+---
+
+## 3:14 AM
+
+An alarm fires in Akron.
+
+CRAC-08 is moving less air than it should. A few minutes later, a rack inlet gets warm. Then a database host starts thermal throttling. The monitoring system is doing its job. It is making noise.
+
+The operator is also doing their job. They open the BMS. Then the monitoring dashboard. Then the DCIM. Then the ticketing system. Four tabs become eight, because the useful thing is always in the tab that was not open.
+
+This is the part of infrastructure work that does not make it into the architecture diagram. Someone has to reconstruct the incident from systems that each know one small piece of it. One system knows the airflow. One knows the rack. One knows the host. One knows the maintenance history. None of them knows the story.
+
+The operator does.
+
+Usually, after a couple of hours.
+
+## The four hour tax
+
+By the time the operator figures out that a return air filter is past its useful life, the answer is almost boring. The filter is loaded. Airflow is down. The fan is working harder. The rack is getting warmer.
+
+Boring is good. Boring is what you want from a root cause.
+
+Getting to boring is the expensive part.
+
+The engineer has to pull the metrics, check the rack topology, look at the power and cooling relationships, search recent changes, check open tickets, and decide which alerts are symptoms of the same event. Then somebody writes the procedure for fixing it. Then somebody writes the postmortem about why it took four hours to discover that a filter needed changing.
+
+The postmortem usually has a sentence like “the issue was identified and resolved.” This is technically true. It also leaves out the part where three senior engineers and a large amount of coffee identified it.
+
+The industry has become very good at producing alerts. We are less good at producing useful answers from them. A dashboard can tell you that fifteen things are wrong. It cannot always tell you that those fifteen things are one filter having a bad day.
+
+## A different layer
+
+A useful operations layer is built for the gap between the alert and the answer.
+
+It sits above the tools an infrastructure team already uses. Monitoring, inventory, logs, ticketing, power, cooling, network data. The point is not to replace those systems. The point is to let them contribute to the same investigation without making an operator manually translate between five different dialects of “something is wrong.”
+
+An operations agent can correlate the incident, check the relationships in the facility, look at what changed, and build a root cause from evidence. It can then draft the operational documents the incident needs: a method of procedure, an emergency operating procedure, a job hazard analysis, a preventive maintenance task, and the postmortem.
+
+That sounds like a lot of paperwork because it is a lot of paperwork. The paperwork exists for a reason. The trick is not pretending it does not matter. The trick is not making an engineer start it from a blank page while a rack is getting hot.
+
+## What the investigation looks like
+
+Take the Akron incident.
+
+The incoming event says the inlet temperature in Row C, Rack C-12 has crossed the safe threshold. The system pulls the related signals and finds three alerts that belong together:
+
+- CRAC-08 supply airflow is low.
+- A host in C-12 has entered thermal throttling.
+- The rack inlet temperature has crossed the ASHRAE A1 ceiling.
+
+Then it checks the timeline. The CRAC alarm came first. The host throttled next. The rack sensor crossed the threshold after that. This is already more useful than a list of red boxes. It gives the incident a shape.
+
+The system checks the facility relationships next. CRAC-08 serves the row. CRAC-07 is the redundant pair. Rack C-12 is pulling 11.8 kW, which is not enough by itself to explain the temperature spike. The fan on CRAC-08 is already at 95 percent while supply airflow sits at 62 percent of nominal. Differential pressure across the return air filter is 1.42 inches of water column. The replacement threshold is 1.0.
+
+The maintenance record says the filter was last replaced 217 days ago. The site interval is 180 days.
+
+There it is. Not “cooling issue.” Not “environmental anomaly.” A specific piece of equipment, a specific failure mode, and a chain that a human can inspect.
+
+The system also checks the alternatives. Maybe the fan bearing is wearing out. Maybe the workload spiked. Those possibilities get scored against the evidence instead of politely ignored. The workload is below the rack rating. The bearing trend is gradual. Neither explains the sudden airflow drop as well as the filter does.
+
+This is the important bit: the system does not just return the answer. It shows the work.
+
+## Confidence needs a ceiling
+
+In the example, the investigation has high confidence and 80 percent evidence coverage. The missing 20 percent is not hidden in a footnote. The logs at the Akron site are unreachable because the Splunk forwarder is down.
+
+That matters.
+
+A system that cannot see one source should not quietly behave as if it saw everything. The gap is exposed and confidence is capped when the evidence is incomplete. It does not let the model grade its own homework.
+
+This is where a lot of AI incident tooling gets uncomfortable. A fluent answer is easy to produce. A defensible answer needs source references, a causal chain, and a clear account of what was not checked.
+
+Engineers are used to working this way. We ask what changed, what correlates, what the blast radius is, and what would prove us wrong. An operations agent can run the same checklist on every incident, even when the incident arrives at 3:14 AM and the human operator has not yet found their glasses.
+
+## From root cause to something people can use
+
+Once the cause is clear, the system drafts the next artifacts from the same evidence.
+
+The MOP covers replacing the CRAC-08 return air filter under reduced cooling capacity. It includes prerequisites, a failover plan, a backout plan, and verification checks. The EOP describes what to do if the inlet crosses the emergency threshold. The JHA covers the hazards of working around the equipment, including lockout and tagout. The preventive maintenance task proposes a shorter inspection interval based on the loading rate. The postmortem gets the timeline and contributing factors without somebody having to reconstruct the night from memory.
+
+The engineer still approves everything. The engineer still runs the change in the tools already under change control. The system does the correlation and the first draft. It does not grab the controls and start flipping breakers because a language model sounded certain.
+
+That boundary is the whole point.
+
+## Less noise, more engineering
+
+There is a version of this story where the answer is another dashboard with a different shade of blue. It has more filters, more charts, and a small badge that says “AI powered.” The operator still opens four other systems to figure out whether the badge is telling the truth.
+
+The useful approach is less glamorous. Make the existing infrastructure legible.
+
+An alert should lead to an incident. An incident should lead to a root cause. A root cause should lead to a safe next action and the documents required to take it. Every claim should have evidence attached. Every blind spot should be visible.
+
+That will not eliminate bad nights. Data centers remain large rooms full of electricity, heat, moving parts, and software that occasionally develops strong opinions.
+
+It can make the bad night shorter. It can keep a senior engineer from spending four hours proving that a filter is dirty. It can turn the postmortem from a memory exercise into a record of what the systems actually said.
+
+The useful version of AI in operations is not a confident paragraph. It is a shorter night, a visible chain of evidence, and a procedure that a human can review before touching production.

@@ -1,0 +1,548 @@
+---
+title: 'NVIDIA Nemo Agent Toolkit'
+date: '2026-02-27'
+lastmod: '2026-02-27'
+tags: ['ai']
+summary: 'NVIDIA Nemo Agent Toolkit'
+images: ['/static/blog/nvidia-nemo-agent-toolkit/1.jpg']
+authors: ['hoangndst']
+---
+
+## 1. Introduction
+
+You know how to build a local prototype agent. It works with the prompts you send it, gives you the answers you expect. But shipping it to production is another story. These are "day 2" problems: "day 1" is building the agent, "day 2" is everything else.
+
+Managing multi-agent systems built on heterogeneous models introduces several layers of complexity:
+
+- **Architectural complexity**: Many tools exist but don't work together. LangChain, LlamaIndex, CrewAI, Semantic Kernel, Google ADK - each has its own patterns for tool calling, memory, and observability.
+- **Repeatability**: Challenging to guarantee consistent results across different environments and model versions.
+- **Code reuse**: Fragmented solutions result in duplicate work across teams building similar agentic workflows.
+- **Performance**: System-level acceleration requires knowledge of the entire system, not just individual components.
+- **Observability**: Without proper tracing, debugging a multi-step agent execution is guesswork.
+- **Security**: Agents need access to tools, files, and APIs, but giving them unrestricted access is a non-starter for enterprise deployments.
+
+Production requirements demand you:
+
+- Expose agents as APIs with consistent interfaces
+- Monitor what's happening across all agent steps
+- Check for edge cases through systematic evaluation
+- Enable continuous learning from feedback loops
+- Preserve data privacy with configurable guardrails
+- Build in evaluation to quickly identify regressions
+
+NVIDIA NeMo Agent Toolkit (NAT) is specifically designed to address these challenges. The key insight: you don't have to rip out your existing agent framework or rewrite your application. NAT works with agents built in any popular framework - LangChain, LangGraph, CrewAI, Semantic Kernel, Google ADK, LlamaIndex, or whatever you're using. It augments what you've already built.
+
+## 2. What is NVIDIA NeMo Agent Toolkit?
+
+NeMo Agent Toolkit is a modular, framework-agnostic Python library that hardens agentic workflows into production-ready systems. It is not a new agent framework. It is a layer that wraps around your existing agents and provides:
+
+- **Framework-agnostic integration**: A plugin-based architecture where each framework registers its LLM providers, embedders, and tools through decorators. The `Builder` system uses a centralized registry to resolve configuration types to implementation classes at runtime.
+- **YAML-driven configuration**: Everything - agents, tools, LLMs, evaluation, telemetry - is defined in declarative YAML files. This makes workflows reproducible, version-controllable, and auditable.
+- **Unified CLI**: The `nat` command handles running, serving, evaluating, and profiling workflows.
+- **Plugin ecosystem**: Optional packages for LangChain (`nvidia-nat[langchain]`), LlamaIndex, CrewAI, and others install only what you need.
+
+### Core architecture
+
+<Mermaid
+  chart="
+flowchart TB
+    CLI[nat CLI / REST API]
+
+    subgraph Engine[Workflow Engine]
+        ReAct[ReAct Agent]
+        Plan[Plan-Execute]
+        Custom[Custom Workflow]
+    end
+
+    CLI --> Engine
+
+    subgraph Plugins[Plugin Registry]
+        LangChain
+        LlamaIndex
+        CrewAI
+        ADK
+    end
+
+    Engine --> Plugins
+
+    subgraph Obs[Observability &amp;amp; Telemetry]
+        LangSmith
+        Langfuse
+        OpenTelemetry
+    end
+
+    Plugins --> Obs
+"
+/>
+
+The architecture follows a Subject-Observer pattern for telemetry. An `IntermediateStepManager` publishes workflow events to a reactive stream, and multiple asynchronous telemetry exporters process them off the hot path - observability without performance penalty.
+
+## 3. Getting Started
+
+### Installation
+
+```bash
+# Core toolkit
+pip install nvidia-nat
+
+# With LangChain integration (most common)
+pip install "nvidia-nat[langchain]"
+
+# Verify installation
+nat --version
+```
+
+Set your NVIDIA API key (free tier available at build.nvidia.com):
+
+```bash
+export NVIDIA_API_KEY=nvapi-...
+```
+
+### Your first workflow
+
+Create a `workflow.yml`:
+
+```yaml
+functions:
+  wikipedia_search:
+    _type: wiki_search
+    max_results: 2
+
+llms:
+  nim_llm:
+    _type: nim
+    model_name: nvidia/nemotron-3-nano-30b-a3b
+    temperature: 0.0
+
+workflow:
+  _type: react_agent
+  tool_names: [wikipedia_search]
+  llm_name: nim_llm
+  verbose: true
+  parse_agent_response_max_retries: 3
+```
+
+Run it:
+
+```bash
+nat run --config_file workflow.yml --input "List five subspecies of Aardvarks"
+```
+
+That's it. A working ReAct agent with a Wikipedia search tool, powered by Nemotron on NVIDIA NIM, with retry logic built in.
+
+### Project scaffolding
+
+```bash
+# Generate a new project structure
+nat workflow create my-first-agent
+
+# Structure generated:
+# my-first-agent/
+#   configs/
+#     config.yml        # Main workflow config
+#     eval_config.yml   # Evaluation config
+#   prompts/            # Prompt templates
+```
+
+## 4. Observability: Seeing Inside the Black Box
+
+The hardest part of production agents is understanding what happened when something goes wrong. NAT's observability system uses an event-driven architecture with the `IntermediateStepManager` broadcasting workflow events to registered telemetry exporters.
+
+### Built-in exporters
+
+NAT ships with exporters for:
+
+- **LangSmith** - Full trace visualization, feedback collection
+- **Phoenix** (Arize) - Open-source observability with embedding analysis
+- **Langfuse** - Open-source LLM observability with cost tracking
+- **Weave** (W&B) - Experiment tracking and evaluation
+- **OpenTelemetry** - Standard protocol for any OTel-compatible backend
+
+### Configuration
+
+```yaml
+general:
+  telemetry:
+    logging:
+      console:
+        _type: console
+        level: INFO
+
+    tracing:
+      langfuse:
+        _type: langfuse
+        public_key: ${LANGFUSE_PUBLIC_KEY}
+        secret_key: ${LANGFUSE_SECRET_KEY}
+        host: https://cloud.langfuse.com
+
+      phoenix:
+        _type: phoenix
+        endpoint: http://localhost:6006
+```
+
+Multiple exporters run concurrently. Each processes the same event stream asynchronously, so adding observability doesn't slow down your agent.
+
+### What gets traced
+
+- **LLM calls**: Input tokens, output tokens, latency, model name, temperature
+- **Tool invocations**: Function name, arguments, return values, duration
+- **Intermediate steps**: Agent reasoning traces (thought/action/observation cycles)
+- **Workflow-level metadata**: Total duration, error counts, retry attempts
+
+This is particularly powerful for debugging. When an agent produces a wrong answer, you can trace through the entire reasoning chain to find exactly where it went wrong.
+
+## 5. Evaluation: Catching Regressions Before Users Do
+
+Agents are non-deterministic. The same input can produce different outputs across model versions, temperature changes, or prompt tweaks. Systematic evaluation is the only way to catch regressions.
+
+NAT integrates evaluation directly into the workflow lifecycle. The `nat eval` command runs your workflow against a dataset and scores the outputs.
+
+### Defining an evaluation config
+
+```yaml
+eval:
+  general:
+    dataset:
+      _type: json
+      file_path: ./data/eval_questions.json
+
+    evaluators:
+      correctness:
+        _type: llm_as_judge
+        llm_name: eval_llm
+        rubric: |
+          Score from 1-5:
+          1: Completely wrong
+          3: Partially correct
+          5: Perfectly correct
+
+      latency:
+        _type: latency
+        max_acceptable_ms: 5000
+
+  profiler:
+    compute_llm_metrics: true
+    bottleneck_analysis:
+      enable_nested_stack: true
+```
+
+### Running evaluation
+
+```bash
+nat eval --config_file configs/eval_config.yml
+```
+
+The output gives you:
+
+- Per-question scores across all evaluators
+- Aggregate statistics (mean, median, p95)
+- Latency distributions
+- Bottleneck analysis showing which steps consume the most time
+- Token usage breakdowns (input vs output, per tool call)
+
+### Continuous evaluation in CI
+
+```yaml
+# GitHub Actions example
+- name: Run agent evaluation
+  run: |
+    nat eval --config_file configs/eval_config.yml
+    # Fail if correctness drops below threshold
+```
+
+This is the feedback loop that transforms agent development from art into engineering. You can iterate on prompts, swap models, add tools, and immediately see the impact on quality.
+
+## 6. Profiling: Performance at the Tool Level
+
+For latency-sensitive applications, you need to know exactly where time is spent. NAT's profiler instruments workflows down to individual tool calls and LLM invocations.
+
+### What the profiler measures
+
+- **LLM metrics**: Input/output token counts, tokens per second, time to first token
+- **Tool latency**: Per-tool execution time with nested call tracking
+- **Bottleneck analysis**: Identifies steps that dominate total latency
+- **Concurrency spike analysis**: Detects periods of high parallel tool usage
+- **Token uniqueness**: Measures token reuse across queries for KV cache optimization
+
+### Prediction Trie for Dynamo
+
+One of the more advanced features: the profiler generates a prediction trie from execution traces. This is a hierarchical data structure that captures per-LLM-call-position statistics. When deployed with NVIDIA Dynamo (the inference serving engine), these statistics are injected as routing hints to optimize KV cache management and request scheduling.
+
+```yaml
+llms:
+  dynamo_llm:
+    _type: dynamo
+    model_name: meta/llama-3.1-70b-instruct
+    prediction_trie_path: ./profiles/workflow_trie.json
+```
+
+This means your agent gets faster over time as the system learns its execution patterns.
+
+## 7. Deployment: From Script to API
+
+### Serving as a REST API
+
+```bash
+nat serve --config_file workflow.yml
+```
+
+This launches a FastAPI server with:
+
+- `POST /run` - Execute the workflow synchronously
+- `POST /evaluate` - Run evaluation against the workflow
+- OpenAPI schema auto-generated from your workflow config
+
+### Production deployment
+
+```yaml
+# pyproject.toml dependency declaration
+[project]
+dependencies = [
+    "nvidia-nat[langchain]==1.8.*",
+]
+```
+
+```dockerfile
+FROM python:3.13-slim
+COPY . /app
+WORKDIR /app
+RUN pip install .
+EXPOSE 8000
+CMD ["nat", "serve", "--config_file", "configs/workflow.yml", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+### Integration with existing services
+
+Since NAT exposes a standard REST API, you can integrate it with:
+
+- **API gateways** (Kong, NGINX, Traefik) for rate limiting and auth
+- **Message queues** (Kafka, RabbitMQ) for async agent execution
+- **Monitoring stacks** (Prometheus, Grafana) via the OpenTelemetry exporter
+- **CI/CD pipelines** for automated evaluation on every deploy
+
+## 8. MCP and A2A: Inter-Agent Communication
+
+### Model Context Protocol (MCP)
+
+NAT is fully MCP-compatible. You can use it as an MCP client to connect to tools served by remote MCP servers, or publish your own tools as an MCP server.
+
+```yaml
+functions:
+  remote_tool:
+    _type: mcp_client
+    server_url: https://my-mcp-server/tools
+    tool_name: search_database
+```
+
+This means your NAT workflow can seamlessly use tools from any MCP-compatible server - including Claude's MCP ecosystem.
+
+### Agent-to-Agent (A2A) Protocol
+
+For distributed agent systems, NAT supports the A2A protocol. You can delegate tasks to remote A2A agents or publish your workflow as a discoverable A2A agent.
+
+```yaml
+workflow:
+  _type: a2a_agent
+  agent_card:
+    name: "Research Assistant"
+    description: "Conducts deep research on technical topics"
+    capabilities: ["web_search", "document_analysis", "summarization"]
+```
+
+This enables multi-agent architectures where specialized agents collaborate - a research agent delegates to a summarization agent, which calls a fact-checking agent, all orchestrated through NAT.
+
+## 9. The Broader NVIDIA Agent Ecosystem
+
+NeMo Agent Toolkit is part of a larger ecosystem that NVIDIA announced at GTC 2026.
+
+### OpenShell
+
+OpenShell is the secure sandboxed runtime for AI agents. It sits between your agent and your infrastructure, providing:
+
+- **Isolated execution**: Every agent runs in a sandbox with Landlock, seccomp, and network namespace isolation. Access is deny-by-default.
+- **Privacy router**: Routes inference requests based on sensitivity - local models for private data, cloud models for general tasks.
+- **Granular permissions**: Control what files, network endpoints, and system resources the agent can access.
+- **Live policy updates**: Change security policies without restarting the agent.
+- **Full audit trail**: Every action is logged for compliance.
+
+```bash
+# Create an OpenShell sandbox
+openshell sandbox create --remote spark --from openclaw
+
+# Run your NAT workflow inside the sandbox
+openshell exec -- nat serve --config_file workflow.yml
+```
+
+### NemoClaw
+
+NemoClaw is an open-source reference stack that orchestrates the entire agent lifecycle:
+
+- **Single-command deployment**: `nemoclaw` CLI installs Nemotron models and OpenShell runtime in one step
+- **Blueprint management**: Versioned blueprints for reproducible sandbox creation
+- **Routed inference**: Transparent model routing - credentials stay on the host, the agent sees only `inference.local`
+- **Declarative network policy**: YAML-defined egress rules with real-time approval workflows
+- **Posture profiles**: Pre-configured security profiles for different risk levels (development, internal tools, production)
+
+```bash
+# Deploy an always-on agent with NemoClaw
+nemoclaw deploy --agent my-workflow --provider anthropic
+
+# The stack handles:
+# - OpenShell sandbox creation
+# - Model endpoint routing
+# - Network policy enforcement
+# - Lifecycle management
+```
+
+### The full stack
+
+<Mermaid
+  chart="
+flowchart TB
+    subgraph top[&quot; &quot;]
+      NemoClaw[&quot;NemoClaw&lt;br/&gt;Orchestration &amp; lifecycle&quot;]
+    end
+    subgraph mid[&quot; &quot;]
+      OpenShell[&quot;OpenShell&lt;br/&gt;Security &amp; isolation&quot;]
+    end
+    subgraph bot[&quot; &quot;]
+      NAT[&quot;NeMo Agent Toolkit (NAT)&lt;br/&gt;Workflow engine&quot;]
+      Framework[&quot;Framework (LangChain/etc)&lt;br/&gt;Your agent code&quot;]
+      NIM[&quot;NVIDIA NIM / Dynamo&lt;br/&gt;Inference serving&quot;]
+    end
+    NemoClaw --> OpenShell
+    OpenShell --> NAT
+    NAT --> Framework
+    Framework --> NIM
+"
+/>
+
+## 10. Building a Complete Agentic Application
+
+Let's walk through building a real application: a technical research assistant that searches the web, summarizes findings, and exposes a REST API.
+
+### Step 1: Define tools
+
+```yaml
+functions:
+  web_search:
+    _type: tavily_search
+    max_results: 5
+    include_domains: ["arxiv.org", "github.com", "docs.nvidia.com"]
+
+  summarize:
+    _type: llm_function
+    llm_name: nim_llm
+    system_prompt: |
+      Summarize the following content in 3-5 bullet points.
+      Focus on technical accuracy and actionable insights.
+
+  save_to_file:
+    _type: file_write
+    base_path: ./research_outputs/
+```
+
+### Step 2: Configure the LLM with thinking mode
+
+```yaml
+llms:
+  nim_llm:
+    _type: nim
+    model_name: nvidia/nemotron-3-nano-30b-a3b
+    temperature: 0.0
+    chat_template_kwargs:
+      enable_thinking: true
+    max_tokens: 4096
+```
+
+### Step 3: Build the workflow
+
+```yaml
+workflow:
+  _type: plan_execute_agent
+  planner_llm_name: nim_llm
+  executor_llm_name: nim_llm
+  tool_names: [web_search, summarize, save_to_file]
+  max_steps: 10
+```
+
+### Step 4: Add observability
+
+```yaml
+general:
+  telemetry:
+    tracing:
+      langfuse:
+        _type: langfuse
+        public_key: ${LANGFUSE_PUBLIC_KEY}
+        secret_key: ${LANGFUSE_SECRET_KEY}
+```
+
+### Step 5: Configure evaluation
+
+```yaml
+eval:
+  general:
+    dataset:
+      _type: json
+      file_path: ./eval_questions.json
+
+    evaluators:
+      accuracy:
+        _type: llm_as_judge
+        llm_name: eval_llm
+      completeness:
+        _type: llm_as_judge
+        llm_name: eval_llm
+        rubric: "Does the answer cover all aspects of the question?"
+```
+
+### Step 6: Deploy
+
+```bash
+# Development
+nat run --config_file workflow.yml --input "Explain NVIDIA Nemotron architecture"
+
+# Evaluation
+nat eval --config_file configs/eval_config.yml
+
+# Production
+nat serve --config_file workflow.yml --host 0.0.0.0 --port 8000
+```
+
+### Step 7: Frontend integration
+
+```typescript
+// React component calling the NAT API
+async function researchAgent(query: string) {
+  const response = await fetch("http://localhost:8000/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ input: query }),
+  })
+  return response.json()
+}
+```
+
+## 11. Conclusion
+
+NVIDIA NeMo Agent Toolkit solves the "day 2" problem for AI agents. It gives you:
+
+- **Observability** through event-driven tracing with multiple exporter backends
+- **Evaluation** through systematic testing against datasets with LLM-as-judge scoring
+- **Profiling** with tool-level latency analysis and bottleneck detection
+- **Deployment** via FastAPI with a single `nat serve` command
+- **Security** through the OpenShell runtime and NemoClaw orchestration stack
+- **Interoperability** through MCP and A2A protocol support
+
+The framework-agnostic design means you keep your existing agent code. NAT wraps around it, adding the production infrastructure layer without requiring a rewrite.
+
+The ecosystem continues to evolve. OpenShell provides the secure runtime. NemoClaw orchestrates the full stack. Together, they form a complete platform for building, deploying, and operating autonomous AI agents at any scale - from a single developer on a DGX Spark to enterprise GPU clusters.
+
+### Resources
+
+- [NeMo Agent Toolkit Documentation](https://docs.nvidia.com/nemo/agent-toolkit/latest/)
+- [GitHub Repository](https://github.com/NVIDIA/NeMo-Agent-Toolkit)
+- [OpenShell Documentation](https://github.com/NVIDIA/OpenShell)
+- [NemoClaw Documentation](https://docs.nvidia.com/nemoclaw/latest/)
+- [NVIDIA NIM](https://build.nvidia.com/explore/discover)
