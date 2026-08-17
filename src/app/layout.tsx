@@ -3,6 +3,7 @@ import 'remark-github-blockquote-alert/alert.css'
 
 import { Inter, Geist_Mono } from 'next/font/google'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
@@ -115,6 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
         </ThemeProviders>
+        <SpeedInsights />
         {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
       </body>
     </html>
