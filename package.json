@@ -37,7 +37,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "esbuild": "0.20.2",
+    "esbuild": "0.28.2",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.2",
     "gsap": "^3.13.0",
