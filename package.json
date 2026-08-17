@@ -6,15 +6,14 @@
     "content:generate": "node --import tsx scripts/generate-content.mts",
     "content:check": "yarn content:generate && node --import tsx scripts/content-check.mts",
     "predev": "yarn content:generate",
-    "prebuild": "yarn content:generate",
-    "build": "cross-env INIT_CWD=$PWD next build",
+    "build": "yarn content:generate && cross-env INIT_CWD=$PWD next build",
     "start": "next dev",
     "dev": "cross-env INIT_CWD=$PWD next dev",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "eslint src/app src/components src/lib src/layouts scripts",
     "prepare": "husky",
-    "preview": "next build && next start"
+    "preview": "yarn build && next start"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.777.0",
