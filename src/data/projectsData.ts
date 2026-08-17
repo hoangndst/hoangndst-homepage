@@ -2,10 +2,19 @@ interface Project {
   title: string
   description: string
   href?: string
+  blogHref?: string
   imgSrc?: string
 }
 
 const projectsData: Project[] = [
+  {
+    title: 'ezmsg / Dash Messaging',
+    description:
+      'A protocol-driven messaging system for designing, running, simulating, and monitoring research conversations.',
+    imgSrc: '/static/blog/building-ezmsg/dash-messaging-dashboard.png',
+    href: 'https://dashmessaging.hoangndst.com/',
+    blogHref: '/blog/building-ezmsg',
+  },
   {
     title: 'Kusion',
     description: `Declarative Intent Driven Platform Orchestrator for Internal Developer Platform (IDP).`,
@@ -20,8 +29,10 @@ const projectsData: Project[] = [
   },
   {
     title: 'Container Monitoring Mobile App',
-    description: 'A mobile app for monitoring container metrics and logs, with an AI assistant for Docker hosts.',
-    imgSrc: 'https://raw.githubusercontent.com/hoangndst/container-monitoring-app/refs/heads/main/assets/images/demo_2.png',
+    description:
+      'A mobile app for monitoring container metrics and logs, with an AI assistant for Docker hosts.',
+    imgSrc:
+      'https://raw.githubusercontent.com/hoangndst/container-monitoring-app/refs/heads/main/assets/images/demo_2.png',
     href: 'https://github.com/hoangndst/container-monitoring-app',
   },
   {
@@ -38,19 +49,22 @@ const projectsData: Project[] = [
   },
   {
     title: 'DevOps Sphere',
-    description: 'A DevOps platform for automating delivery, managing source code, and improving software security. Built for Viettel Cloud.',
+    description:
+      'A DevOps platform for automating delivery, managing source code, and improving software security. Built for Viettel Cloud.',
     imgSrc: '/static/images/devops-sphere.png',
     href: 'https://viettelcloud.vn/en/products/60',
   },
   {
     title: 'Cluster Upgrade Operator',
-    description: 'A Cluster API operator for rolling and blue-green Kubernetes upgrades. Built for Viettel Cloud.',
+    description:
+      'A Cluster API operator for rolling and blue-green Kubernetes upgrades. Built for Viettel Cloud.',
     imgSrc: 'https://cluster-api.sigs.k8s.io/images/introduction.svg',
     href: 'https://viettelcloud.vn/en/products/8/30',
   },
   {
     title: '@danchoicloud GitHub App',
-    description: 'GitHub App for @danchoicloud that supports PR review, task force coordination, CLA checks, and other repository automations.',
+    description:
+      'GitHub App for @danchoicloud that supports PR review, task force coordination, CLA checks, and other repository automations.',
     imgSrc: '/static/images/danchoicloud-gh.png',
     href: 'https://github.com/a1y-developer/danchoicloud-gh',
   },
@@ -61,10 +75,10 @@ const projectsData: Project[] = [
     href: 'https://github.com/hoangndst/danchoicloud-genkit',
   },
   {
-    title: "@danchoicloud_bot",
-    description: "Telegram chat bot to help manage my everyday tasks.",
+    title: '@danchoicloud_bot',
+    description: 'Telegram chat bot to help manage my everyday tasks.',
     imgSrc: '/static/images/danchoicloud_bot.png',
-    href: "https://github.com/hoangndst/danchoicloud",
+    href: 'https://github.com/hoangndst/danchoicloud',
   },
   {
     title: 'Project Management System',
@@ -81,19 +95,22 @@ const projectsData: Project[] = [
   {
     title: 'Dictionary',
     description: `Online dictionary, multi-language support.`,
-    imgSrc: 'https://raw.githubusercontent.com/hoangndst/dictionary-java/refs/heads/master/demo/dashboard.png',
+    imgSrc:
+      'https://raw.githubusercontent.com/hoangndst/dictionary-java/refs/heads/master/demo/dashboard.png',
     href: 'https://github.com/hoangndst/dictionary-java',
   },
   {
     title: 'Evaluate network performance',
     description: `A tool to evaluate network performance.`,
-    imgSrc: 'https://raw.githubusercontent.com/hoangndst/evaluate-network-performance/main/wireless/assets/granularity.png',
+    imgSrc:
+      'https://raw.githubusercontent.com/hoangndst/evaluate-network-performance/main/wireless/assets/granularity.png',
     href: 'https://github.com/hoangndst/evaluate-network-performance',
   },
   {
     title: 'Gas Warning System',
     description: `Gas warning system at mines using network mesh.`,
-    imgSrc: 'https://raw.githubusercontent.com/hoangndst/gas-warning-system/refs/heads/main/assets/frontend.png',
+    imgSrc:
+      'https://raw.githubusercontent.com/hoangndst/gas-warning-system/refs/heads/main/assets/frontend.png',
     href: 'https://github.com/hoangndst/gas-warning-system',
   },
   {
@@ -115,23 +132,24 @@ const projectsData: Project[] = [
     href: 'https://github.com/hoangndst/510pay',
   },
   {
-    title: "Kmeans Algorithm Visualization",
+    title: 'Kmeans Algorithm Visualization',
     description: 'An interactive visualization for understanding the K-means algorithm.',
     imgSrc: 'https://raw.githubusercontent.com/hoangndst/kmeans-visualization/main/img/kmeans.gif',
-    href: "https://github.com/hoangndst/kmeans-visualization",
+    href: 'https://github.com/hoangndst/kmeans-visualization',
   },
   {
-    title: "stuffops",
+    title: 'stuffops',
     description: 'Utilities for deploying and managing containers with Docker and Kubernetes.',
     imgSrc: '',
-    href: "https://github.com/hoangndst/stuffops",
+    href: 'https://github.com/hoangndst/stuffops',
   },
   {
-    title: "@buddy",
-    description: 'A Discord bot with AI features for game help, reminders, notifications, and tasks.', 
+    title: '@buddy',
+    description:
+      'A Discord bot with AI features for game help, reminders, notifications, and tasks.',
     imgSrc: '/static/images/buddy_bot.png',
-    href: "https://github.com/hoangndst/buddy",
-  }
+    href: 'https://github.com/hoangndst/buddy',
+  },
 ]
 
 export default projectsData

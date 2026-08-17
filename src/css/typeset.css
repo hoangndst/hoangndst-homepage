@@ -14,9 +14,9 @@
   }
 
   .typeset-blog {
-    --typeset-size: 17px;
-    --typeset-leading: 1.8;
-    --typeset-flow: 1.35em;
+    --typeset-size: 15px;
+    --typeset-leading: 1.75;
+    --typeset-flow: 1.25em;
   }
 }
 
