@@ -1,19 +1,36 @@
-const { withContentlayer } = require('next-contentlayer2')
+const createMDX = require('@next/mdx')
+const path = require('node:path')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'false',
+})
+const remarkGithubAlertPluginPath = path.join(process.cwd(), 'src/lib/mdx/remark-github-alert.mjs')
+
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: ['remark-frontmatter', 'remark-gfm', 'remark-math', remarkGithubAlertPluginPath],
+    rehypePlugins: [
+      'rehype-slug',
+      ['rehype-autolink-headings', { behavior: 'prepend' }],
+      ['rehype-katex', { strict: 'ignore', throwOnError: false }],
+      'rehype-katex-notranslate',
+      ['rehype-citation', { path: path.join(process.cwd(), 'src/data') }],
+      ['rehype-prism-plus', { defaultLanguage: 'js', ignoreMissing: true }],
+    ],
+  },
 })
 
 // You might need to insert additional domains in script-src if you are using external services
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com giscus.app;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com giscus.app https://assets.calendly.com;
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
   media-src *.s3.amazonaws.com;
   connect-src 'self' blob: *;
   font-src 'self';
-  frame-src giscus.app https://www.youtube.com https://www.youtube-nocookie.com https://github.com;
+  frame-src giscus.app https://www.youtube.com https://www.youtube-nocookie.com https://github.com https://calendly.com;
 `
 
 const securityHeaders = [
@@ -58,17 +75,17 @@ const basePath = process.env.BASE_PATH || undefined
 const unoptimized = process.env.UNOPTIMIZED ? true : undefined
 
 /**
- * @type {import('next/dist/next-server/server/config').NextConfig}
+ * @type {import('next').NextConfig}
  **/
 module.exports = () => {
-  const plugins = [withContentlayer, withBundleAnalyzer]
+  const plugins = [withMDX, withBundleAnalyzer]
   return plugins.reduce((acc, next) => next(acc), {
     basePath,
     reactStrictMode: true,
-    pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-    eslint: {
-      dirs: ['app', 'components', 'layouts', 'scripts'],
+    experimental: {
+      viewTransition: true,
     },
+    pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     images: {
       remotePatterns: [
         {
@@ -98,9 +115,26 @@ module.exports = () => {
       ],
       unoptimized,
     },
-    output: "standalone",
     async headers() {
       return [
+        {
+          source: '/feed.xml',
+          headers: [
+            {
+              key: 'Content-Type',
+              value: 'application/rss+xml; charset=utf-8',
+            },
+          ],
+        },
+        {
+          source: '/tags/:tag/feed.xml',
+          headers: [
+            {
+              key: 'Content-Type',
+              value: 'application/rss+xml; charset=utf-8',
+            },
+          ],
+        },
         {
           source: '/(.*)',
           headers: securityHeaders,
@@ -117,5 +151,3 @@ module.exports = () => {
     },
   })
 }
-
-import('@opennextjs/cloudflare').then(m => m.initOpenNextCloudflareForDev());
