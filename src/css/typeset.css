@@ -61,7 +61,7 @@
     }
     &:where(h2) {
       font-size: 1.25em;
-      line-height: 1.3;
+      line-height: 1.4;
       margin-block-start: calc(var(--typeset-flow) * 1.4);
     }
     &:where(h3) {
@@ -443,6 +443,42 @@
         border: 1px solid;
       }
     }
+  }
+
+  .typeset-blog {
+    counter-reset: blog-section;
+  }
+
+  .typeset-blog
+    h2:not(:where(.not-typeset, [data-not-typeset], .not-typeset *, [data-not-typeset] *)):not(
+      [data-manual-section]
+    ) {
+    padding-block-start: 1.15rem;
+    border-block-start: 1px solid var(--typeset-rule);
+    counter-increment: blog-section;
+  }
+
+  .typeset-blog
+    h2:not(:where(.not-typeset, [data-not-typeset], .not-typeset *, [data-not-typeset] *)):not(
+      [data-manual-section]
+    )::before {
+    display: block;
+    margin-block-end: 0.55rem;
+    color: var(--typeset-muted);
+    content: '[' counter(blog-section, decimal-leading-zero) ']';
+    font-family: var(--typeset-font-mono);
+    font-size: 0.48em;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  /* A post that opens with a section should not begin with a decorative rule. */
+  .typeset-blog > h2:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
   }
 
   /* First child adds no space above. Last so it wins ties. */

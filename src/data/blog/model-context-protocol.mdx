@@ -8,7 +8,7 @@ images:
   ['/static/blog/model-context-protocol/1.png']
 authors: ['hoangndst']
 ---
-## 1. Introduction
+## Introduction
 > Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context to LLMs.
 > Think of MCP like USB-C port for AI applications. Just as USB-C offers a standardized way to connect your devices to various peripherals,
 > MCP provides a standardized way to connect AI models to different data sources and tools.
@@ -26,7 +26,7 @@ authors: ['hoangndst']
 The protocol addresses the issues caused by fragmented data integration by offering developers a cohesive architecture across MCP servers and clients, 
 along with pre-built connectors for popular systems such as Google Drive and GitHub.
 
-## 2. Architecture
+## Architecture
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-1"
@@ -43,7 +43,7 @@ The architecture of MCP consists:
 - **Local Data Sources**: Your computer’s files, databases, and services that MCP servers can securely access.
 - **Remote Services**: External systems available over the internet (e.g., through APIs) that MCP servers can connect to.
 
-## 3. Server Development
+## Server Development
 In this example we will build a MCP server to get random image of "sieu nhan" and connect it to a host, Claude for Desktop, Cursor, or any other MCP client.
 
 We’ll build a server that exposes tool: `get-sieu-nhan`. Then we’ll connect the server to an MCP host.
@@ -261,7 +261,7 @@ Build the Docker image:
 $ docker build . -t hoangndst/mcp-server-danchoicloud:v0.1.0
 ```
 
-## 4. Testing your server.
+## Testing your server.
 In this article, we will use Claude for Desktop as the MCP host because it supports image response. If you want to setup on the other hosts,
  here is the configuration:
 ### 4.1. With [continue](https://github.com/continuedev/continue)
@@ -370,7 +370,7 @@ What’s happening under the hood. When you ask a question:
 5. Claude formulates a natural language response
 6. The response is displayed to you!
 
-## 5. Conclusion
+## Conclusion
 The Model Context Protocol (MCP) is a powerful tool for developers looking to integrate AI models into their applications.
 By providing a standardized way to connect AI models to different data sources and tools, MCP simplifies the process of building AI-powered applications.
 

@@ -6,6 +6,8 @@ import SectionContainer from '@/components/SectionContainer'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import PostNavigationButton from '@/components/PostNavigationButton'
+import PostTopNavigation from '@/components/PostTopNavigation'
+import BlogSources from '@/components/blog/BlogSources'
 import PostCoverPlaceholder from '@/components/PostCoverPlaceholder'
 import type { PostMeta } from '@/lib/content'
 import NextLink from 'next/link'
@@ -26,7 +28,7 @@ interface LayoutProps {
 }
 
 export default function PostMinimal({ content, next, prev, children }: LayoutProps) {
-  const { slug, title, images, path } = content
+  const { slug, title, images, path, sources } = content
   const displayImage = images?.[0]
   const basePath = path.split('/')[0]
   const baseLabel = basePath.charAt(0).toUpperCase() + basePath.slice(1)
@@ -36,26 +38,29 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
       <ScrollTopAndComment />
       <article>
         <div>
-          <div className="pb-2 pt-6">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <NextLink href="/">Home</NextLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <NextLink href={`/${basePath}`}>{baseLabel}</NextLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{title}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+          <div className="flex items-center justify-between gap-4 pb-2 pt-6">
+            <div className="min-w-0">
+              <Breadcrumb>
+                <BreadcrumbList className="min-w-0 flex-nowrap overflow-hidden">
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <NextLink href="/">Home</NextLink>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <NextLink href={`/${basePath}`}>{baseLabel}</NextLink>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="min-w-0 max-w-full">
+                    <BreadcrumbPage className="block min-w-0 truncate">{title}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+            <PostTopNavigation next={next} path={path} prev={prev} title={title} />
           </div>
           <div className="flex flex-col gap-1 pb-10 text-center">
             <div className="w-full">
@@ -72,6 +77,7 @@ export default function PostMinimal({ content, next, prev, children }: LayoutPro
             </div>
           </div>
           <div className="typeset typeset-blog py-4">{children}</div>
+          <BlogSources sources={sources} />
           {siteMetadata.comments && (
             <div className="text-muted-foreground pb-6 pt-6 text-center" id="comment">
               <Comments slug={slug} />

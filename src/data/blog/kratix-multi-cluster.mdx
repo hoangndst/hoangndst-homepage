@@ -7,7 +7,7 @@ summary: 'Deploy Kratix in a multi-cluster model (platform - workers)'
 images: ['/static/blog/kratix-multi-cluster/topo.png']
 authors: ['hoangndst']
 ---
-## 1. Deploy Kratix in a multi-cluster model (platform - workers)
+## Deploy Kratix in a multi-cluster model (platform - workers)
 <div style={{ textAlign: "center" }}>
   <img
     src="/static/blog/kratix-multi-cluster/topo.png"
@@ -16,12 +16,12 @@ authors: ['hoangndst']
   />
 </div>
 
-## 2. Install necessary tools
+## Install necessary tools
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) - Kubernetes IN Docker
 - [docker](https://docs.docker.com/get-docker/) - Docker Engine
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - Kubernetes Command Line Tool
 
-## 3. Deploy Platform cluster
+## Deploy Platform cluster
 - Create the platform cluster using kind
   ```sh
   kind create cluster --image kindest/node:v1.27.3 --name platform
@@ -72,7 +72,7 @@ authors: ['hoangndst']
     url: https://github.com/Choco-Boba/backstage
     branch: main
   ```
-## 4. Deploy Worker clusters:
+## Deploy Worker clusters:
 - Create the worker cluster using kind:
   ```sh
   kind create cluster --image kindest/node:v1.27.3 --name worker
@@ -175,7 +175,7 @@ authors: ['hoangndst']
 
   Other worker clusters that want to join will also follow the same steps from installing Flux.
 
-## 5. Install Promises on the Platform cluster (Example Jenkins)
+## Install Promises on the Platform cluster (Example Jenkins)
 We can find Promise resources on the Kratix Marketplace or write our own Promises: [Kratix Marketplace](https://docs.kratix.io/marketplace)
 - Jenkins Promise: https://github.com/syntasso/kratix-marketplace/tree/main/jenkins
   ```sh
@@ -195,7 +195,7 @@ We can find Promise resources on the Kratix Marketplace or write our own Promise
   
   Each time a Jenkins instance is requested, the Jenkins Operator will create this resource on the worker cluster.
 
-## 6. Conclusion
+## Conclusion
 - With the Kratix multi-cluster deployment model (platform - workers), we can easily scale the worker cluster without affecting the platform cluster. The platform cluster will manage and provide resources for the worker cluster through GitOps. The worker cluster will synchronize and deploy the resources requested by the platform cluster.
 - This Platform Orchestrator model is quite interesting but requires the worker clusters to install the necessary resources as mentioned above. We will compare it with another Platform Orchestrator in the next blog post.
 > [!NOTE]  

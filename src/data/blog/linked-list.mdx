@@ -8,7 +8,7 @@ images: ['/static/blog/linked-list/fig-1.png']
 authors: ['hoangndst']
 ---
 
-## 1. Introduction
+## Introduction
 Danh sách liên kết là một cấu trúc dữ liệu tuyến tính, trong đó các phần tử không được lưu trữ tại các vị trí bộ nhớ liền kề. Các phần tử trong danh sách được liên kết được liên kết bằng cách sử dụng con trỏ như được hiển thị trong hình ảnh bên dưới:
 
 <div style={{ textAlign: "center" }}>
@@ -52,7 +52,7 @@ int main() {
 ```
 Như vậy chúng ta đã có một list. Giờ chúng ta muốn thêm một phần tử zero vào một vị trí bất kì thì làm thế nào?
 
-## 2. Thêm phần tử vào đầu danh sách liên kết
+## Thêm phần tử vào đầu danh sách liên kết
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-2"
@@ -87,7 +87,7 @@ Cho những bạn chưa hiểu tại sao trong hàm [`addhead(0, &head)`](#add-h
 
 Chúng ta đưa vào địa trỉ để thay đổi giá trị nó, cái này gọi là tham chiếu, còn nếu là `Node *head` thì chỉ truyền vào giá trị, ta không thay đổi được sau khi kết thúc hàm, đó gọi là tham trị.
 
-## 3. Thêm sau một vị trí cho trước
+## Thêm sau một vị trí cho trước
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-3"
@@ -112,7 +112,7 @@ void insertAfter(Node *index, int data) {
 </div>
 Phần này khá dễ hiểu mọi người hãy nhìn hình [Figure 3](#figure-3) sẽ hiểu.
 
-## 4. Thêm vào cuối danh sách
+## Thêm vào cuối danh sách
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-4"
@@ -164,7 +164,7 @@ int main() {
 ```
 Kết quả sẽ là `0 1 2 3 4`.
 
-## 5. Xóa phần tử có giá trị bằng x
+## Xóa phần tử có giá trị bằng x
 Cho một Linked List chúng ta hay xóa phần tử có $value = x$
 
 ### 5.1. Code
@@ -189,7 +189,7 @@ void delete_value(Node **head, int x) {
 ```
 </div>
 
-## 6. Xóa phần tử tại vị trí cho trước
+## Xóa phần tử tại vị trí cho trước
 ### 6.1. Code
 <div id="delete-index">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -224,7 +224,7 @@ Xem hoạt ảnh sau để có thể dễ dàng hiểu:
     <p style={{ textAlign: "center" }}>Figure 5: Delete Node at Index</p>
 </div>
 
-## 7. Xóa một Linked List?
+## Xóa một Linked List?
 ### 7.1. Code
 <div id="delete-list">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -241,7 +241,7 @@ void delete_list(Node **head) {
 ```
 </div>
 
-## 8. Tìm độ dài của Linked List
+## Tìm độ dài của Linked List
 ### 8.1. Code
 <div id="length-list">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -259,7 +259,7 @@ int len_list(Node *head) {
 
 Ở đây chúng ta chỉ cần xét giá trị không cần thiết phài `Node **head` để truy đến địa trỉ, chúng ta chỉ cần biến đếm và không cần thay đổi giá trị gì cả 😙.
 
-## 9. Check xem trong Linked List có giá trị nào bằng x không:
+## Check xem trong Linked List có giá trị nào bằng x không:
 ### 9.1. Code
 <div id="check-value">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -273,7 +273,7 @@ bool find(Node *head, int x) {
 ```
 </div>
 
-## 10. Lấy giá trị tại vị trí cho trước
+## Lấy giá trị tại vị trí cho trước
 ### 10.1. Code
 <div id="get-value">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -288,7 +288,7 @@ int getNth (Node *head, int index) {
 ```
 </div>
 
-## 11. Tìm độ dài của LOOP trong Linked List
+## Tìm độ dài của LOOP trong Linked List
 <div style={{ textAlign: "center" }}>
     <img
         id="figure-6"
@@ -368,7 +368,7 @@ int countLoop(Node *head) {
 ```
 </div>
 
-## 12. Xóa phần tử lặp của một Linked List chưa được sắp xếp:
+## Xóa phần tử lặp của một Linked List chưa được sắp xếp:
 ### 12.1. Code
 <div id="remove-duplicate">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -393,7 +393,7 @@ void removeDuplicates (Node **head) {
 
 Ta sẽ sử dụng `Hashing` để có thể có độ phức tạp là $O(n)$.
 
-## 13. Intersection of Two Linked Lists (LeetCode) | Giao điểm của hai danh sách được liên kết.
+## Intersection of Two Linked Lists (LeetCode) | Giao điểm của hai danh sách được liên kết.
 ### 13.1. Code
 <div id="intersection">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -416,7 +416,7 @@ Node *getIntersectionNode (Node *headA, Node *headB) {
 ```
 </div>
 
-## 14. Reverse Linked Lists (LeetCode) | Đảo ngược Linked List
+## Reverse Linked Lists (LeetCode) | Đảo ngược Linked List
 ### 14.1. Code
 <div id="reverse-list">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -436,7 +436,7 @@ Node *reverseList(Node **head) {
 - Time complexity : $O(n)$. Assume that $n$ is the list's length, the time complexity is $O(n)$.
 - Space complexity : $O(1)$.
 
-## 15. Remove Elements (LeetCode)
+## Remove Elements (LeetCode)
 ### 15.1. Code
 <div id="remove-elements">
 ```cpp:linked_list.cpp caption="linked_list.cpp" showLineNumbers
@@ -458,7 +458,7 @@ Node *removeElements(Node **head, int value) {
 ```
 </div>
 
-## 16. Odd Even
+## Odd Even
 <div style={{ textAlign: "center"}}>
     <img
         id="figure-7"

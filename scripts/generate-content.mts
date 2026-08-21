@@ -9,6 +9,7 @@ import type {
   PostLayoutKey,
   PostMeta,
   SearchDocument,
+  Source,
   TalkMeta,
   TocItem,
 } from '../src/lib/content/types'
@@ -33,6 +34,11 @@ const imageFieldSchema = z
   .union([z.string().min(1), z.array(z.string().min(1))])
   .transform((value) => (Array.isArray(value) ? value : [value]))
 
+const sourceSchema: z.ZodType<Source> = z.object({
+  title: z.string().min(1),
+  url: z.string().url(),
+})
+
 const PostFrontmatterSchema = z
   .object({
     title: z.string().min(1),
@@ -41,6 +47,7 @@ const PostFrontmatterSchema = z
     tags: z.array(z.string().min(1)).default([]),
     summary: z.string().optional(),
     images: imageFieldSchema.optional(),
+    sources: z.array(sourceSchema).default([]),
     authors: z.array(z.string().min(1)).default(['default']),
     layout: z.enum(POST_LAYOUTS).default('PostLayout'),
     draft: z.boolean().default(false),
@@ -241,6 +248,7 @@ const main = async () => {
           minutes: reading.minutes,
         },
         toc: extractToc(content),
+        sources: frontmatter.sources,
         path: `blog/${slug}`,
         filePath: `blog/${slug}.mdx`,
       }

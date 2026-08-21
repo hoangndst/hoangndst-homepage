@@ -1,5 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
-import type { ComponentProps } from 'react'
+import { Children, type ComponentProps } from 'react'
 import Link from '@/components/Link'
 import Youtube from '@/components/Youtube'
 import { Mermaid } from '@/components/Mermaid'
@@ -7,6 +7,11 @@ import siteMetadata from '@/data/siteMetadata'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import Image from '@/components/Image'
+import { MdxCallout } from '@/components/blog/MdxCallout'
+import { MdxCitation } from '@/components/blog/MdxCitation'
+import { MdxFigure } from '@/components/blog/MdxFigure'
+import { MdxSource } from '@/components/blog/MdxSource'
 
 type TocItem = {
   value: string
@@ -41,6 +46,30 @@ const MDXTable = ({ children, ...props }: ComponentProps<'table'>) => (
   </div>
 )
 
+const MDXImage = ({ alt, ...props }: ComponentProps<'img'>) => (
+  <Image
+    sizes="(min-width: 768px) 70ch, 100vw"
+    style={{ width: '100%', height: 'auto' }}
+    width={1400}
+    height={800}
+    {...(props as ComponentProps<typeof Image>)}
+    alt={alt ?? ''}
+  />
+)
+
+const MDXSectionHeading = ({ children, ...props }: ComponentProps<'h2'>) => {
+  const headingText = Children.toArray(children)
+    .map((child) => (typeof child === 'string' || typeof child === 'number' ? String(child) : ''))
+    .join('')
+  const hasManualNumber = /^\s*\d+(?:\.\d+)*(?:[.)]|:)?\s+/.test(headingText)
+
+  return (
+    <h2 {...props} data-manual-section={hasManualNumber ? 'true' : undefined}>
+      {children}
+    </h2>
+  )
+}
+
 const BlogNewsletterForm = ({
   title = 'Subscribe to newsletter',
 }: {
@@ -65,13 +94,18 @@ const BlogNewsletterForm = ({
 }
 
 const baseComponents: MDXComponents = {
+  Callout: MdxCallout,
+  Citation: MdxCitation,
+  Figure: MdxFigure,
+  Source: MdxSource,
   TOCInline,
   BlogNewsletterForm,
   Youtube,
   Mermaid,
   a: Link,
+  h2: MDXSectionHeading,
   table: MDXTable,
-  img: (props) => <img {...props} />,
+  img: MDXImage,
 }
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {

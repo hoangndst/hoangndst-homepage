@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
 import { authors, posts, talks } from './generated/manifest'
 import { slug as slugify } from 'github-slugger'
 import type { AuthorMeta, PostMeta, TalkMeta } from './types'
@@ -20,6 +22,13 @@ export const getPublishedPosts = (): PostMeta[] =>
     .sort((a, b) => toTimestamp(b.date) - toTimestamp(a.date))
 
 export const getPost = (slug: string): PostMeta | undefined => posts.find((post) => post.slug === slug)
+
+export const getPostSource = (slug: string): string | undefined => {
+  const post = getPost(slug)
+  if (!post || post.draft) return undefined
+
+  return readFileSync(path.join(process.cwd(), 'src', 'data', post.filePath), 'utf8')
+}
 
 export const getPostsByTag = (tag: string): PostMeta[] =>
   getPublishedPosts().filter((post) => post.tags.map((item) => slugify(item)).includes(tag))
