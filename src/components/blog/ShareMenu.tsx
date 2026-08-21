@@ -4,15 +4,11 @@ import {
   CheckIcon,
   CopyIcon,
   CaretDownIcon,
-  CursorIcon,
-  GlobeIcon,
   LinkIcon,
-  MarkdownLogoIcon,
-  OpenAiLogoIcon,
   ShareNetworkIcon,
-  SparkleIcon,
 } from '@phosphor-icons/react'
 import { useEffect, useRef, useState, type SyntheticEvent } from 'react'
+import { ClaudeIcon, CursorIcon, GrokIcon, MarkdownIcon, OpenAIIcon } from '@/components/blog/brand-icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -144,7 +140,7 @@ export default function ShareMenu({ title, url, rawUrl }: ShareMenuProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <MarkdownLogoIcon aria-hidden="true" className="size-4" />
+              <MarkdownIcon className="size-4" />
               View as Markdown
             </a>
             <div className="my-1 border-t border-border" />
@@ -154,7 +150,7 @@ export default function ShareMenu({ title, url, rawUrl }: ShareMenuProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <OpenAiLogoIcon aria-hidden="true" className="size-4" />
+              <OpenAIIcon className="size-4" />
               Open in ChatGPT
             </a>
             <a
@@ -163,7 +159,7 @@ export default function ShareMenu({ title, url, rawUrl }: ShareMenuProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <SparkleIcon aria-hidden="true" className="size-4" />
+              <ClaudeIcon className="size-4" />
               Open in Claude
             </a>
             <a
@@ -172,7 +168,7 @@ export default function ShareMenu({ title, url, rawUrl }: ShareMenuProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <CursorIcon aria-hidden="true" className="size-4" />
+              <CursorIcon className="size-4" />
               Open in Cursor
             </a>
             <a
@@ -181,7 +177,7 @@ export default function ShareMenu({ title, url, rawUrl }: ShareMenuProps) {
               rel="noreferrer"
               target="_blank"
             >
-              <GlobeIcon aria-hidden="true" className="size-4" />
+              <GrokIcon className="size-4" />
               Open in Grok
             </a>
           </div>
