@@ -14,10 +14,10 @@ const siteMetadata = {
   openToWork: true,
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://hoangndst.com',
+  siteUrl: 'https://www.hoangndst.com',
   siteRepo: 'https://github.com/hoangndst/hoangndst-homepage',
-  siteLogo: `https://hoangndst.com/static/images/logo.png`,
-  socialBanner: `https://hoangndst.com/opengraph-image`,
+  siteLogo: `https://www.hoangndst.com/static/images/logo.png`,
+  socialBanner: `https://www.hoangndst.com/opengraph-image`,
   email: 'hoangndst@gmail.com',
   github: 'https://github.com/hoangndst',
   x: 'https://x.com/hoangndst',

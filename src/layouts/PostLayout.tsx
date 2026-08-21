@@ -9,6 +9,8 @@ import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import TOC from '@/components/TOC'
 import PostNavigationButton from '@/components/PostNavigationButton'
+import PostTopNavigation from '@/components/PostTopNavigation'
+import BlogSources from '@/components/blog/BlogSources'
 import type { AuthorMeta, PostMeta } from '@/lib/content'
 import NextLink from 'next/link'
 import { formatDate } from '@/lib/utils/format-date'
@@ -34,36 +36,39 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags, readingTime, toc, summary } = content
+  const { filePath, path, slug, date, title, tags, readingTime, toc, summary, sources } = content
   const basePath = path.split('/')[0]
   const baseLabel = basePath.charAt(0).toUpperCase() + basePath.slice(1)
 
   return (
     <>
-      <div className="grid grid-cols-[minmax(0px,1fr)_min(768px,100%)_minmax(0px,1fr)] gap-y-8 pt-4 *:px-4">
-        <section className="col-start-2 flex flex-col gap-y-8">
-          <div className="pt-2 sm:-mx-4">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <NextLink href="/">Home</NextLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <NextLink href={`/${basePath}`}>{baseLabel}</NextLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{title}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+      <div className="grid grid-cols-[minmax(0px,1fr)_min(768px,100%)_minmax(0px,1fr)] gap-y-6 pt-4 *:px-4">
+        <section className="col-start-2 flex flex-col gap-y-6">
+          <div className="flex items-center justify-between gap-4 pt-2 sm:-mx-4">
+            <div className="min-w-0">
+              <Breadcrumb>
+                <BreadcrumbList className="min-w-0 flex-nowrap overflow-hidden">
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <NextLink href="/">Home</NextLink>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <NextLink href={`/${basePath}`}>{baseLabel}</NextLink>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem className="min-w-0 max-w-full">
+                    <BreadcrumbPage className="block min-w-0 truncate">{title}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+            <PostTopNavigation next={next} path={path} prev={prev} title={title} />
           </div>
-          <header className="border-border/70 border-b pb-8">
+          <header className="pb-6">
             <PageTitle className="mx-auto max-w-3xl text-center">{title}</PageTitle>
             {summary && (
               <p className="text-muted-foreground mx-auto mt-5 max-w-2xl text-center text-lg leading-8 text-pretty">
@@ -121,6 +126,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
         </section>
         <TOC toc={toc} />
         <article className="typeset typeset-blog col-start-2">{children}</article>
+        <BlogSources sources={sources} />
         <div className="col-start-2 flex flex-col gap-4 sm:flex-row">
           <PostNavigationButton direction="next" post={next} />
           <PostNavigationButton direction="prev" post={prev} />

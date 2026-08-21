@@ -1,59 +1,30 @@
 'use client'
-import type { TocItem } from '@/lib/content'
-import { useEffect, useState } from 'react'
+
+import { useEffect, useRef, useState } from 'react'
 import { CaretDownIcon } from '@phosphor-icons/react'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import type { TocItem } from '@/lib/content'
+import { cn } from '@/lib/utils'
 
 export interface TOCInlineProps {
   toc: TocItem[]
   fromHeading?: number
   toHeading?: number
-  asDisclosure?: boolean
   exclude?: string | string[]
-  collapse?: boolean
-  ulClassName?: string
-  liClassName?: string
 }
 
-export interface NestedTocItem extends TocItem {
-  children?: NestedTocItem[]
-}
-
-const createNestedList = (items: TocItem[]): NestedTocItem[] => {
-  const nestedList: NestedTocItem[] = []
-  const stack: NestedTocItem[] = []
-
-  items.forEach((item) => {
-    const newItem: NestedTocItem = { ...item }
-
-    while (stack.length > 0 && stack[stack.length - 1].depth >= newItem.depth) {
-      stack.pop()
-    }
-
-    const parent = stack.length > 0 ? stack[stack.length - 1] : null
-
-    if (parent) {
-      parent.children = parent.children || []
-      parent.children.push(newItem)
-    } else {
-      nestedList.push(newItem)
-    }
-
-    stack.push(newItem)
-  })
-
-  return nestedList
+type TocGroup = {
+  section: TocItem
+  subsections: TocItem[]
 }
 
 const TOC = ({
   toc,
-  fromHeading = 1,
-  toHeading = 6,
+  fromHeading = 2,
+  toHeading = 3,
   exclude = '',
-  ulClassName = 'mt-1 flex flex-col gap-y-0.5',
-  liClassName = 'text-xs leading-5',
 }: TOCInlineProps) => {
   const [activeId, setActiveId] = useState<string>('')
+  const detailsRef = useRef<HTMLDetailsElement>(null)
 
   const re = Array.isArray(exclude)
     ? new RegExp('^(' + exclude.join('|') + ')$', 'i')
@@ -63,100 +34,108 @@ const TOC = ({
     (heading) =>
       heading.depth >= fromHeading && heading.depth <= toHeading && !re.test(heading.value)
   )
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
-            break
-          }
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0% 0% -80% 0%',
-        threshold: [0, 1],
-      }
-    )
-
-    // Observe all headings in the article
-    const headings = document.querySelectorAll(
-      'article h1, article h2, article h3, article h4, article h5, article h6'
-    )
-    headings.forEach((heading) => observer.observe(heading))
-
-    return () => {
-      headings.forEach((heading) => observer.unobserve(heading))
+  const groupedToc = filteredToc.reduce<TocGroup[]>((groups, item) => {
+    if (item.depth === fromHeading || groups.length === 0) {
+      groups.push({ section: item, subsections: [] })
+    } else {
+      groups[groups.length - 1].subsections.push(item)
     }
+    return groups
   }, [])
 
-  const createList = (items: NestedTocItem[] | undefined) => {
-    if (!items || items.length === 0) {
-      return null
-    }
+  useEffect(() => {
+    const details = detailsRef.current
+    if (!details) return
 
-    return (
-      <ul className={ulClassName}>
-        {items.map((item) => {
-          const isActive = activeId === item.url.slice(1) // Remove the # from the URL
-          return (
-            <li key={item.url} className={liClassName}>
-              <a
-                href={item.url}
-                className={`block px-2.5 py-1 transition-[color,background-color] duration-150 ease-out ${
-                  isActive
-                    ? 'bg-muted text-foreground'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                }`}
-              >
-                {item.value}
-              </a>
-              {item.children && item.children.length > 0 && (
-                <div className="ml-2.5 pl-1.5">{createList(item.children)}</div>
-              )}
-            </li>
-          )
-        })}
-      </ul>
+    details.open = window.matchMedia('(min-width: 640px)').matches
+  }, [])
+
+  useEffect(() => {
+    const headings = [...document.querySelectorAll('article h2, article h3')] as HTMLElement[]
+    if (headings.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        if (visible[0]) setActiveId(visible[0].target.id)
+      },
+      { rootMargin: '-96px 0px -68% 0px', threshold: [0, 1] }
     )
-  }
 
-  const nestedList = createNestedList(filteredToc)
+    headings.forEach((heading) => observer.observe(heading))
+    return () => observer.disconnect()
+  }, [])
+
+  if (filteredToc.length === 0) return null
 
   return (
-    <>
-      {toc && toc.length > 0 && (
-        <>
-          <nav className="sticky top-[9.5rem] col-start-1 hidden self-start text-xs leading-4 xl:block">
-            <div className="flex justify-end">
-              <ScrollArea
-                className="bg-card/60 max-h-[calc(100vh-14.5rem)] w-[320px] max-w-[320px] px-4 py-3"
-                type="always"
-              >
-                <h2 className="text-muted-foreground mb-1.5 pl-1 font-mono text-[11px] font-medium uppercase tracking-wider">
-                  Table of Contents
-                </h2>
-                {createList(nestedList)}
-              </ScrollArea>
-            </div>
-          </nav>
-          <details
-            open={true}
-            className="bg-card/60 group col-start-2 mx-4 block p-4 xl:hidden"
-          >
-            <summary className="text-foreground flex cursor-pointer items-center justify-between pl-1 text-xs font-semibold uppercase tracking-wide group-open:pb-3">
-              Table of Contents
-              <CaretDownIcon className="text-muted-foreground size-4 transition-transform duration-200 group-open:rotate-180" />
-            </summary>
-            <ScrollArea className="flex max-h-64 flex-col overflow-y-auto pr-1" type="always">
-              <nav>{createList(nestedList)}</nav>
-            </ScrollArea>
-          </details>
-        </>
-      )}
-    </>
+    <details ref={detailsRef} className="group col-start-2 mb-3">
+      <summary className="text-muted-foreground hover:text-foreground flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] transition-colors [&::-webkit-details-marker]:hidden">
+        <span>On this page</span>
+        <CaretDownIcon
+          aria-hidden="true"
+          className="size-3.5 shrink-0 transition-transform duration-200 group-open:rotate-180"
+          weight="bold"
+        />
+      </summary>
+      <nav aria-label="Table of contents" className="px-1 py-3">
+        <ul className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+          {groupedToc.map(({ section, subsections }, index) => {
+            const sectionNumber = String(index + 1).padStart(2, '0')
+            const isSectionActive = activeId === section.url.slice(1)
+            return (
+              <li key={section.url} className="min-w-0">
+                <a
+                  href={section.url}
+                  aria-current={isSectionActive ? 'location' : undefined}
+                  className={cn(
+                    'flex min-w-0 items-baseline gap-2 border-l border-transparent px-2 py-1.5 text-xs leading-snug transition-colors duration-150',
+                    isSectionActive
+                      ? 'border-foreground font-medium text-foreground'
+                      : 'text-muted-foreground hover:border-border hover:text-foreground'
+                  )}
+                >
+                  <span className="text-muted-foreground/60 shrink-0 font-mono text-[10px] tabular-nums">
+                    {sectionNumber}
+                  </span>
+                  <span className="min-w-0 break-words">{section.value}</span>
+                </a>
+                {subsections.length > 0 && (
+                  <ul className="ml-2 mt-0.5 border-l border-border/50 pl-2">
+                    {subsections.map((item, subsectionIndex) => {
+                      const isActive = activeId === item.url.slice(1)
+                      const subsectionNumber = `${sectionNumber}.${String(subsectionIndex + 1).padStart(2, '0')}`
+                      return (
+                        <li key={item.url}>
+                          <a
+                            href={item.url}
+                            aria-current={isActive ? 'location' : undefined}
+                            className={cn(
+                              'flex min-w-0 items-baseline gap-2 border-l border-transparent px-2 py-1 text-xs leading-snug transition-colors duration-150',
+                              isActive
+                                ? 'border-foreground text-foreground'
+                                : 'text-muted-foreground hover:border-border hover:text-foreground'
+                            )}
+                          >
+                            <span className="text-muted-foreground/60 shrink-0 font-mono text-[9px] tabular-nums">
+                              {subsectionNumber}
+                            </span>
+                            <span className="min-w-0 break-words">{item.value}</span>
+                          </a>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
+      <div aria-hidden="true" className="border-b border-border" />
+    </details>
   )
 }
 

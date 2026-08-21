@@ -11,6 +11,11 @@ export interface ReadingTimeMeta {
   minutes: number
 }
 
+export interface Source {
+  title: string
+  url: string
+}
+
 export interface PostMeta {
   slug: string
   title: string
@@ -24,6 +29,7 @@ export interface PostMeta {
   draft: boolean
   readingTime: ReadingTimeMeta
   toc: TocItem[]
+  sources: Source[]
   path: string
   filePath: string
 }
