@@ -130,30 +130,6 @@ export default function AuthorLayout({ children, content }: Props) {
               <SectionHeading>Experience</SectionHeading>
               <div className="divide-border/60 mt-4 divide-y">
                 <TimelineItem
-                  date="May 2026 - Present"
-                  title="Founder"
-                  subtitle={
-                    <a
-                      href="https://www.getspektro.com/"
-                      className="hover:text-foreground text-muted-foreground transition-colors"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Spektro Inc.
-                    </a>
-                  }
-                  logo={
-                    <Image
-                      src="/static/images/spektro.svg"
-                      alt="Spektro"
-                      width={28}
-                      height={28}
-                      className="size-7"
-                      unoptimized
-                    />
-                  }
-                />
-                <TimelineItem
                   date="Sept 2025 - Present"
                   title="Graduate Research Assistant"
                   subtitle={
@@ -347,7 +323,16 @@ export default function AuthorLayout({ children, content }: Props) {
                 <TimelineItem
                   date="2026 - 2027"
                   title="Graduate Competitive Scholarship"
-                  subtitle="College of AI, Cyber and Computing"
+                  subtitle={
+                    <a
+                      href="https://caicc.utsa.edu/"
+                      className="hover:text-foreground text-muted-foreground transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      College of AI, Cyber and Computing
+                    </a>
+                  }
                   logo={
                     <Image
                       src="/static/images/UTSanAntonio.svg"

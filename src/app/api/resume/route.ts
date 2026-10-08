@@ -3,7 +3,7 @@ import { getS3Client, getS3Config } from '@/lib/s3'
 
 export const dynamic = 'force-dynamic'
 
-const resumeKey = 'resume/resume-steven-nguyen.pdf'
+const resumeKey = 'resume/resume.pdf'
 
 export async function GET() {
   try {
@@ -22,7 +22,7 @@ export async function GET() {
     return new Response(object.Body.transformToWebStream(), {
       headers: {
         'Cache-Control': 'private, no-store',
-        'Content-Disposition': 'inline; filename="resume-steven-nguyen.pdf"',
+        'Content-Disposition': 'inline; filename="resume.pdf"',
         ...(object.ContentLength === undefined
           ? {}
           : { 'Content-Length': String(object.ContentLength) }),
