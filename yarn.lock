@@ -3350,8 +3350,8 @@ __metadata:
   linkType: hard
 
 "@modelcontextprotocol/sdk@npm:^1.26.0":
-  version: 1.30.0
-  resolution: "@modelcontextprotocol/sdk@npm:1.30.0"
+  version: 1.32.1
+  resolution: "@modelcontextprotocol/sdk@npm:1.32.1"
   dependencies:
     "@hono/node-server": ^1.19.9 || ^2.0.5
     ajv: ^8.17.1
@@ -3378,7 +3378,7 @@ __metadata:
       optional: true
     zod:
       optional: false
-  checksum: a932a26bfdb2097eb379a0ff526191fdb2dd15e2aa3d191fc58803a550139caf11f217a75f7d6929e8683a97124da619dbe0b0e17837e82372acd6bab39cd050
+  checksum: c1a5c5773d2353e457d818363cead3dc27289a8d753002d48725e5aecbb109349fdd3df9970c94b663866b332e8a59126a334f3e2d58bb5e2da67fb9580d20eb
   languageName: node
   linkType: hard
 
