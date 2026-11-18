@@ -39,36 +39,41 @@ Instead of sending metrics directly from application code to cloud endpoints, al
   <Mermaid
     chart="
 flowchart TD
-  subgraph Host['Production Host']
-    API['FastAPI Services']
-    Workers['Background Workers (8 instances)']
-    Redis[('Redis Streams')]
-    Postgres[('PostgreSQL')]
-    Exporters['Redis & Postgres Exporters']
+  subgraph Host[Production Host]
+    API[FastAPI Services]
+    Workers[Background Workers - 8 instances]
+    Redis[(Redis Streams)]
+    Postgres[(PostgreSQL)]
+    Exporters[Redis and Postgres Exporters]
   end
 
-  subgraph Collector['Splunk OpenTelemetry Collector']
-    PromScrape['Prometheus Receiver']
-    MemoryBallast['Memory Ballast & Limiter']
-    Batcher['Batch Processor']
-    SFxExporter['SignalFx Exporter (gRPC OTLP)']
+  subgraph Collector[Splunk OpenTelemetry Collector]
+    PromScrape[Prometheus Receiver]
+    MemoryBallast[Memory Ballast and Limiter]
+    Batcher[Batch Processor]
+    SFxExporter[SignalFx Exporter - gRPC OTLP]
   end
 
-  subgraph SplunkCloud['Splunk Observability Cloud']
-    SignalFlow['SignalFlow Engine']
-    Dashboard['12-Column SRE Dashboard']
-    Detectors['Production Detectors']
-    Template['Centralized Alert Template']
+  subgraph SplunkCloud[Splunk Observability Cloud]
+    SignalFlow[SignalFlow Engine]
+    Dashboard[12-Column SRE Dashboard]
+    Detectors[Production Detectors]
+    Template[Centralized Alert Template]
   end
 
-  API & Workers & Exporters --> PromScrape
-  Redis & Postgres --> Exporters
-  PromScrape --> MemoryBallast --> Batcher --> SFxExporter
+  API --> PromScrape
+  Workers --> PromScrape
+  Exporters --> PromScrape
+  Redis --> Exporters
+  Postgres --> Exporters
+  PromScrape --> MemoryBallast
+  MemoryBallast --> Batcher
+  Batcher --> SFxExporter
   SFxExporter --> SignalFlow
   SignalFlow --> Dashboard
   SignalFlow --> Detectors
   Detectors --> Template
-  Template --> OnCall['On-Call Engineer (Email + Runbooks)']
+  Template --> OnCall[On-Call Engineer - Email and Runbooks]
 "
   />
 </div>
@@ -202,21 +207,24 @@ When on-call rotations change or a diagnostic command is updated, engineers must
   <Mermaid
     chart="
 flowchart LR
-  subgraph Detectors['Detector Fleet (Rule Logic Only)']
-    D1['Redis Memory Guard']
-    D2['Worker Count Down']
-    D3['Consumer Lag Spike']
-    D4['API 5xx Rate Spike']
+  subgraph Detectors[Detector Fleet - Rule Logic]
+    D1[Redis Memory Guard]
+    D2[Worker Count Down]
+    D3[Consumer Lag Spike]
+    D4[API 5xx Rate Spike]
   end
 
-  subgraph Centralized['Centralized Notification Layer']
-    Tpl['SRE Email Template (HWOnxSBA4AA)']
-    Runbook['Parameterized Handlebars Body\n• Metric value & condition\n• Exact diagnostic shell commands\n• Direct dashboard links']
+  subgraph Centralized[Centralized Notification Layer]
+    Tpl[SRE Email Template - HWOnxSBA4AA]
+    Runbook[Standardized Runbook and Triage Commands]
   end
 
-  D1 & D2 & D3 & D4 --> Tpl
+  D1 --> Tpl
+  D2 --> Tpl
+  D3 --> Tpl
+  D4 --> Tpl
   Tpl --> Runbook
-  Runbook --> SRE['On-Call Engineer']
+  Runbook --> SRE[On-Call Engineer]
 "
   />
 </div>
