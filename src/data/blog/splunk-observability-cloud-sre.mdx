@@ -1,0 +1,281 @@
+---
+title: 'Engineering Production SRE Observability with Splunk: Architecture, SignalFlow, and Alert Automation'
+date: '2026-11-17'
+lastmod: '2026-11-17'
+tags: ['devops', 'observability', 'sre', 'splunk', 'cloud']
+summary: 'A deep dive into building high-density, production-grade observability on Splunk Observability Cloud: OpenTelemetry collector hardening, precision SignalFlow metrics, centralized API alert templating, and eliminating dashboard AI slop.'
+authors: ['hoangndst']
+layout: 'PostLayout'
+sources:
+  - title: 'Splunk Observability Cloud Documentation'
+    url: 'https://docs.splunk.com/observability/en/index.html'
+  - title: 'OpenTelemetry Collector Splunk Distribution'
+    url: 'https://github.com/signalfx/splunk-otel-collector'
+  - title: 'Splunk Alert Email Templates API Reference'
+    url: 'https://dev.splunk.com/observability/reference/api/alerts/latest'
+  - title: 'SignalFlow Streaming Analytics Language'
+    url: 'https://dev.splunk.com/observability/docs/signalflow/'
+  - title: 'Google SRE Book: Monitoring Distributed Systems'
+    url: 'https://sre.google/sre-book/monitoring-distributed-systems/'
+---
+
+## Introduction
+
+In distributed backend architectures, the difference between an operational crisis and a routine triage comes down to one factor: **telemetry signal-to-noise ratio**.
+
+Too many engineering teams fall into the trap of "vanity observability": dashboards covered in colorful emoji banners, unformatted raw byte counters (`1,700,456`), generic `up` checks that fail to catch zombie worker threads, and un-actionable alert emails that offer no immediate runbook steps. When a production Sev-1 incident hits in the middle of the night, engineers don't need decorative markdown paragraphs—they need precise metric trends, exact error distributions, and immediate shell triage runbooks.
+
+In this post, I detail our architectural rollout of **Splunk Observability Cloud** for our production messaging and distributed worker infrastructure (`ezmsg`). We will cover:
+
+1. **The Telemetry Pipeline**: Hardening the OpenTelemetry Collector for fault-tolerant metric ingestion.
+2. **Mastering SignalFlow**: Custom worker metrics, binary byte scaling, and stream consumer lag.
+3. **Designing SRE-Grade Dashboards**: Eliminating "AI slop" in favor of high-density 12-column telemetry grids.
+4. **Automating Centralized Alert Templates via REST API**: Parameterized Handlebars runbooks, incident shell snippets, and multi-detector linkage.
+5. **Production Detector Fleet**: The 6 core detectors protecting our stream consumers, databases, and APIs.
+
+---
+
+## Architecture: The Telemetry Pipeline
+
+Our production system consists of a microservices mesh running distributed worker processes, an ingestion API, PostgreSQL, and Redis Streams. Telemetry flows through a dedicated OpenTelemetry Collector before reaching Splunk Observability Cloud.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ PRODUCTION HOST INFRASTRUCTURE                                         │
+│                                                                        │
+│  ┌──────────────────────┐    ┌──────────────────────────────────────┐  │
+│  │ FastAPI / Core APIs  │    │ Redis Streams / PostgreSQL           │  │
+│  │ (/metrics endpoint)  │    │ (redis-exporter, postgres-exporter)  │  │
+│  └──────────┬───────────┘    └──────────────────┬───────────────────┘  │
+│             │                                   │                      │
+│             │          Prometheus Scrapes       │                      │
+│             └───────────────────┬───────────────┘                      │
+│                                 ▼                                      │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ SPLUNK OPENTELEMETRY COLLECTOR (signalfx/splunk-otel-collector)  │  │
+│  │                                                                  │  │
+│  │  1. Receivers:   Prometheus, Host Metrics, Container Stats      │  │
+│  │  2. Processors:  Memory Ballast, Batching, Resource Detection   │  │
+│  │  3. Exporters:   SignalFx Exporter (gRPC OTLP over TLS)         │  │
+│  └──────────────────────────────┬───────────────────────────────────┘  │
+└─────────────────────────────────┼──────────────────────────────────────┘
+                                  │ Secure TLS Stream
+                                  ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ SPLUNK OBSERVABILITY CLOUD (us1 realm)                                 │
+│                                                                        │
+│  ┌──────────────────────────────┐    ┌──────────────────────────────┐  │
+│  │ Streaming SignalFlow Engine  │    │ 12-Column SRE Overview Board │  │
+│  │ Real-time metric analytics   │    │ High-density cards & charts  │  │
+│  └──────────────┬───────────────┘    └──────────────────────────────┘  │
+│                 │                                                      │
+│                 ▼                                                      │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │ CENTRALIZED ALERT NOTIFICATION TEMPLATE (API Managed)            │  │
+│  │ • Parameterized Handlebars Body                                  │  │
+│  │ • Embedded Shell Triage Commands                                │  │
+│  │ • Dispatches directly to SRE on-call engineers                   │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Hardening the OpenTelemetry Collector
+
+A common failure mode in telemetry architectures is collector OOM (Out Of Memory) or dropped samples during burst traffic. We configure the collector with strict memory ballast, batching, and retry limits:
+
+```yaml
+# /platform/observability/otel-collector-config.yaml
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'ezmsg-services'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['ezmsg-user-api:8000', 'ezmsg-admin-api:8000']
+        - job_name: 'ezmsg-workers'
+          scrape_interval: 10s
+          static_configs:
+            - targets:
+                - 'ezmsg-worker-prod:8000'
+                - 'ezmsg-worker-sim:8000'
+                - 'ezmsg-worker-ai-index:8000'
+                - 'ezmsg-worker-bundle:8000'
+
+processors:
+  # Memory ballast prevents aggressive GC thrashing
+  memory_ballast:
+    size_in_percentage: 20
+
+  memory_limiter:
+    check_interval: 2s
+    limit_percentage: 80
+    spike_limit_percentage: 20
+
+  batch:
+    send_batch_size: 8192
+    timeout: 5s
+
+exporters:
+  signalfx:
+    access_token: "${SPLUNK_ACCESS_TOKEN}"
+    realm: "${SPLUNK_REALM}"
+    api_url: "https://api.${SPLUNK_REALM}.signalfx.com"
+    ingest_url: "https://ingest.${SPLUNK_REALM}.signalfx.com"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [memory_ballast, memory_limiter, batch]
+      exporters: [signalfx]
+```
+
+---
+
+## Precision Telemetry with SignalFlow
+
+Splunk Observability Cloud’s power lies in **SignalFlow**—a real-time, streaming computation language that operates on timeseries at sub-second frequencies.
+
+During our implementation, we encountered several metric pitfalls where naive queries produced deceptive data. Here is how we solved them.
+
+### 1. The Active Workers Illusion: Sum vs. Count
+
+A standard Prometheus query for uptime is `up{job="ezmsg-workers"}`. However, if a worker process locks up, enters a zombie state, or encounters an internal thread deadlock, the HTTP scrape endpoint may still respond with `200 OK`, masking the failure.
+
+We implemented a custom gauge metric, `ezm_worker_up{worker="..."}`, emitted directly by the worker's processing loop. The SignalFlow query calculates the live sum across all worker instances:
+
+```python
+# SignalFlow query for live worker fleet
+A = data('ezm_worker_up').sum().publish(label='Active Workers')
+```
+
+If an individual worker crashes or hangs, the sum immediately drops below the baseline threshold (8 workers), firing an alert in less than 15 seconds.
+
+### 2. Binary Unit Scaling: Converting Raw Bytes to MiB
+
+By default, charts plotting `redis_memory_used_bytes` or host memory display raw, unformatted integers (e.g., `1,700,456`). During an outage, mental math under pressure leads to misdiagnosis.
+
+To solve this, configure the visualization properties directly via the Splunk Chart API:
+
+```json
+{
+  "options": {
+    "valueUnit": "Byte",
+    "unitPrefix": "Binary",
+    "maximumPrecision": 2
+  }
+}
+```
+
+This configuration ensures Splunk automatically calculates binary byte divisions ($1024^2$), rendering `1,700,456` cleanly as **`1.62 MiB`**.
+
+### 3. Tracking Stream Lag & Dead Letter Queues (DLQ)
+
+For consumer groups processing distributed messages from Redis Streams, monitoring queue depth is critical. We isolate two key timeseries:
+
+```python
+# Consumer Group Processing Lag
+A = data('ezm_redis_stream_consumer_lag').max().publish(label='Max Consumer Lag')
+
+# Dead Letter Queue Ingestion Spike
+B = data('ezm_dlq_messages_total').sum(over='5m').publish(label='DLQ Inflow')
+```
+
+---
+
+## Designing SRE Dashboards: Eliminating "AI Slop"
+
+A pervasive trend in modern dashboard generation is "AI Slop"—dashboards generated with massive text banners, emojis, inconsistent card widths, and low informational density. 
+
+When designing our production dashboard (`HWBuSQpA0AA`), we enforced strict SRE visualization standards:
+
+1. **Symmetric 12-Column Grid Layout**: Standardizing panel widths across rows (`4x3`, `2x6`, `3x4`) eliminates visual fatigue.
+2. **Integrated Sparklines**: SingleValue metric cards must display a secondary sparkline showing the 1-hour rolling trend so spikes are instantly recognizable without navigating to a separate graph.
+3. **Strict Color Scales**: Thresholds strictly mirror SLO error budgets:
+   - **Green**: Nominal operation ($< 1\%$ 5xx, $< 75\%$ RAM).
+   - **Yellow**: Warning threshold ($1\% - 5\%$ 5xx, $75\% - 85\%$ RAM).
+   - **Red**: P1 condition ($> 5\%$ 5xx, $> 85\%$ RAM, worker count $< 8$).
+
+### Visual Hierarchy
+
+| Grid Position | Category | Metrics Monitored |
+| :--- | :--- | :--- |
+| **Row 1 (Top)** | **Golden Signals** | Total Inbound Traffic, HTTP 5xx Error Rate, p95 API Latency, Active Workers |
+| **Row 2** | **Message Fabric** | Redis Stream Inbound Rate, Consumer Processing Lag, DLQ Activity |
+| **Row 3** | **Database & Cache** | Redis Dataset Memory (MiB), Redis RSS, Postgres Active Connections, Slow Queries |
+| **Row 4** | **Host Infrastructure** | Host Available RAM (GB), CPU Utilization %, Disk I/O Wait, Network Bandwidth |
+
+---
+
+## Centralized Alert Notification Automation via REST API
+
+In production environments, **never hardcode notification payloads into individual detectors**. If an on-call rotation changes or a runbook command needs updating, having to edit 40 separate alerts by hand is guaranteed to introduce operational drift.
+
+Splunk Observability Cloud supports centralized **Email Templates** (`/v2/alert/emailtemplate`), allowing you to manage notification layout and runbooks as code.
+
+### 1. Registering the Centralized Template (`HWOnxSBA4AA`)
+
+We created a centralized template via the Splunk REST API:
+
+```bash
+curl -X POST "https://api.us1.signalfx.com/v2/alert/emailtemplate" \
+  -H "X-SF-Token: ${SPLUNK_ACCESS_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "EZMSG Production SRE Alert Template",
+    "to": ["dinhhoang.nguyen@utsa.edu"],
+    "triggerSubject": "{{#if anomalous}}[{{ruleSeverity}}] {{detectorName}}{{else}}[RESOLVED] {{detectorName}}{{/if}}",
+    "triggerBody": "PRODUCTION ALERT TRIGGERED\n\nDetector: {{detectorName}}\nSeverity: {{ruleSeverity}}\nStatus: {{#if anomalous}}FIRING{{else}}RESOLVED{{/if}}\nValue: {{inputs.A.value}}\nCondition: {{ruleCondition}}\nTriggered At: {{timestamp}}\nHost: {{dimensions.host}}\n\nTRIAGE & DIAGNOSTIC RUNBOOK:\n1. Check active containers: docker ps\n2. Inspect worker logs: docker logs --tail 100 ezmsg-worker-prod\n3. Check system memory: free -h\n4. Dashboard: https://app.us1.observability.splunkcloud.com/#/dashboard/HWBuSQpA0AA\n\nPlease investigate immediately."
+  }'
+```
+
+### 2. Gotchas and Hard-Earned Lessons
+
+When interacting with the Splunk Observability REST API, watch out for these subtle syntax traps:
+
+> [!WARNING]
+> **Handlebars Escaping in Shell Commands**: Splunk parses template bodies using Handlebars. If your runbook contains shell commands with double brackets like `docker stats --format "{{.Name}}"`, the Splunk parser fails with `parameterizedBody is not valid: inline: found '{{', expected '}}'`. Either avoid double braces in embedded command examples or format them as single bracket references.
+
+> [!IMPORTANT]
+> **Detector Notification Payload Schema**: When linking a detector rule to an email template, the payload structure must use `templateId`:
+> ```json
+> {
+>   "notifications": [
+>     {
+>       "type": "EmailTemplate",
+>       "templateId": "HWOnxSBA4AA"
+>     }
+>   ]
+> }
+> ```
+> Using `"emailTemplate": "..."` or passing raw email strings will result in an HTTP 400 rejection from the API.
+
+> [!NOTE]
+> **Chart Visualization Types**: When updating dashboard charts via API, Splunk rejects `"type": "AreaChart"`. The proper schema is `"type": "TimeSeriesChart"` with `"defaultPlotType": "AreaChart"`.
+
+---
+
+## The Production Detector Fleet
+
+With the centralized template active, we deployed and linked 6 production detectors monitoring our core stack:
+
+| Detector ID | Detector Name | SignalFlow Condition | Severity |
+| :--- | :--- | :--- | :--- |
+| `HWAq9A3A0AE` | **Redis Memory Spike & Leak Guard** | `data('redis_memory_used_bytes') > 500000000` (500 MB) | `Critical` |
+| `HWAq816A4AA` | **Redis Stream Consumer Processing Lag** | `data('ezm_redis_stream_consumer_lag').max() > 100` for 2m | `Major` |
+| `HWAq4F1A0AA` | **Dead Letter Queue (DLQ) Message Activity** | `data('ezm_dlq_messages_total').sum(over='1m') > 0` | `Critical` |
+| `HWArEXOAwBA` | **Host High RAM Utilization** | `(data('memory.used') / data('memory.total')) * 100 > 85%` for 5m | `Major` |
+| `HWArFq_A0AE` | **EzMsg Worker Service Down** | `data('ezm_worker_up').sum() < 8` for 1m | `Critical` |
+| `HWAq8HYAwAA` | **API High 5xx HTTP Error Rate** | `(5xx_requests / total_requests) * 100 > 5%` for 3m | `Critical` |
+
+Every detector dispatches alerts formatted with exact metric thresholds, target host dimensions, and triage commands, ensuring zero guesswork for the on-call engineer.
+
+---
+
+## Key Takeaways
+
+1. **Treat Dashboards as SRE Instruments, Not Marketing Canvas**: High-density layouts, sparklines, and standard 12-column grids allow engineers to scan system health in seconds. Strip away conversational banners, emojis, and unformatted numbers.
+2. **Automate Alert Runbooks at the Template Layer**: Decouple rule thresholds from notification logic. Use centralized email templates to embed real shell diagnostic commands (`docker logs`, `free -h`, `ss -tulpn`) directly in the alert body.
+3. **Verify What "Up" Actually Means**: Synthetic HTTP 200 checks on a `/health` endpoint are insufficient for complex worker systems. Emit real execution heartbeat gauges from worker loops to detect deadlocks and thread exhaustion.
+4. **Enforce Unit Precision**: Raw byte numbers are dangerous in high-stress triage situations. Configure binary scaling (`valueUnit: "Byte"`, `unitPrefix: "Binary"`) so metrics speak the language of systems engineering.
