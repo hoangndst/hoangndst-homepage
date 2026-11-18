@@ -3,6 +3,7 @@ title: 'Building Production Observability with Splunk: OpenTelemetry, SignalFlow
 date: '2026-11-17'
 lastmod: '2026-11-17'
 tags: ['sre', 'devops']
+images: ['/static/blog/splunk-observability-cloud-sre/1.jpeg']
 summary: 'How I built a high-density observability stack on Splunk Observability Cloud: OpenTelemetry Collector architecture, custom SignalFlow metrics, centralized alert design, and SRE dashboard layouts.'
 authors: ['hoangndst']
 layout: 'PostLayout'
@@ -184,6 +185,17 @@ Tracking the maximum lag across all consumer groups surfaces partition imbalance
 
 A good SRE dashboard is an instrument panel, not a canvas. We rebuilt our production dashboard (`HWBuSQpA0AA`) around strict density guidelines:
 
+<figure>
+  <img
+    src="/static/blog/splunk-observability-cloud-sre/1.jpeg"
+    alt="Splunk Observability Cloud SRE Dashboard overview showing Golden Signals, stream processing, and host telemetry"
+    style={{ width: '100%', display: 'block', margin: '0 auto', borderRadius: '8px' }}
+  />
+  <figcaption>
+    Production SRE Overview Dashboard (HWBuSQpA0AA) in Splunk Observability Cloud structured in a 12-column grid.
+  </figcaption>
+</figure>
+
 1. **12-Column Symmetrical Grid**: Panels follow consistent widths (`4x3` cards, `2x6` charts, `3x4` splits) so the eye can scan vertically without jagged alignments.
 2. **Every Metric Card Has a Sparkline**: Single-value numbers alone do not indicate direction. A card showing `1.62 MiB` could be steady, dropping, or leaking. A 1-hour rolling sparkline embedded inside each card gives immediate historical context.
 3. **Three-Tier Visual Hierarchy**:
@@ -264,6 +276,17 @@ When building templates for Splunk Observability Cloud, two structural constrain
 ## The Production Detector Fleet
 
 We configured six core detectors protecting our streaming infrastructure, each linked to the centralized notification template:
+
+<figure>
+  <img
+    src="/static/blog/splunk-observability-cloud-sre/2.jpeg"
+    alt="Splunk Observability detector fleet and metric monitoring detail"
+    style={{ width: '100%', display: 'block', margin: '0 auto', borderRadius: '8px' }}
+  />
+  <figcaption>
+    Production detector monitoring and active SignalFlow rules in Splunk Observability Cloud.
+  </figcaption>
+</figure>
 
 | Detector Name | SignalFlow Trigger Condition | Severity | Action Triggered |
 | :--- | :--- | :--- | :--- |
