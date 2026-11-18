@@ -166,29 +166,52 @@ Tracking peak lag across consumer groups identifies partition imbalances early, 
 
 ## SRE Dashboard Layout
 
-The production dashboard follows a 12-column grid organized into three visual tiers:
+We split our Splunk Observability dashboards into two operational views: service-level application telemetry and host-level container infrastructure.
+
+### Service Overview Dashboard
+
+The primary SRE dashboard tracks Golden Signals, task worker throughput, and message stream buffers:
 
 <figure>
   <img
     src="/static/blog/splunk-observability-cloud-sre/1.jpeg"
-    alt="Splunk Observability Cloud SRE Dashboard overview showing Golden Signals, stream processing, and host telemetry"
+    alt="Splunk Observability Cloud Service Overview Dashboard showing Golden Signals, worker heartbeats, and Redis stream telemetry"
     style={{ width: '100%', display: 'block', margin: '0 auto', borderRadius: '8px' }}
   />
   <figcaption>
-    Production SRE Overview Dashboard in Splunk Observability Cloud structured in a 12-column grid.
+    Production Service Overview Dashboard in Splunk Observability Cloud: Golden Signals, worker heartbeats, and Redis stream consumer metrics.
   </figcaption>
 </figure>
 
 1. **12-Column Symmetrical Grid**: Panels follow consistent widths (`4x3` cards, `2x6` charts, `3x4` splits) so the eye can scan vertically without jagged alignments.
 2. **Every Metric Card Has a Sparkline**: A bare number like `1.62 MiB` offers no indication of direction. A 1-hour rolling sparkline embedded inside each card gives immediate historical context.
 3. **Three-Tier Visual Hierarchy**:
-   - Row 1: Golden Signals (Inbound Request Rate, HTTP 5xx Error Rate, p95 Latency, Active Worker Count).
-   - Row 2: Pipeline & Storage (Redis Stream Throughput, Consumer Lag, DLQ Activity, Postgres Connections).
-   - Row 3: Host Infrastructure (Available RAM in GB, CPU Idle %, Disk I/O Wait, Redis Memory RSS).
+   - Row 1: Golden Signals (Active Workers, Inbound Request Rate, Redis Resident Memory, Host RAM Utilization).
+   - Row 2: API Traffic (Request rate by service, HTTP status distribution, request duration, AI provider token throughput).
+   - Row 3: Pipeline & Storage (Worker execution rates, consumer group lag, stream depth, pending message counts, DLQ routing).
 4. **SLO-Aligned Color Scales**:
    - Green: Nominal operation ($< 1\%$ 5xx errors, $< 75\%$ RAM).
    - Yellow: Warning threshold ($1\% - 5\%$ 5xx errors, $75\% - 85\%$ RAM).
    - Red: Breach threshold ($> 5\%$ 5xx errors, $> 85\%$ RAM, worker count $< 8$).
+
+### Host and Container Infrastructure Dashboard
+
+Below application metrics, a dedicated infrastructure dashboard monitors node health and container resource consumption across host `hoangndst`:
+
+<figure>
+  <img
+    src="/static/blog/splunk-observability-cloud-sre/2.jpeg"
+    alt="Splunk Observability Cloud Host and Container Infrastructure Dashboard showing CPU load averages, container memory limits, disk I/O, and network throughput"
+    style={{ width: '100%', display: 'block', margin: '0 auto', borderRadius: '8px' }}
+  />
+  <figcaption>
+    Host and Container Infrastructure Dashboard in Splunk Observability Cloud: CPU load averages, memory by state, container utilization, disk I/O, and network throughput for host hoangndst.
+  </figcaption>
+</figure>
+
+- **Host Load and Memory**: Tracks 1m, 5m, and 15m load averages alongside RAM state breakdown (used, free, and cached memory).
+- **Per-Container Allocation**: Graphs CPU percentage and memory ceiling usage per container, identifying runaway worker processes before the kernel kills them.
+- **I/O and Network Telemetry**: Monitors read/write disk operations and bidirectional network throughput to catch storage bottlenecks and socket exhaustion.
 
 ## Decoupling Alert Rules from Runbooks
 
@@ -253,17 +276,6 @@ Two structural details matter when managing templates in Splunk Observability Cl
 ## Production Detector Fleet
 
 We configured six core detectors protecting our streaming infrastructure, each linked to the centralized notification template:
-
-<figure>
-  <img
-    src="/static/blog/splunk-observability-cloud-sre/2.jpeg"
-    alt="Splunk Observability detector fleet and metric monitoring detail"
-    style={{ width: '100%', display: 'block', margin: '0 auto', borderRadius: '8px' }}
-  />
-  <figcaption>
-    Production detector monitoring and active SignalFlow rules in Splunk Observability Cloud.
-  </figcaption>
-</figure>
 
 | Detector Name | SignalFlow Trigger Condition | Severity | Action Triggered |
 | :--- | :--- | :--- | :--- |
